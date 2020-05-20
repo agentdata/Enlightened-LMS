@@ -1,4 +1,4 @@
-package CS3750Summer2020.com.LMS;
+package com.CoolioCoders.LMS;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

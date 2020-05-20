@@ -1,4 +1,4 @@
-package CS3750Summer2020.com.LMS;
+package com.CoolioCoders.LMS;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
