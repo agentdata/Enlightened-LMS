@@ -1,5 +1,7 @@
-HELP.md
 target/
+.gradle
+/gradle
+/Spring-Backend/gradle
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
@@ -25,11 +27,38 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+
+/Spring-Backend/build/
+/Spring-Backend/gradle/
 
 ### VS Code ###
 .vscode/
 
 
-### other random files ###
+
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/React-Frontend/node_modules/
+/React-Frontend/.pnp
+/React-Frontend/.pnp.js
+
+# testing
+/React-Frontend/coverage/
+
+# production
+/React-Frontend/build/
+
+# misc
 .DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock*
