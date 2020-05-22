@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { loginUser } from "../actions";
 import { withStyles } from "@material-ui/core/styles";
 import Register from './Register';
@@ -25,34 +25,34 @@ import LoginSide from '../images/login-side.jpg';
 // styles for sign in page
 const styles = theme => ({
     root: {
-      height: '100vh',
+        height: '100vh',
     },
     image: {
-    backgroundImage: "url(" + LoginSide + ")",
-      backgroundRepeat: 'no-repeat',
-      backgroundColor:
-        theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+        backgroundImage: "url(" + LoginSide + ")",
+        backgroundRepeat: 'no-repeat',
+        backgroundColor:
+            theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
     },
     paper: {
-      margin: theme.spacing(8, 4),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
+        margin: theme.spacing(8, 4),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: '#F05041'
+        margin: theme.spacing(1),
+        backgroundColor: '#e53935'
     },
     form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
     },
     submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  });
+        margin: theme.spacing(3, 0, 2),
+    }
+});
 
 class Login extends Component {
     state = { email: "", password: "" };
@@ -86,93 +86,93 @@ class Login extends Component {
                 </Router>
             </Provider>,
             document.getElementById('root')
-          );  
+        );
     }
 
     // render sign in page
     render() {
-        const { classes, loginError, isAuthenticated } = this.props;
+        const { classes, isAuthenticated } = this.props;
         if (isAuthenticated) {
             return <Redirect to="/" />;
         } else {
             return (
                 <Grid container component="main" className={classes.root}>
-                  <CssBaseline />
-                  <Grid item xs={false} sm={4} md={7} className={classes.image} />
-                  <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                    <div className={classes.paper}>
-                      <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                      </Avatar>
-                      <Typography component="h2" variant="h5">
-                        Sign in
+                    <CssBaseline />
+                    <Grid item xs={false} sm={4} md={7} className={classes.image} />
+                    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                        <div className={classes.paper}>
+                            <Avatar className={classes.avatar}>
+                                <LockOutlinedIcon />
+                            </Avatar>
+                            <Typography component="h2" variant="h5">
+                                Sign in
                       </Typography>
-                      <form className={classes.form} noValidate>
-                        <TextField
-                          variant="outlined"
-                          margin="normal"
-                          required
-                          fullWidth
-                          id="email"
-                          label="Email Address"
-                          name="email"
-                          autoComplete="email"
-                          autoFocus
-                          onChange={this.handleEmailChange}
-                        />
-                        <TextField
-                          variant="outlined"
-                          margin="normal"
-                          required
-                          fullWidth
-                          name="password"
-                          label="Password"
-                          type="password"
-                          id="password"
-                          autoComplete="current-password"
-                          onChange={this.handlePasswordChange}
-                        />
-                        <FormControlLabel
-                          control={<Checkbox value="remember" color="primary" />}
-                          label="Remember me"
-                        />
-                        <Button
-                          type="submit"
-                          fullWidth
-                          variant="contained"
-                          color="primary"
-                          className={classes.submit}
-                          onClick={this.handleSubmit}
-                          style={{marginTop: 10}}
-                        >
-                          Sign In
+                            <form className={classes.form} noValidate>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
+                                    onChange={this.handleEmailChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    onChange={this.handlePasswordChange}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox value="remember" color="primary" />}
+                                    label="Remember me"
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                    onClick={this.handleSubmit}
+                                    style={{ marginTop: 10 }}
+                                >
+                                    Sign In
                         </Button>
-                        <Button
-                            type="button"
-                            fullWidth
-                            variant="contained"
-                            color="secondary"
-                            className={classes.Button}
-                            onClick={this.handleRegister}
-                            style={{backgroundColor: '#F05041'}}
-                            >Register
+                                <Button
+                                    type="button"
+                                    fullWidth
+                                    variant="contained"
+                                    color="secondary"
+                                    className={classes.Button}
+                                    onClick={this.handleRegister}
+                                    style={{ backgroundColor: '#e53935', marginBottom: 10 }}
+                                >Register
                         </Button>
-                        <Grid container>
-                          <Grid item xs>
-                            <Link href="#" variant="body2">
-                              Forgot password?
+                                <Grid container>
+                                    <Grid item xs>
+                                        <Link href="#" variant="body2">
+                                            Forgot password?
                             </Link>
-                          </Grid>
-                        </Grid>
-                      </form>
-                    </div>
-                  </Grid>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </div>
+                    </Grid>
                 </Grid>
-              );
+            );
         }
     }
 }
-    
+
 // update states
 function mapStateToProps(state) {
     return {
