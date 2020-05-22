@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { logoutUser } from "../actions";
 import { withStyles } from "@material-ui/core";
+import Profile from "./Profile";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -51,7 +52,9 @@ class Home extends Component {
   render() {
     const { classes } = this.props;
     return (
+      
       <Container component="main" maxWidth="xs">
+        <Profile></Profile>
         <Paper className={classes.paper}>
           <Avatar className={classes.avatar} style={{marginBottom: 10}}>
           <AlternateEmail />

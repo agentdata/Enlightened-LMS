@@ -1,5 +1,5 @@
 import React from 'react';
-import UserService from './userService';
+// import UserService from './userService';
 
 // dummy user object
 const user = {
