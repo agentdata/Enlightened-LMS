@@ -82,7 +82,9 @@ export const loginUser = (email, password) => dispatch => {
 
     // TODO: send sign in info to back end and get info for state
     var loggedIn = false;
-    if (email === "admin" && password === "password") {
+    var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (emailRegex.test(String(email).toLowerCase()) && password === "password"){  
         loggedIn = true;
     }
 
@@ -120,6 +122,48 @@ export const registerUser = (firstName, lastName, birthDate, email, password) =>
 
     // TODO: send info to backend to attempt to register user 
     var registered = false;
+    var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    var nameRegex = /^[a-zA-Z ]+$/;
+
+    // Grab today's day and format it to yyyy/mm/dd
+    var currentDate = new Date();
+    var year = String(currentDate.getFullYear());
+    var month = String(currentDate.getMonth() + 1).padStart(2, 0);
+    var day = String(currentDate.getDate()).padStart(2, 0);
+    currentDate = year + '-' + month + '-' + day;
+
+    // Flags for validating input
+    var name = false;
+    var date = false;
+    var emailV = false;
+    var password = false;
+
+    if(firstName != null && lastName != null)  
+    {
+        if(nameRegex.test(firstName) && nameRegex.test(lastName))
+        {
+            name = true;
+        }
+    }
+    if(emailRegex.test(String(email).toLowerCase()))
+        emailV = true;
+
+    if(birthDate < currentDate)
+    {
+        date = true;
+    }
+        
+
+    // Validation Output
+    console.log("BirthDate: " + birthDate + "\nCurrentDate: " + currentDate + "\n")
+
+    console.log(
+        "Name: " + name +
+        "\nDate: " + date +
+        "\nEmail: " + emailV +
+        "\nPassword: " + password
+    );
+    
 
     // if user is registered and returned
     if (registered) {
