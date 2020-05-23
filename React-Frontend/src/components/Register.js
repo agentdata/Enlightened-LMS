@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { registerUser } from "../actions";
-import { withStyles } from "@material-ui/styles";
+import { withStyles } from "@material-ui/core/styles";
 import ReactDOM from 'react-dom';
 import { Provider } from "react-redux";
 import configureStore from "../configureStore";
@@ -15,37 +15,39 @@ import TextField from "@material-ui/core/TextField";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import Container from "@material-ui/core/Container";
+import LoginSide from '../images/login-side.jpg';
+import Grid from '@material-ui/core/Grid';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
-const styles = () => ({
-    "@global": {
-      body: {
-        backgroundColor: "#efefef"
-      }
+const styles = theme => ({
+    root: {
+        height: '100vh',
+    },
+    image: {
+        backgroundImage: "url(" + LoginSide + ")",
+        backgroundRepeat: 'no-repeat',
+        backgroundColor:
+            theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
     },
     paper: {
-      marginTop: 100,
-      display: "flex",
-      padding: 40,
-      flexDirection: "column",
-      alignItems: "center"
+        margin: theme.spacing(8, 4),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     avatar: {
-      marginLeft: "auto",
-      marginRight: "auto",
-      backgroundColor: "#f50060"
+        margin: theme.spacing(1),
+        backgroundColor: '#e53935'
     },
     form: {
-      marginTop: 1
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
     },
-    errorText: {
-      color: "#f50060",
-      marginBottom: 5,
-      textAlign: "center"
-    },
-    Button: {
-        marginTop: 10
-    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    }
 });
 
 const store = configureStore();
@@ -103,7 +105,7 @@ class Register extends Component {
     };
 
     handleBackToSignIn = () => {
-        
+
         ReactDOM.render(
             <Provider store={store}>
                 <Router>
@@ -111,112 +113,125 @@ class Register extends Component {
                 </Router>
             </Provider>,
             document.getElementById('root')
-          );
+        );
     }
 
     render() {
-        const { classes, loginError, isAuthenticated } = this.props;
+        const { classes, isAuthenticated } = this.props;
         if (isAuthenticated) {
             return <Redirect to="/" />;
         } else {
             return (
-            <Container component="main" maxWidth="xs">
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar} style={{marginBottom: 10}}>
-                    <AccountCircle />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                    Sign Up
-                    </Typography>
-                    <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    name="firstName"
-                    onChange={this.handleFirstNameChange}
-                    />
-                    <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    onChange={this.handleLastNameChange}
-                    />
-                    <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="birthDate"
-                    name="birthDate"
-                    type="date"
-                    label="Birth Date"
-                    onChange={this.handleBirthDateChange}
-                    InputLabelProps={{ shrink: true }}
-                    />
-                    <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    onChange={this.handleEmailChange}
-                    />
-                    <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    onChange={this.handlePasswordChange}
-                    />
-                    <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    type="password"
-                    id="confirmPassword"
-                    onChange={this.handleConfirmPasswordChange}
-                    />
-                    {loginError && (
-                    <Typography component="p" className={classes.errorText}>
-                        Incorrect email or password.
-                    </Typography>
-                    )}
-                    <Button
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={this.handleRegister}
-                    style={{marginTop: 10}}
-                    >
-                    Sign Up
-                    </Button>
-                    <Button
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    color="secondary"
-                    className={classes.Button}
-                    onClick={this.handleBackToSignIn}
-                    >Back To Sign In</Button>
-                </Paper>
-                </Container>
-            )
+                <Grid container component="main" className={classes.root}>
+                    <CssBaseline />
+                    <Grid item xs={false} sm={4} md={7} className={classes.image} />
+                    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                        <div className={classes.paper}>
+                            <Avatar className={classes.avatar}>
+                                <AccountCircle />
+                            </Avatar>
+                            <Typography component="h2" variant="h5">
+                                Sign in
+                      </Typography>
+                            <form className={classes.form} noValidate>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    required
+                                    id="firstName"
+                                    label="First Name"
+                                    name="firstName"
+                                    onChange={this.handleFirstNameChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    required
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    onChange={this.handleLastNameChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    required
+                                    id="birthDate"
+                                    name="birthDate"
+                                    type="date"
+                                    label="Birth Date"
+                                    onChange={this.handleBirthDateChange}
+                                    InputLabelProps={{ shrink: true }}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
+                                    onChange={this.handleEmailChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    onChange={this.handlePasswordChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="confirmPassword"
+                                    label="Confirm Password"
+                                    type="password"
+                                    id="confirmPassword"
+                                    autoComplete="current-password"
+                                    onChange={this.handleConfirmPasswordChange}
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                    onClick={this.handleRegister}
+                                    style={{ marginTop: 10 }}
+                                >
+                                    Register
+                        </Button>
+                                <Button
+                                    type="button"
+                                    fullWidth
+                                    variant="contained"
+                                    color="secondary"
+                                    className={classes.Button}
+                                    onClick={this.handleBackToSignIn}
+                                    style={{ backgroundColor: '#e53935', marginBottom: 10 }}
+                                >Back To Sign In
+                        </Button>
+                            </form>
+                        </div>
+                    </Grid>
+                </Grid>
+            );
         }
     }
 }
-    
+
 
 function mapStateToProps(state) {
     return {

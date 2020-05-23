@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { loginUser } from "../actions";
-import { withStyles } from "@material-ui/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Register from './Register';
 import ReactDOM from 'react-dom';
 import { Provider } from "react-redux";
@@ -15,38 +15,43 @@ import TextField from "@material-ui/core/TextField";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import Container from "@material-ui/core/Container";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import LoginSide from '../images/login-side.jpg';
 
 // styles for sign in page
-const styles = () => ({
-    "@global": {
-      body: {
-        backgroundColor: "#efefef"
-      }
+const styles = theme => ({
+    root: {
+        height: '100vh',
+    },
+    image: {
+        backgroundImage: "url(" + LoginSide + ")",
+        backgroundRepeat: 'no-repeat',
+        backgroundColor:
+            theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
     },
     paper: {
-      marginTop: 100,
-      display: "flex",
-      padding: 40,
-      flexDirection: "column",
-      alignItems: "center"
+        margin: theme.spacing(8, 4),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     avatar: {
-      marginLeft: "auto",
-      marginRight: "auto",
-      backgroundColor: "#f50060"
+        margin: theme.spacing(1),
+        backgroundColor: '#e53935'
     },
     form: {
-      marginTop: 1
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
     },
-    errorText: {
-      color: "#f50060",
-      marginBottom: 5,
-      textAlign: "center"
-    },
-    Button: {
-        marginTop: 10
-    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    }
 });
 
 class Login extends Component {
@@ -81,74 +86,93 @@ class Login extends Component {
                 </Router>
             </Provider>,
             document.getElementById('root')
-          );  
+        );
     }
 
     // render sign in page
     render() {
-        const { classes, loginError, isAuthenticated } = this.props;
+        const { classes, isAuthenticated } = this.props;
         if (isAuthenticated) {
             return <Redirect to="/" />;
         } else {
             return (
-            <Container component="main" maxWidth="xs">
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar} style={{marginBottom: 10}}>
-                    <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                    Sign in
-                    </Typography>
-                    <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    onChange={this.handleEmailChange}
-                    />
-                    <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    onChange={this.handlePasswordChange}
-                    />
-                    {loginError && (
-                    <Typography component="p" className={classes.errorText}>
-                        Incorrect email or password.
-                    </Typography>
-                    )}
-                    <Button
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={this.handleSubmit}
-                    style={{marginTop: 10}}
-                    >
-                    Sign In
-                    </Button>
-                    <Button
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    color="secondary"
-                    className={classes.Button}
-                    onClick={this.handleRegister}
-                    >Register</Button>
-                </Paper>
-            </Container>
-            )
+                <Grid container component="main" className={classes.root}>
+                    <CssBaseline />
+                    <Grid item xs={false} sm={4} md={7} className={classes.image} />
+                    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                        <div className={classes.paper}>
+                            <Avatar className={classes.avatar}>
+                                <LockOutlinedIcon />
+                            </Avatar>
+                            <Typography component="h2" variant="h5">
+                                Sign in
+                      </Typography>
+                            <form className={classes.form} noValidate>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
+                                    onChange={this.handleEmailChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    onChange={this.handlePasswordChange}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox value="remember" color="primary" />}
+                                    label="Remember me"
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                    onClick={this.handleSubmit}
+                                    style={{ marginTop: 10 }}
+                                >
+                                    Sign In
+                        </Button>
+                                <Button
+                                    type="button"
+                                    fullWidth
+                                    variant="contained"
+                                    color="secondary"
+                                    className={classes.Button}
+                                    onClick={this.handleRegister}
+                                    style={{ backgroundColor: '#e53935', marginBottom: 10 }}
+                                >Register
+                        </Button>
+                                <Grid container>
+                                    <Grid item xs>
+                                        <Link href="#" variant="body2">
+                                            Forgot password?
+                            </Link>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </div>
+                    </Grid>
+                </Grid>
+            );
         }
     }
 }
-    
+
 // update states
 function mapStateToProps(state) {
     return {
