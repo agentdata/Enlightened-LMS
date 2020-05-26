@@ -69,10 +69,20 @@ class Login extends Component {
 
     // handle sign in button
     handleSubmit = () => {
-        const { dispatch } = this.props;
-        const { email, password } = this.state;
-        dispatch(loginUser(email, password));
-        this.props.history.push('/');
+
+        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var nameRegex = /^[a-zA-Z ]+$/;
+
+        if(emailRegex.test(String(this.state.email).toLowerCase()) && this.state.password != "")
+        {
+            console.log("Sign in data VALID");
+
+            const { dispatch } = this.props;
+            const { email, password } = this.state;
+            dispatch(loginUser(email, password));
+            this.props.history.push('/');
+        }
+
     };
 
     // handle register button

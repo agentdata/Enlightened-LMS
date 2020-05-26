@@ -86,8 +86,23 @@ class Register extends Component {
     // handle register button
     handleRegister = () => {
         // check inputs are filled out TODO: IMPROVE INPUT VALIDATION
-        if (this.firstName !== "" && this.lastName !== "" && this.birthDate !== "" &&
-            this.password === this.confirmPassword) {
+        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var nameRegex = /^[a-zA-Z ]+$/;
+
+        // Grab today's day and format it to yyyy/mm/dd
+        var currentDate = new Date();
+        var year = String(currentDate.getFullYear());
+        var month = String(currentDate.getMonth() + 1).padStart(2, 0);
+        var day = String(currentDate.getDate()).padStart(2, 0);
+        currentDate = year + '-' + month + '-' + day;
+
+        if (nameRegex.test(String(this.state.firstName).toLowerCase()) && nameRegex.test(String(this.state.lastName).toLowerCase()) &&
+            this.state.birthDate != "" && this.state.birthDate < currentDate &&
+            emailRegex.test(String(this.state.email).toLowerCase()) &&
+            this.state.password == this.state.confirmPassword)
+        {
+            console.log("Registration data VALID");
+
             const { dispatch } = this.props;
             const { firstName, lastName, birthDate, email, password } = this.state;
             // call registerUser in auth.js
@@ -102,6 +117,8 @@ class Register extends Component {
                 document.getElementById('root')
             );
         }
+
+
     };
 
     handleBackToSignIn = () => {
