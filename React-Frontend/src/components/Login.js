@@ -68,7 +68,7 @@ const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const nameRegex = /^[a-zA-Z ]+$/;
 
 class Login extends Component {
-    state = { email: "", password: "", emailValidated: false, passwordValidated: false };
+    state = { email: "", password: "", emailStatus: "pending", passwordStatus: "pending" };
 
     /* #region Text Change Handlers */
     handleEmailChange = ({ target }) => {
@@ -85,7 +85,13 @@ class Login extends Component {
     // handle sign in button
     handleSubmit = () => {
 
-        if (this.state.emailValidated && this.state.passwordValidated) {
+        if (this.state.email === "") {
+            this.state.emailStatus = "empty";
+        }
+        if (this.state.password === "") {
+            this.state.passwordStatus = "empty";
+        }
+        if (this.state.emailStatus === "validated" && this.state.passwordStatus === "validated") {
             const { dispatch } = this.props;
             console.log("Sign in data VALID");
             const { email, password, } = this.state;
@@ -97,11 +103,18 @@ class Login extends Component {
     // (emailRegex.test(String(this.state.email).toLowerCase()) && this.state.password != ""); 
 
     validateEmail = () => {
-        this.state.emailValidated = (emailRegex.test(String(this.state.email).toLowerCase()));
+        if (emailRegex.test(String(this.state.email).toLowerCase())) {
+            this.state.emailStatus = "validated";
+        } else {
+            this.state.emailStatus = "pending";
     }
 
     validatePassword = () => {
-        this.state.passwordValidated = this.state.password !== "";
+        if (this.state.password === "") {
+            this.state.passwordStatus = "pending";
+        } else {
+            this.state.passwordStatus = "validated";
+        }
     }
 
     // handle register button
@@ -142,6 +155,14 @@ class Login extends Component {
                                 id="email"
                                 label="Email Address"
                                 name="email"
+                                error = {(function() {
+                                    switch (this.state.emailStatus) {
+                                        case 'empty':
+                                            return true;
+                                        default:
+                                            return false;
+                                    }
+                                })}
                                 error = {!this.state.emailValidated && this.state.email !== ""}
                                 helperText = {!this.state.emailValidated && this.state.email !== "" ? "Enter a valid email" : ""}
                                 autoComplete="email"
