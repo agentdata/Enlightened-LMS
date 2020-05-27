@@ -23,8 +23,8 @@ function App(props) {
           component={Home}
           isAuthenticated={isAuthenticated}
           isVerifying={isVerifying}
-          />
-          <Route path="/login" component={Login} />
+        />
+        <Route path="/login" component={Login} />
       </Switch>
     </div>
   );

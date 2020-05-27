@@ -135,117 +135,113 @@ class Register extends Component {
 
     render() {
         const { classes, isAuthenticated } = this.props;
-        if (isAuthenticated) {
-            return <Redirect to="/" />;
-        } else {
-            return (
-                <Grid container component="main" className={classes.root}>
-                    <CssBaseline />
-                    <Grid item xs={false} sm={4} md={7} className={classes.image} />
-                    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                        <div className={classes.paper}>
-                            <Avatar className={classes.avatar}>
-                                <AccountCircle />
-                            </Avatar>
-                            <Typography component="h2" variant="h5">
-                                Sign in
-                      </Typography>
-                            <form className={classes.form} noValidate>
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    fullWidth
-                                    required
-                                    id="firstName"
-                                    label="First Name"
-                                    name="firstName"
-                                    onChange={this.handleFirstNameChange}
-                                />
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    fullWidth
-                                    required
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    onChange={this.handleLastNameChange}
-                                />
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    fullWidth
-                                    required
-                                    id="birthDate"
-                                    name="birthDate"
-                                    type="date"
-                                    label="Birth Date"
-                                    onChange={this.handleBirthDateChange}
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    autoFocus
-                                    onChange={this.handleEmailChange}
-                                />
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    onChange={this.handlePasswordChange}
-                                />
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    name="confirmPassword"
-                                    label="Confirm Password"
-                                    type="password"
-                                    id="confirmPassword"
-                                    autoComplete="current-password"
-                                    onChange={this.handleConfirmPasswordChange}
-                                />
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.submit}
-                                    onClick={this.handleRegister}
-                                    style={{ marginTop: 10 }}
-                                >
-                                    Register
-                        </Button>
-                                <Button
-                                    type="button"
-                                    fullWidth
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.Button}
-                                    onClick={this.handleBackToSignIn}
-                                    style={{ backgroundColor: '#e53935', marginBottom: 10 }}
-                                >Back To Sign In
-                        </Button>
-                            </form>
-                        </div>
-                    </Grid>
+        return (
+            <Grid container component="main" className={classes.root}>
+                <CssBaseline />
+                <Grid item xs={false} sm={4} md={7} className={classes.image} />
+                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                    <div className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <AccountCircle />
+                        </Avatar>
+                        <Typography component="h2" variant="h5">
+                            Sign in
+                    </Typography>
+                        <form className={classes.form} noValidate>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                required
+                                autoFocus
+                                id="firstName"
+                                label="First Name"
+                                name="firstName"
+                                onChange={this.handleFirstNameChange}
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                required
+                                id="lastName"
+                                label="Last Name"
+                                name="lastName"
+                                onChange={this.handleLastNameChange}
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                required
+                                id="birthDate"
+                                name="birthDate"
+                                type="date"
+                                label="Birth Date"
+                                onChange={this.handleBirthDateChange}
+                                InputLabelProps={{ shrink: true }}
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                autoComplete="email"
+                                onChange={this.handleEmailChange}
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                onChange={this.handlePasswordChange}
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="confirmPassword"
+                                label="Confirm Password"
+                                type="password"
+                                id="confirmPassword"
+                                autoComplete="current-password"
+                                onChange={this.handleConfirmPasswordChange}
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                                onClick={this.handleRegister}
+                                style={{ marginTop: 10 }}
+                            >
+                                Register
+                    </Button>
+                            <Button
+                                type="button"
+                                fullWidth
+                                variant="contained"
+                                color="secondary"
+                                className={classes.Button}
+                                onClick={this.handleBackToSignIn}
+                                style={{ backgroundColor: '#e53935', marginBottom: 10 }}
+                            >Back To Sign In
+                    </Button>
+                        </form>
+                    </div>
                 </Grid>
-            );
-        }
+            </Grid>
+        );
     }
 }
 

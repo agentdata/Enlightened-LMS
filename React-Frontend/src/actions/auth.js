@@ -27,7 +27,7 @@ const successfulLogin = user => {
     };
 };
 
-const loginError = () => {
+export const loginError = () => {
     return {
         type: LOGIN_FAIL
     };
