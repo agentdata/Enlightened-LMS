@@ -83,7 +83,7 @@ export const loginUser = (email, password) => dispatch => {
     // TODO: send sign in info to back end and get info for state
     var loggedIn = false;
 
-    if(email == "admin@mail.com" && password == "password")
+    if(email === "admin@mail.com" && password === "password")
         loggedIn = true;
 
     if (loggedIn) {

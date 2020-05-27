@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { registerUser } from "../actions";
 import { withStyles } from "@material-ui/core/styles";
 import ReactDOM from 'react-dom';
@@ -18,6 +17,8 @@ import Paper from "@material-ui/core/Paper";
 import LoginSide from '../images/login-side.jpg';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const styles = theme => ({
     root: {
@@ -51,6 +52,8 @@ const styles = theme => ({
 });
 
 const store = configureStore();
+const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+const nameRegex = /^[a-zA-Z ]+$/;
 
 class Register extends Component {
     state = { firstName: "", lastName: "", birthDate: "", email: "", password: "", confirmPassword: "" };
@@ -85,9 +88,6 @@ class Register extends Component {
 
     // handle register button
     handleRegister = () => {
-        // check inputs are filled out TODO: IMPROVE INPUT VALIDATION
-        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        var nameRegex = /^[a-zA-Z ]+$/;
 
         // Grab today's day and format it to yyyy/mm/dd
         var currentDate = new Date();
@@ -97,9 +97,9 @@ class Register extends Component {
         currentDate = year + '-' + month + '-' + day;
 
         if (nameRegex.test(String(this.state.firstName).toLowerCase()) && nameRegex.test(String(this.state.lastName).toLowerCase()) &&
-            this.state.birthDate != "" && this.state.birthDate < currentDate &&
+            this.state.birthDate !== "" && this.state.birthDate < currentDate &&
             emailRegex.test(String(this.state.email).toLowerCase()) &&
-            this.state.password == this.state.confirmPassword)
+            this.state.password === this.state.confirmPassword)
         {
             console.log("Registration data VALID");
 
@@ -117,8 +117,6 @@ class Register extends Component {
                 document.getElementById('root')
             );
         }
-
-
     };
 
     handleBackToSignIn = () => {
@@ -216,6 +214,10 @@ class Register extends Component {
                                 autoComplete="current-password"
                                 onChange={this.handleConfirmPasswordChange}
                             />
+                            <FormControlLabel
+                            control={<Checkbox value="instructor" color="primary" />}
+                            label="Sign Up As Instructor"
+                            />
                             <Button
                                 type="submit"
                                 fullWidth
@@ -225,8 +227,8 @@ class Register extends Component {
                                 onClick={this.handleRegister}
                                 style={{ marginTop: 10 }}
                             >
-                                Register
-                    </Button>
+                            Register
+                            </Button>
                             <Button
                                 type="button"
                                 fullWidth

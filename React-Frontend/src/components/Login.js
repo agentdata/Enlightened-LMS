@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { loginUser, loginError } from "../actions";
+import { loginUser} from "../actions";
 import { withStyles } from "@material-ui/core/styles";
 import Register from './Register';
 import ReactDOM from 'react-dom';
@@ -16,9 +15,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import LoginSide from '../images/login-side.jpg';
 
@@ -64,21 +61,32 @@ const styles = theme => ({
     }
 });
 
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const nameRegex = /^[a-zA-Z ]+$/;
 
 class Login extends Component {
-    state = { email: "", password: "", emailStatus: "pending", passwordStatus: "pending" };
+    state = { email: "", password: "", emailStatus: "default", passwordStatus: "default" };
 
     /* #region Text Change Handlers */
     handleEmailChange = ({ target }) => {
-        this.setState({ email: target.value });
-        this.validateEmail();
+        this.setState({ email: target.value }, () => {
+            if (emailRegex.test(String(this.state.email).toLowerCase())) {
+                this.setState({ emailStatus: "validated" }, this.setEmailError);
+            } else {
+                this.setState({ emailStatus: "pending" }, this.setEmailError);
+            }
+        });
     };
 
     handlePasswordChange = ({ target }) => {
-        this.setState({ password: target.value });
-        this.validatePassword();
+        this.setState({ password: target.value }, () => {
+            if (this.state.password === "") {
+                this.setState({ passwordStatus: "empty" })
+            } else {
+                this.setState({ passwordStatus: "validated" });
+            }
+        });
+        
     };
     /* #endregion */
 
@@ -86,10 +94,10 @@ class Login extends Component {
     handleSubmit = () => {
 
         if (this.state.email === "") {
-            this.state.emailStatus = "empty";
+            this.setState({ emailStatus: "empty" });
         }
         if (this.state.password === "") {
-            this.state.passwordStatus = "empty";
+            this.setState({ passwordStatus: "empty" });
         }
         if (this.state.emailStatus === "validated" && this.state.passwordStatus === "validated") {
             const { dispatch } = this.props;
@@ -98,24 +106,7 @@ class Login extends Component {
             dispatch(loginUser(email, password));
             this.props.history.push('/');
         } 
-
     };
-    // (emailRegex.test(String(this.state.email).toLowerCase()) && this.state.password != ""); 
-
-    validateEmail = () => {
-        if (emailRegex.test(String(this.state.email).toLowerCase())) {
-            this.state.emailStatus = "validated";
-        } else {
-            this.state.emailStatus = "pending";
-    }
-
-    validatePassword = () => {
-        if (this.state.password === "") {
-            this.state.passwordStatus = "pending";
-        } else {
-            this.state.passwordStatus = "validated";
-        }
-    }
 
     // handle register button
     handleRegister = () => {
@@ -129,7 +120,7 @@ class Login extends Component {
             </Provider>,
             document.getElementById('root')
         );
-    }
+    };
 
     // render sign in page
     render() {
@@ -145,7 +136,7 @@ class Login extends Component {
                         </Avatar>
                         <Typography component="h2" variant="h5">
                             Sign in
-                    </Typography>
+                        </Typography>
                         <form className={classes.form} noValidate>
                             <TextField
                                 variant="outlined"
@@ -155,16 +146,9 @@ class Login extends Component {
                                 id="email"
                                 label="Email Address"
                                 name="email"
-                                error = {(function() {
-                                    switch (this.state.emailStatus) {
-                                        case 'empty':
-                                            return true;
-                                        default:
-                                            return false;
-                                    }
-                                })}
-                                error = {!this.state.emailValidated && this.state.email !== ""}
-                                helperText = {!this.state.emailValidated && this.state.email !== "" ? "Enter a valid email" : ""}
+                                error = {(this.state.emailStatus === "pending" || this.state.emailStatus === "empty")}
+                                helperText = {(this.state.emailStatus !== "default" && this.state.emailStatus !== "validated") ? "Enter a Valid Email" : ""}
+                                // helperText = {!this.state.emailValidated && this.state.email !== "" ? "Enter a valid email" : ""}
                                 autoComplete="email"
                                 autoFocus
                                 onChange={this.handleEmailChange}
@@ -178,6 +162,8 @@ class Login extends Component {
                                 label="Password"
                                 type="password"
                                 id="password"
+                                error = {this.state.passwordStatus === "empty"}
+                                helperText = {this.state.passwordStatus === "empty" ? "Enter Your Password" : ""}
                                 autoComplete="current-password"
                                 onChange={this.handlePasswordChange}
                             />
@@ -186,10 +172,7 @@ class Login extends Component {
                                 Incorrect email or password.
                             </Typography>
                             )}
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="Remember me"
-                            />
+                            
                             <Button
                                 type="button"
                                 fullWidth
@@ -201,7 +184,7 @@ class Login extends Component {
                                 style={{ marginTop: 10 }}
                             >
                                 Sign In
-                    </Button>
+                            </Button>
                             <Button
                                 type="button"
                                 fullWidth
@@ -211,12 +194,12 @@ class Login extends Component {
                                 onClick={this.handleRegister}
                                 style={{ backgroundColor: '#e53935', marginBottom: 10 }}
                             >Register
-                    </Button>
+                            </Button>
                             <Grid container>
                                 <Grid item xs>
                                     <Link href="#" variant="body2">
                                         Forgot password?
-                        </Link>
+                                    </Link>
                                 </Grid>
                             </Grid>
                         </form>
