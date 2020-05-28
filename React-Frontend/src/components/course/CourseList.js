@@ -9,22 +9,26 @@ class CourseList extends Component {
             {
                 title: 'Dummy Course',
                 description: 'A dummy course description',
-                url: '/dummycourse'
+                url: '/dummycourse',
+                image: ''
             },
             {
                 title: 'Another Course',
                 description: 'Another course description',
-                url: '/dummycourse2'
+                url: '/dummycourse2',
+                image: ''
             },
             {
                 title: 'Another Course',
                 description: 'Another course description',
-                url: '/dummycourse3'
+                url: '/dummycourse3',
+                image: ''
             },
             {
                 title: 'Final Course',
                 description: 'The last dummy course on here',
-                url: '/dummycourse4'
+                url: '/dummycourse4',
+                image: ''
             }
         ]
     };

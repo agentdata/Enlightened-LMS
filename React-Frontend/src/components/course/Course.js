@@ -10,10 +10,9 @@ const Course = (props) => {
         <div>
             { props.course ? (
                 <a href={props.course.url} style={{textDecoration: 'none'}}>
-                    <Card>
+                    <Card style={{margin: 10}}>
                         <CardMedia style={{height: 0, paddingTop: '56.25%'}}
-                            // image={props.course.fields.courseImage.fields.file.url}
-                            // title={props.course.fields.title}
+                            // image={props.course.image}
                         />
                         <CardContent>
                             <Typography gutterBottom variant="headline" component="h2">
