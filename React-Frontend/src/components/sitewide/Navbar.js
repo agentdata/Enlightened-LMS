@@ -13,6 +13,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -81,6 +82,7 @@ const Navbar = () => {
         onClose={handleMenuClose}
       >
         <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
       </Menu>
     );
   
@@ -150,36 +152,46 @@ const Navbar = () => {
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-                <IconButton color="inherit">
+                <Tooltip title="Courses" arrow>
+                  <IconButton color="inherit">
+                      <Badge color="secondary">
+                        <DashboardIcon />
+                      </Badge>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Calendar" arrow>
+                  <IconButton color="inherit">
+                      <Badge color="secondary">
+                        <DateRangeIcon/>
+                      </Badge>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Messages" arrow>
+                  <IconButton color="inherit">
                     <Badge color="secondary">
-                    <DashboardIcon />
+                      <MailIcon />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Notifications" arrow>
+                  <IconButton color="inherit">
+                    <Badge color="secondary">
+                        <NotificationsIcon />
                     </Badge>
                 </IconButton>
-                <IconButton color="inherit">
-                    <Badge color="secondary">
-                    <DateRangeIcon/>
-                    </Badge>
+                </Tooltip>
+                <Tooltip title="Profile" arrow>
+                  <IconButton
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
                 </IconButton>
-              <IconButton color="inherit">
-                <Badge color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton color="inherit">
-                <Badge color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+                </Tooltip>
             </div>
             <div className={classes.sectionMobile}>
               <IconButton
