@@ -1,5 +1,6 @@
 import React from 'react';
-// import UserService from './userService';
+import { Container, Card, CardHeader, CardContent, CardActions, 
+        Typography, Grid, Button } from '@material-ui/core';
 
 // dummy user object
 const user = {
@@ -15,24 +16,30 @@ const user = {
 function UserDetails ({details}) {
         const {email, firstName, lastName, birthDate} = {...details};
         return (
-            <div style={{
-                margin: '3rem',
-                borderStyle: 'solid',
-                borderColor: '#34c',
-                color: '#333'
-            }}>
-                <h3 style={{
-                    backgroundColor: '#34c',
-                    color: '#FFF',
-                    margin: 0
-                }}>
-                    {firstName} {lastName}
-                </h3>
-                <h4 style={{ marginBottom: '1rem' }}>Email:</h4>
-                <h5 style={{ margin: 0 }}>{email}</h5>
-                <h4 style={{ marginBottom: '1rem' }}>Birthday:</h4>
-                <h5 style={{ margin: 0 }}>{birthDate.toLocaleDateString()}</h5>
-            </div>
+            <Container fixed>
+                <Card style={{padding: 10}}>
+                    <CardContent>
+                        <Typography component="h2" variant="h2">
+                            {firstName} {lastName}
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            Email:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            {email}
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 20, marginBottom: 0}}>
+                            Birthday:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            {birthDate.toLocaleDateString()}
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="medium">Logout</Button>
+                    </CardActions>
+                </Card>
+            </Container>
         );
 }
 
