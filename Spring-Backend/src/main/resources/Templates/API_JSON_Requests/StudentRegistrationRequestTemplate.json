@@ -1,0 +1,8 @@
+{
+  "firstName": "Johnny",
+  "lastName": "McTest",
+  "birthDate": "1990-01-01",
+  "email": "johnnymctest@example.com",
+  "password": "123456",
+  "roles": [{"role": "STUDENT"}]
+}
