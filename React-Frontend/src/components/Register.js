@@ -56,7 +56,7 @@ const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const nameRegex = /^[a-zA-Z ]+$/;
 
 class Register extends Component {
-    state = { firstName: "", lastName: "", birthDate: "", email: "", password: "", confirmPassword: "" };
+    state = { firstName: "", lastName: "", birthDate: "", email: "", password: "", confirmPassword: "", instructorCheckBox: false};
 
     /* #region Handle Text Changes
      * update states during input
@@ -74,6 +74,7 @@ class Register extends Component {
     };
 
     handleEmailChange = ({ target }) => {
+        //TODO: check if email already exists in the DB
         this.setState({ email: target.value });
     };
 
@@ -83,6 +84,10 @@ class Register extends Component {
 
     handleConfirmPasswordChange = ({ target }) => {
         this.setState({ confirmPassword: target.value });
+    };
+
+    handleInstructorCheckBoxChange = ({target}) => {
+        this.setState({ instructorCheckBox: target.checked });
     };
     /* #endregion */
 
@@ -102,11 +107,11 @@ class Register extends Component {
             this.state.password === this.state.confirmPassword)
         {
             console.log("Registration data VALID");
-
             const { dispatch } = this.props;
-            const { firstName, lastName, birthDate, email, password } = this.state;
+            const { firstName, lastName, birthDate, email, password, instructorCheckBox} = this.state;
             // call registerUser in auth.js
-            dispatch(registerUser(firstName, lastName, birthDate, email, password));
+            dispatch(registerUser( firstName, lastName, birthDate, email, password, instructorCheckBox));
+            
             // render main page after registration
             ReactDOM.render(
                 <Provider store={store}>
@@ -215,9 +220,15 @@ class Register extends Component {
                                 onChange={this.handleConfirmPasswordChange}
                             />
                             <FormControlLabel
-                            control={<Checkbox value="instructor" color="primary" />}
-                            label="Sign Up As Instructor"
-                            />
+                                control={
+                                    <Checkbox
+                                    id="instructorCheckBox"
+                                    name="instructorCheckBox"
+                                    onChange={this.handleInstructorCheckBoxChange}
+                                    valuecolor="primary"/>
+                                }
+                                label="Sign Up As Instructor"
+                            />                              
                             <Button
                                 type="submit"
                                 fullWidth
@@ -246,7 +257,6 @@ class Register extends Component {
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {

@@ -1,3 +1,4 @@
+import axios from 'axios';
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCEED = "LOGIN_SUCCEED";
 export const LOGIN_FAIL = "LOGIN_FAIL";
@@ -80,28 +81,53 @@ const registerError = () => {
 export const loginUser = (email, password) => dispatch => {
     dispatch(requestLogin());
 
-    // TODO: send sign in info to back end and get info for state
-    var loggedIn = false;
+    var statusCode;
 
-    if(email === "admin@mail.com" && password === "password")
-        loggedIn = true;
+    //build http request
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
 
-    if (loggedIn) {
-        // TODO: update view, get info from backend
-        console.log("logged in");
-        var user = {email: email, password: password};
-        dispatch(successfulLogin(user));
-    } else {
-        // TODO: show error
-        dispatch(loginError());
-        console.log("not logged in");
-    }
+    const body = JSON.stringify({
+        "email": email,
+        "password": password
+    });
+
+    const init = {
+    method: 'POST',
+    headers,
+    body
+    };
+
+    //send HTTP request
+    fetch('http://cooliocoders.ddns.net:37502/api/auth/login', init).then((response) => {
+        statusCode = response.status;
+        return response.json(); // or .text() or .blob() ...
+    }).then((text) => {
+        // text is the response body
+        if (statusCode == 200) {
+            // TODO: update view, get info from backend
+            console.log("login success, token is: " + text["token"]);
+            var user = {email: email, password: password};
+            // var user = {
+            //     "username":text["username"],
+            //     "token":text["token"]
+            // }
+            dispatch(successfulLogin(user));
+        } else {
+            // TODO: show error
+            console.log("not logged in");
+            dispatch(loginError());
+        }
+    }).catch((e) => {
+        // error in e.message
+    });
 }
 
 export const logoutUser = () => dispatch => {
     dispatch(requestLogout());
 
-    // TODO: attempt to log out
+    // TODO: invalidate token with api call on server
+    // TODO: reset local session
     var loggedOut = true;
 
     // if user is logged out
@@ -115,25 +141,47 @@ export const logoutUser = () => dispatch => {
     }
 }
 
-export const registerUser = (firstName, lastName, birthDate, email, password) => dispatch => {
+export const registerUser = (firstName, lastName, birthDate, email, password, instructorCheckmarkBox) => dispatch => {
     dispatch(requestRegister());
 
-    // TODO: send info to backend to attempt to register user 
-    var registered = false;
+    var statusCode;
+    
+    //build HTTP request
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const body = JSON.stringify({
+        "firstName": firstName,
+        "lastName": lastName,
+        "birthDate": birthDate,
+        "email": email,
+        "password": password,
+        "roles": [{"role": instructorCheckmarkBox ? "INSTRUCTOR":"STUDENT"}]
+    });
+    const init = {
+        method: 'POST',
+        headers,
+        body
+    };
 
-    // if user is registered and returned
-    if (registered) {
-        // TODO: update view, get info from backend
-        // TODO: determine email verification requirements, possiblly
-        // call loginUser directly after registration
-        console.log("registered");
-        dispatch(successfulRegister());
-    } else {
-        // TODO: show error
-        console.log("not registered");
-        dispatch(registerError());
-    }
-
+    //send HTTP Request
+    fetch('http://cooliocoders.ddns.net:37502/api/auth/register', init).then((response) => {
+        statusCode = response.status;
+        return response.json(); // or .text() or .blob() ...
+    }).then((text) => {
+        // text is the response body, check for successful registration
+        
+        //if status code == 200 then user successfully registered
+        if(statusCode == 200 && text["message"] == "User registered successfully"){
+            // TODO: update view, get info from backend
+            // TODO: determine email verification requirements, possiblly
+            // call loginUser directly after registration
+            dispatch(successfulRegister());
+        } else {
+            // TODO: show error
+            console.log("user not registered");
+            dispatch(registerError());
+        }
+    }).catch((e) => {
+        // error in e.message
+    });
 }
-
-

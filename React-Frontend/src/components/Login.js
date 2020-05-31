@@ -86,7 +86,7 @@ class Login extends Component {
                 this.setState({ passwordStatus: "validated" });
             }
         });
-        
+
     };
     /* #endregion */
 
@@ -101,7 +101,6 @@ class Login extends Component {
         }
         if (this.state.emailStatus === "validated" && this.state.passwordStatus === "validated") {
             const { dispatch } = this.props;
-            console.log("Sign in data VALID");
             const { email, password, } = this.state;
             dispatch(loginUser(email, password));
             this.props.history.push('/');
@@ -195,13 +194,6 @@ class Login extends Component {
                                 style={{ backgroundColor: '#e53935', marginBottom: 10 }}
                             >Register
                             </Button>
-                            <Grid container>
-                                <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>
-                            </Grid>
                         </form>
                     </div>
                 </Grid>
