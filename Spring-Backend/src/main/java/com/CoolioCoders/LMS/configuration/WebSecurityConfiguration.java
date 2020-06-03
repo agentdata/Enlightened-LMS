@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -38,9 +40,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.httpBasic().disable().csrf().disable().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers("/api/auth/login").permitAll().antMatchers("/api/auth/register").permitAll()
-                .antMatchers("/api/instructor/**").hasAuthority("INSTRUCTOR")
-                .antMatchers("/api/student/**").hasAuthority("STUDENT")
-                .antMatchers("/api/**").hasAuthority("ADMIN")
+                // See endpoints in controllers for authorization rules
+//                .antMatchers("api/user/**").hasAnyAuthority("ADMIN", "INSTRUCTOR", "STUDENT")
+//                .antMatchers("api/instructor/**").hasAuthority("INSTRUCTOR")
+//                .antMatchers("api/student/**").hasAuthority("STUDENT")
+//                .antMatchers("api/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated().and().csrf()
                 .disable().exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint()).and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

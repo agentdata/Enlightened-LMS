@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,14 +16,14 @@ public class User {
     private String id;
     private String firstName;
     private String lastName;
-    private Date birthDate;
+    private LocalDate birthDate;
     @Indexed(unique=true, direction = IndexDirection.DESCENDING)
     private String email;
     private String password;
     @DBRef
     private Set<Role> roles;
 
-    public User(String firstName, String lastName, Date birthDate, String email, String password, Set<Role> roles) {
+    public User(String firstName, String lastName, LocalDate birthDate, String email, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -51,11 +52,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
