@@ -150,7 +150,12 @@ class Register extends Component {
                         <Typography component="h2" variant="h5">
                             Sign in
                     </Typography>
-                        <form className={classes.form} noValidate>
+                        <form className={classes.form} noValidate
+                        onKeyPress={event => {
+                            if (event.key === 'Enter') {
+                              this.handleSubmit()
+                            }
+                          }}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
