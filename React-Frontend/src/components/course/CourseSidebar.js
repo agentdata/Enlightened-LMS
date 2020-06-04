@@ -45,13 +45,6 @@ const styles = theme => ({
         return (
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar position="fixed" className={classes.appBar}>
-            <Toolbar>
-                <Typography variant="h6" noWrap>
-                Clipped drawer
-                </Typography>
-            </Toolbar>
-            </AppBar>
             <Drawer
             className={classes.drawer}
             variant="permanent"

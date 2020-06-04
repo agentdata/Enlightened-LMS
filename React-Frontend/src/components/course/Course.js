@@ -4,12 +4,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
 
 const Course = (props) => {
     return (
         <div>
             { props.course ? (
-                <a href={props.course.url} style={{textDecoration: 'none'}}>
+                <Link to={props.course.url}>
                     <Card style={{margin: 10}}>
                         <CardMedia style={{height: 0, paddingTop: '56.25%'}}
                             // image={props.course.image}
@@ -23,7 +24,7 @@ const Course = (props) => {
                             </Typography>
                         </CardContent>
                     </Card>
-                </a>
+                </Link>
             ): null }
         </div>
     );
