@@ -104,7 +104,6 @@ class Login extends Component {
             const { email, password, } = this.state;
             dispatch(loginUser(email, password));
             this.props.history.push('/');
-            
         } 
     };
 
@@ -137,12 +136,7 @@ class Login extends Component {
                         <Typography component="h2" variant="h5">
                             Sign in
                         </Typography>
-                        <form className={classes.form} noValidate
-                        onKeyPress={event => {
-                            if (event.key === 'Enter') {
-                              this.handleSubmit()
-                            }
-                          }}>
+                        <form className={classes.form} noValidate>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
