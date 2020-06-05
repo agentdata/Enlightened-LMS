@@ -9,6 +9,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import CoursePage from "./components/course/CoursePage";
+import Navbar from "./components/sitewide/Navbar"
+import CourseList from "./components/course/CourseList"
 
 function App(props) {
   // props
@@ -16,19 +18,18 @@ function App(props) {
 
   return (
     // returns protected route if user authenticated, otherwise login page
-    // <div className="App">
-    //   <Switch>
-    //     <ProtectedRoute
-    //       exact
-    //       path="/"
-    //       component={Home}
-    //       isAuthenticated={isAuthenticated}
-    //       isVerifying={isVerifying}
-    //     />
-    //     <Route path="/login" component={Login} />
-    //   </Switch>
-    // </div>
-    <CoursePage></CoursePage>
+    <div className="App">
+      <Switch>
+        <ProtectedRoute
+          exact
+          path="/"
+          component={Home}
+          isAuthenticated={isAuthenticated}
+          isVerifying={isVerifying}
+        />
+        <Route path="/login" component={Login} />
+      </Switch>
+    </div>
   );
 }
 // maps state to App props

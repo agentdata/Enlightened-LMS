@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { loginUser} from "../actions";
+import { loginUser } from "../actions";
 import { withStyles } from "@material-ui/core/styles";
 import Register from './Register';
 import ReactDOM from 'react-dom';
@@ -92,6 +92,8 @@ class Login extends Component {
 
     // handle sign in button
     handleSubmit = () => {
+
+        
 
         if (this.state.email === "") {
             this.setState({ emailStatus: "empty" });
