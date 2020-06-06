@@ -67,6 +67,7 @@ class Home extends Component {
             <Route path="/calendar" exact component={Calendar} />
             <Route path="/messages" exact component={Messages} />
             <Route path="/profile" exact component={Profile} />
+            <Route path="/course-page" exact component={CoursePage} />
           </Switch>
         </div>
       </Router>

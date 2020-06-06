@@ -82,7 +82,7 @@ const Navbar = () => {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
-        <Link to="profile">
+        <Link to="profile" style={{textDecoration: 'none'}}>
           <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
         </Link>
         <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
@@ -165,7 +165,7 @@ const Navbar = () => {
                     </Link>
                   </Tooltip>
                   <Tooltip title="Calendar" arrow>
-                    <Link to="calendar">
+                    <Link to="calendar" style={{textDecoration: 'none'}}>
                       <IconButton color="inherit">
                           <Badge color="secondary">
                             <DateRangeIcon/>
@@ -174,7 +174,7 @@ const Navbar = () => {
                     </Link>
                   </Tooltip>
                   <Tooltip title="Messages" arrow>
-                    <Link to="messages">
+                    <Link to="messages" style={{textDecoration: 'none'}}>
                       <IconButton color="inherit">
                         <Badge color="secondary">
                           <MailIcon />

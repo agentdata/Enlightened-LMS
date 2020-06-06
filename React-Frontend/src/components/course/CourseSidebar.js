@@ -16,8 +16,9 @@ import MailIcon from '@material-ui/icons/Mail';
 const drawerWidth = 240;
 
 const styles = theme => ({
-    root: {
-      display: 'flex'
+    mainDrawer: {
+        zIndex: -1,
+        position: "relative",
     },
     drawer: {
       width: drawerWidth,
@@ -27,10 +28,10 @@ const styles = theme => ({
       width: drawerWidth,
     },
     drawerContainer: {
-      overflow: 'auto',
+      overflow: 'hidden',
     },
     content: {
-      flexGrow: 1,
+      flexGrow: 0,
       padding: theme.spacing(3),
     },
   });
@@ -40,8 +41,7 @@ const styles = theme => ({
     render() {
         const { classes } = this.props;
         return (
-        <div className={classes.root}>
-            <CssBaseline />
+        <div className={classes.mainDrawer}>
             <Drawer
             className={classes.drawer}
             variant="permanent"
