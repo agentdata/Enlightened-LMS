@@ -8,12 +8,9 @@ import { connect } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./components/Home";
 import Login from "./components/Login";
-<<<<<<< HEAD
-=======
 import CoursePage from "./components/course/CoursePage";
 import Navbar from "./components/sitewide/Navbar"
 import CourseList from "./components/course/CourseList"
->>>>>>> course-page
 
 function App(props) {
   // props
@@ -33,10 +30,8 @@ function App(props) {
         <Route path="/login" component={Login} />
       </Switch>
     </div>
-<<<<<<< HEAD
-=======
-    
->>>>>>> course-page
+    // for testing Home Page without needing to sign in, comment above and uncomment <Home />
+    // <Home />
   );
 }
 // maps state to App props
