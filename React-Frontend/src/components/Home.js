@@ -1,8 +1,14 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../actions";
 import { withStyles } from "@material-ui/core";
 import Profile from "./Profile";
+import CourseList from "./course/CourseList"
+import Navbar from "./sitewide/Navbar"
+import CoursePage from "./course/CoursePage"
+import Calendar from "./calendar/Calendar"
+import Messages from "./messages/Messages"
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -52,37 +58,49 @@ class Home extends Component {
   render() {
     const { classes } = this.props;
     return (
-      
-      <Container component="main" maxWidth="xs">
-        <Profile></Profile>
-        <Paper className={classes.paper}>
-          <Avatar className={classes.avatar} style={{marginBottom: 10}}>
-          <AlternateEmail />
-          </Avatar>
-          <Typography component="h1" variant="h5" align="center">
-          Hello! Please check your email to confirm your account.
-          </Typography>
-          <Button
-          type="button"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={this.handleResendEmail}
-          style={{marginTop: 10}}
-          >
-          Re-Send Email
-          </Button>
-          <Button
-          type="button"
-          fullWidth
-          variant="contained"
-          color="secondary"
-          className={classes.Button}
-          onClick={this.handleLogout}
-          >Sign Out</Button>
-        </Paper>
-      </Container>
+        
+      <Router>
+        <div>
+          <Navbar />
+          <Switch>
+            <Route path="/course-list" exact component={CourseList} />
+            <Route path="/calendar" exact component={Calendar} />
+            <Route path="/messages" exact component={Messages} />
+            <Route path="/profile" exact component={Profile} />
+          </Switch>
+        </div>
+      </Router>
+
+      // <Container component="main" maxWidth="xs">
+      //   <Profile></Profile>
+      //   <Paper className={classes.paper}>
+      //     <Avatar className={classes.avatar} style={{marginBottom: 10}}>
+      //     <AlternateEmail />
+      //     </Avatar>
+      //     <Typography component="h1" variant="h5" align="center">
+      //     Hello! Please check your email to confirm your account.
+      //     </Typography>
+      //     <Button
+      //     type="button"
+      //     fullWidth
+      //     variant="contained"
+      //     color="primary"
+      //     className={classes.submit}
+      //     onClick={this.handleResendEmail}
+      //     style={{marginTop: 10}}
+      //     >
+      //     Re-Send Email
+      //     </Button>
+      //     <Button
+      //     type="button"
+      //     fullWidth
+      //     variant="contained"
+      //     color="secondary"
+      //     className={classes.Button}
+      //     onClick={this.handleLogout}
+      //     >Sign Out</Button>
+      //   </Paper>
+      // </Container>
     );
     
   }

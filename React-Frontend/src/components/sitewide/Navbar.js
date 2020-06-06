@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -81,7 +82,9 @@ const Navbar = () => {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        <Link to="profile">
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        </Link>
         <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
       </Menu>
     );
@@ -144,71 +147,77 @@ const Navbar = () => {
     );
   
     return (
-      <div className={classes.grow}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography className={classes.title} variant="h6" noWrap>
-              Enlightened
-            </Typography>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-                <Tooltip title="Courses" arrow>
-                  <IconButton color="inherit">
+        <div className={classes.grow}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography className={classes.title} variant="h6" noWrap>
+                Enlightened
+              </Typography>
+              <div className={classes.grow} />
+              <div className={classes.sectionDesktop}>
+                  <Tooltip title="Courses" arrow>
+                    <Link to="course-list">
+                      <IconButton color="inherit">
+                          <Badge color="secondary">
+                            <DashboardIcon />
+                          </Badge>
+                      </IconButton>
+                    </Link>
+                  </Tooltip>
+                  <Tooltip title="Calendar" arrow>
+                    <Link to="calendar">
+                      <IconButton color="inherit">
+                          <Badge color="secondary">
+                            <DateRangeIcon/>
+                          </Badge>
+                      </IconButton>
+                    </Link>
+                  </Tooltip>
+                  <Tooltip title="Messages" arrow>
+                    <Link to="messages">
+                      <IconButton color="inherit">
+                        <Badge color="secondary">
+                          <MailIcon />
+                        </Badge>
+                      </IconButton>
+                    </Link>
+                  </Tooltip>
+                  <Tooltip title="Notifications" arrow>
+                    <IconButton color="inherit">
                       <Badge color="secondary">
-                        <DashboardIcon />
+                          <NotificationsIcon />
                       </Badge>
                   </IconButton>
-                </Tooltip>
-                <Tooltip title="Calendar" arrow>
-                  <IconButton color="inherit">
-                      <Badge color="secondary">
-                        <DateRangeIcon/>
-                      </Badge>
+                  </Tooltip>
+                  <Tooltip title="Profile" arrow>
+                    <IconButton
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    onClick={handleProfileMenuOpen}
+                    color="inherit"
+                  >
+                    <AccountCircle />
                   </IconButton>
-                </Tooltip>
-                <Tooltip title="Messages" arrow>
-                  <IconButton color="inherit">
-                    <Badge color="secondary">
-                      <MailIcon />
-                    </Badge>
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Notifications" arrow>
-                  <IconButton color="inherit">
-                    <Badge color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                </Tooltip>
-                <Tooltip title="Profile" arrow>
-                  <IconButton
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-controls={menuId}
+                  </Tooltip>
+              </div>
+              <div className={classes.sectionMobile}>
+                <IconButton
+                  aria-label="show more"
+                  aria-controls={mobileMenuId}
                   aria-haspopup="true"
-                  onClick={handleProfileMenuOpen}
+                  onClick={handleMobileMenuOpen}
                   color="inherit"
                 >
-                  <AccountCircle />
+                  <MoreIcon />
                 </IconButton>
-                </Tooltip>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
-      </div>
+              </div>
+            </Toolbar>
+          </AppBar>
+          {renderMobileMenu}
+          {renderMenu}
+        </div>
     );
 }
 
