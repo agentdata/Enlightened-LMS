@@ -30,6 +30,7 @@ function App(props) {
         <Route path="/login" component={Login} />
       </Switch>
     </div>
+    
   );
 }
 // maps state to App props
