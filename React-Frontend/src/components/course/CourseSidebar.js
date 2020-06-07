@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,12 +13,18 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import HomeIcon from '@material-ui/icons/Home'
+import AssignmentIcon from '@material-ui/icons/Assignment'
+import CheckBoxIcon from '@material-ui/icons/CheckBox'
+import AnnouncementIcon from '@material-ui/icons/Announcement'
+import ChatIcon from '@material-ui/icons/Chat'
 
 const drawerWidth = 240;
 
 const styles = theme => ({
-    root: {
-      display: 'flex'
+    mainDrawer: {
+        zIndex: -1,
+        position: "relative",
     },
     drawer: {
       width: drawerWidth,
@@ -27,21 +34,23 @@ const styles = theme => ({
       width: drawerWidth,
     },
     drawerContainer: {
-      overflow: 'auto',
+      overflow: 'hidden',
     },
     content: {
-      flexGrow: 1,
+      flexGrow: 0,
       padding: theme.spacing(3),
     },
   });
+
+  const links = ['course-page', 'course-assignments', 'course-grades'];
+  const links2 = ['course-announcements', 'course-discussions']
 
   class CourseSidebar extends Component {
 
     render() {
         const { classes } = this.props;
         return (
-        <div className={classes.root}>
-            <CssBaseline />
+        <div className={classes.mainDrawer}>
             <Drawer
             className={classes.drawer}
             variant="permanent"
@@ -52,21 +61,49 @@ const styles = theme => ({
             <Toolbar />
             <div className={classes.drawerContainer}>
                 <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text}>
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                    <ListItemText primary={text} />
-                    </ListItem>
-                ))}
+                    <Link to="course-page" style={{textDecoration: 'none'}}>
+                        <ListItem button key="Home">
+                            <ListItemIcon>
+                                <HomeIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Home" />
+                        </ListItem>
+                    </Link>
+                    <Link to="course-assignments" style={{textDecoration: 'none'}}>
+                        <ListItem button key="Assignments">
+                            <ListItemIcon>
+                                <AssignmentIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Assignment" />
+                        </ListItem>
+                    </Link>
+                    <Link to="course-grades" style={{textDecoration: 'none'}}>
+                        <ListItem button key="Grades">
+                            <ListItemIcon>
+                                <CheckBoxIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Grades" />
+                        </ListItem>
+                    </Link>
                 </List>
                 <Divider />
                 <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem button key={text}>
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                    <ListItemText primary={text} />
-                    </ListItem>
-                ))}
+                    <Link to="course-announcements" style={{textDecoration: 'none'}}>
+                        <ListItem button key="Announcements">
+                            <ListItemIcon>
+                                <AnnouncementIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Announcements" />
+                        </ListItem>
+                    </Link>
+                    <Link to="course-discussions" style={{textDecoration: 'none'}}>
+                        <ListItem button key="Discussions">
+                            <ListItemIcon>
+                                <ChatIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Discussions" />
+                        </ListItem>
+                    </Link>
                 </List>
             </div>
             </Drawer>
