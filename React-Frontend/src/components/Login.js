@@ -16,7 +16,6 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import LoginSide from '../images/login-side.jpg';
 
 // styles for sign in page
@@ -62,7 +61,7 @@ const styles = theme => ({
 });
 
 const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-const nameRegex = /^[a-zA-Z ]+$/;
+// const nameRegex = /^[a-zA-Z ]+$/;
 
 class Login extends Component {
     state = { email: "", password: "", emailStatus: "default", passwordStatus: "default" };

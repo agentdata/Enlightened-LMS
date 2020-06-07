@@ -1,4 +1,3 @@
-import axios from 'axios';
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCEED = "LOGIN_SUCCEED";
 export const LOGIN_FAIL = "LOGIN_FAIL";
@@ -80,8 +79,6 @@ const registerError = () => {
 
 export const loginUser = (email, password) => dispatch => {
     dispatch(requestLogin());
-    dispatch(successfulLogin);
-    return;
 
     var statusCode;
 
@@ -106,7 +103,7 @@ export const loginUser = (email, password) => dispatch => {
         return response.json(); // or .text() or .blob() ...
     }).then((text) => {
         // text is the response body
-        if (statusCode == 200) {
+        if (statusCode === 200) {
             // TODO: update view, get info from backend
             console.log("login success, token is: " + text["token"]);
             var user = {email: email, password: password};
@@ -172,8 +169,8 @@ export const registerUser = (firstName, lastName, birthDate, email, password, in
     }).then((text) => {
         // text is the response body, check for successful registration
         
-        //if status code == 200 then user successfully registered
-        if(statusCode == 200 && text["message"] == "User registered successfully"){
+        //if status code === 200 then user successfully registered
+        if(statusCode === 200 && text["message"] === "User registered successfully"){
             // TODO: update view, get info from backend
             // TODO: determine email verification requirements, possiblly
             // call loginUser directly after registration

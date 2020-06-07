@@ -8,9 +8,6 @@ import { connect } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import CoursePage from "./components/course/CoursePage";
-import Navbar from "./components/sitewide/Navbar"
-import CourseList from "./components/course/CourseList"
 
 function App(props) {
   // props

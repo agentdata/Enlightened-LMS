@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../actions";
 import { withStyles } from "@material-ui/core";
@@ -9,13 +9,6 @@ import Navbar from "./sitewide/Navbar"
 import CoursePage from "./course/CoursePage"
 import Calendar from "./calendar/Calendar"
 import Messages from "./messages/Messages"
-
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import AlternateEmail from "@material-ui/icons/AlternateEmail";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import Container from "@material-ui/core/Container";
 
 // styles for sign in page
 const styles = () => ({
@@ -56,7 +49,7 @@ class Home extends Component {
 
   };
   render() {
-    const { classes } = this.props;
+    // const { classes } = this.props;
     return (
         
       <Router>

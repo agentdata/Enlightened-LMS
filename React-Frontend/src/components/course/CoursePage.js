@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Grid from '@material-ui/core/Grid';
-import Course from './Course';
 import CourseSidebar from './CourseSidebar'
 import CourseHome from './CourseHome'
 import CourseAssignments from './CourseAssignments'

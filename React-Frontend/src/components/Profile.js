@@ -1,6 +1,6 @@
 import React from 'react';
-import { Container, Card, CardHeader, CardContent, CardActions, 
-        Typography, Grid, Button } from '@material-ui/core';
+import { Container, Card, CardContent, CardActions, 
+        Typography, Button } from '@material-ui/core';
 
 // dummy user object
 const user = {

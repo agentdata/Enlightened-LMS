@@ -137,7 +137,7 @@ class Register extends Component {
     }
 
     render() {
-        const { classes, isAuthenticated } = this.props;
+        const { classes, /*isAuthenticated*/ } = this.props;
         return (
             <Grid container component="main" className={classes.root}>
                 <CssBaseline />

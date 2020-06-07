@@ -2,17 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import HomeIcon from '@material-ui/icons/Home'
 import AssignmentIcon from '@material-ui/icons/Assignment'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
@@ -41,10 +36,7 @@ const styles = theme => ({
       padding: theme.spacing(3),
     },
   });
-
-  const links = ['course-page', 'course-assignments', 'course-grades'];
-  const links2 = ['course-announcements', 'course-discussions']
-
+  
   class CourseSidebar extends Component {
 
     render() {

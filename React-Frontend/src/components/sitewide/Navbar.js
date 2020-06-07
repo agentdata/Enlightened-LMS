@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import { fade, makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { Link } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const preventDefault = (event) => event.preventDefault();
+// const preventDefault = (event) => event.preventDefault();
 
 const Navbar = () => {
     const classes = useStyles();
