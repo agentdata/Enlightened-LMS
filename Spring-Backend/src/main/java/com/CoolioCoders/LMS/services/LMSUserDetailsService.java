@@ -40,56 +40,56 @@ public class LMSUserDetailsService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    public User update(String id, User updatedUser) {
-        Optional<User> foundUser = userRepository.findById(id);
+    public User update(String email, User updatedUser) {
+        User foundUser = userRepository.findByEmail(email);
         if(updatedUser.getFirstName() != null)
-            foundUser.get().setFirstName(updatedUser.getFirstName());
+            foundUser.setFirstName(updatedUser.getFirstName());
 
         if(updatedUser.getLastName() != null)
-            foundUser.get().setLastName(updatedUser.getLastName());
+            foundUser.setLastName(updatedUser.getLastName());
 
         if(updatedUser.getBirthDate() != null)
-            foundUser.get().setBirthDate(updatedUser.getBirthDate());
+            foundUser.setBirthDate(updatedUser.getBirthDate());
 
         if(updatedUser.getEmail() != null) //TODO: check new email for uniqueness
-            foundUser.get().setEmail(updatedUser.getEmail());
+            foundUser.setEmail(updatedUser.getEmail());
 
         if(updatedUser.getPassword() != null)
-            foundUser.get().setPassword(updatedUser.getPassword());
+            foundUser.setPassword(updatedUser.getPassword());
 
         if(updatedUser.getBio() != null)
-            foundUser.get().setBio(updatedUser.getBio());
+            foundUser.setBio(updatedUser.getBio());
         
         if(updatedUser.getLink1() != null)
-            foundUser.get().setLink1(updatedUser.getLink1());
+            foundUser.setLink1(updatedUser.getLink1());
 
         if(updatedUser.getLink2() != null)
-            foundUser.get().setLink2(updatedUser.getLink2());
+            foundUser.setLink2(updatedUser.getLink2());
 
         if(updatedUser.getAvatar() != null)
-            foundUser.get().setAvatar(updatedUser.getAvatar());
+            foundUser.setAvatar(updatedUser.getAvatar());
 
         if(updatedUser.getPhone() != null)
-            foundUser.get().setPhone(updatedUser.getPhone());
+            foundUser.setPhone(updatedUser.getPhone());
 
         if(updatedUser.getAddress1() != null)
-            foundUser.get().setAddress1(updatedUser.getAddress1());
+            foundUser.setAddress1(updatedUser.getAddress1());
 
         if(updatedUser.getAddress2() != null)
-            foundUser.get().setAddress2(updatedUser.getAddress2());
+            foundUser.setAddress2(updatedUser.getAddress2());
 
         if(updatedUser.getCity() != null)
-            foundUser.get().setCity(updatedUser.getCity());
+            foundUser.setCity(updatedUser.getCity());
 
         if(updatedUser.getState() != null)
-            foundUser.get().setState(updatedUser.getState());
+            foundUser.setState(updatedUser.getState());
 
         if(updatedUser.getZip() != null)
-            foundUser.get().setZip(updatedUser.getZip());
+            foundUser.setZip(updatedUser.getZip());
 
         // We'll save the found user back into the db to ensure
         // that the id & role cannot be changed
-        return userRepository.save(foundUser.get());
+        return userRepository.save(foundUser);
     }
 
     public void deleteById(String id) {

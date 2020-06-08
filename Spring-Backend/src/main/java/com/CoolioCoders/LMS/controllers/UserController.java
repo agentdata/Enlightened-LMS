@@ -48,10 +48,8 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@PathVariable String id, @RequestBody Principal principalUser) {
-        // return userService.update(user.getId(), user);
-        //TODO: change input to principal to prevent users from updating other users
-        return ok(userService.update(principalUser.getId(), principalUser));
+    public User update(Principal principalUser, @RequestBody User updatedUser) {
+        return userService.update(principalUser.getName(), updatedUser);
         // See findUserProfile Method
     }
 
