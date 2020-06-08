@@ -57,6 +57,36 @@ public class LMSUserDetailsService implements UserDetailsService {
         if(updatedUser.getPassword() != null)
             foundUser.get().setPassword(updatedUser.getPassword());
 
+        if(updatedUser.getBio() != null)
+            foundUser.get().setBio(updatedUser.getBio());
+        
+        if(updatedUser.getLink1() != null)
+            foundUser.get().setLink1(updatedUser.getLink1());
+
+        if(updatedUser.getLink2() != null)
+            foundUser.get().setLink2(updatedUser.getLink2());
+
+        if(updatedUser.getAvatar() != null)
+            foundUser.get().setAvatar(updatedUser.getAvatar());
+
+        if(updatedUser.getPhone() != null)
+            foundUser.get().setPhone(updatedUser.getPhone());
+
+        if(updatedUser.getAddress1() != null)
+            foundUser.get().setAddress1(updatedUser.getAddress1());
+
+        if(updatedUser.getAddress2() != null)
+            foundUser.get().setAddress2(updatedUser.getAddress2());
+
+        if(updatedUser.getCity() != null)
+            foundUser.get().setCity(updatedUser.getCity());
+
+        if(updatedUser.getState() != null)
+            foundUser.get().setState(updatedUser.getState());
+
+        if(updatedUser.getZip() != null)
+            foundUser.get().setZip(updatedUser.getZip());
+
         // We'll save the found user back into the db to ensure
         // that the id & role cannot be changed
         return userRepository.save(foundUser.get());
