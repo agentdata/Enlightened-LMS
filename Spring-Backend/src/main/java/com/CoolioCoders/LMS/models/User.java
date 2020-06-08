@@ -20,15 +20,39 @@ public class User {
     @Indexed(unique=true, direction = IndexDirection.DESCENDING)
     private String email;
     private String password;
+    private String bio;
+    private String link1;
+    private String link2;
+    private String link3;
+    private String avatar;
+    private String phone;
+    private String address1;
+    private String address2;
+    private String city;
+    private String state;
+    private String zip;
     @DBRef
     private Set<Role> roles;
 
-    public User(String firstName, String lastName, LocalDate birthDate, String email, String password, Set<Role> roles) {
+    public User(String firstName, String lastName, LocalDate birthDate, String email, 
+    String password, String bio, String link1, String link2, String link3, String avatar, 
+    String phone, String address1, String address2, String city, String state, String zip, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.email = email;
         this.password = password;
+        this.bio = bio;
+        this.link1 = link1;
+        this.link2 = link2;
+        this.link3 = link3;
+        this.avatar = avatar;
+        this.phone = phone;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
         this.roles = roles;
     }
 
@@ -76,7 +100,99 @@ public class User {
         this.password = password;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    // link getters / setters
+    public String getLink1() {
+        return link1;
+    }
+
+    public void setLink1(String link1) {
+        this.link1 = link1;
+    }
+
+    public String getLink2() {
+        return link2;
+    }
+
+    public void setLink2(String link2) {
+        this.link2 = link2;
+    }
+
+    public String getLink3() {
+        return link3;
+    }
+
+    public void setLink3(String link3) {
+        this.link3 = link3;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    // address lines getters/setters
+    public String getAddress1() {
+        return address1;
+    }
+
+    public void setAddress1(String address1) {
+        this.address1 = address1;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    // city, state, zip getters/setters
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
     public Set<Role> getRoles() { return roles; }
 
     public void setRoles(Set<Role> roles) { this.roles = roles; }
+
 }
