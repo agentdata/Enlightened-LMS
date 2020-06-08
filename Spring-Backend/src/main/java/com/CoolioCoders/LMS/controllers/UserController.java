@@ -47,10 +47,11 @@ public class UserController {
         return userService.findUserByEmail(email);
     }
 
-    @PutMapping("/{id}")
-    public User update(@PathVariable String id, @RequestBody User user) {
-        return userService.update(user.getId(), user);
+    @PutMapping
+    public User update(@PathVariable String id, @RequestBody Principal principalUser) {
+        // return userService.update(user.getId(), user);
         //TODO: change input to principal to prevent users from updating other users
+        return ok(userService.update(principalUser.getId(), principalUser));
         // See findUserProfile Method
     }
 
