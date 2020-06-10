@@ -13,10 +13,10 @@ class CourseHome extends Component {
             {
                 title: "Welcome to the dummy course",
                 description: "Here are some resources for the course"
-            },
-            {
-                title: "Another topic",
-                description: "Office hours for dummy course"
+            // },
+            // {
+            //     title: "Another topic",
+            //     description: "Office hours for dummy course"
             }
         ]
     };

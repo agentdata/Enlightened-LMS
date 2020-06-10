@@ -19,7 +19,7 @@ class CourseList extends Component {
                 image: ''
             },
             {
-                title: 'Another Course',
+                title: 'One More Course',
                 description: 'Another course description',
                 url: '/dummycourse3',
                 image: ''
@@ -65,9 +65,9 @@ class CourseList extends Component {
             <div>
                 {this.state.courses ? (
                     <div>
-                        <Grid container spacing={24} style ={{padding: 24}}>
+                        <Grid container spacing={2} style ={{padding: 24}}>
                             {this.state.courses.map(currentCourse => (
-                                <Grid item xs={6} s={4} lg={3} xl={3}>
+                                <Grid item xs={6} s={4} lg={3} xl={3} key={currentCourse.title}>
                                     <Course course={currentCourse} />
                                 </Grid>
                             ))}

@@ -13,9 +13,10 @@ const Course = (props) => {
                     <Card style={{margin: 10}}>
                         <CardMedia style={{height: 0, paddingTop: '56.25%'}}
                             // image={props.course.image}
+                            image = 'nothing to see here...'
                         />
                         <CardContent>
-                            <Typography gutterBottom variant="headline" component="h2">
+                            <Typography gutterBottom variant="h4" component="h2">
                                 {props.course.title}
                             </Typography>
                             <Typography component="p">

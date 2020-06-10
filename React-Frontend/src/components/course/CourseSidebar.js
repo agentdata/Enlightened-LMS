@@ -18,7 +18,7 @@ const drawerWidth = 240;
 
 const styles = theme => ({
     mainDrawer: {
-        zIndex: -1,
+        //zIndex: -1,
         position: "relative",
     },
     drawer: {
@@ -66,7 +66,7 @@ const styles = theme => ({
                             <ListItemIcon>
                                 <AssignmentIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Assignment" />
+                            <ListItemText primary="Assignments" />
                         </ListItem>
                     </Link>
                     <Link to="course-grades" style={{textDecoration: 'none'}}>

@@ -39,7 +39,8 @@ const styles = () => ({
   },
   Button: {
       marginTop: 10
-  }
+  },
+
 });
 
 class Home extends Component {
@@ -49,12 +50,12 @@ class Home extends Component {
 
   };
   render() {
-    // const { classes } = this.props;
+    const { classes } = this.props;
     return (
         
       <Router>
         <div>
-          <Navbar />
+          <Navbar className={classes.nav}/>
           <Switch>
             <Route path="/course-list" exact component={CourseList} />
             <Route path="/calendar" exact component={Calendar} />
