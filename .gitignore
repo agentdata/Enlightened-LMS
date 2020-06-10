@@ -27,6 +27,7 @@ target/
 /.nb-gradle/
 
 /Spring-Backend/build/
+/Spring-Backend/bin/
 
 ### VS Code ###
 .vscode/

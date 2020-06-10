@@ -1,60 +1,124 @@
 import React from 'react';
 import { Container, Card, CardContent, CardActions, 
         Typography, Button } from '@material-ui/core';
+import SelectInput from '@material-ui/core/Select/SelectInput';
 
-// dummy user object
-const user = {
-    studentID: 29403,
-    email: 'sampleStudent@gmail.com',
-    password: 'secretpass',
-    firstName: 'Jane',
-    lastName: 'Doe',
-    birthDate: new Date(1995, 8, 24)
-};
-
-// UserDetails Component - renders/displays user info
+        // UserDetails Component - renders/displays user info
 function UserDetails ({details}) {
-        const {email, firstName, lastName, birthDate} = {...details};
-        return (
-            <Container fixed>
-                <Card style={{padding: 10}}>
-                    <CardContent>
-                        <Typography component="h2" variant="h2">
-                            {firstName} {lastName}
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            Email:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            {email}
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 20, marginBottom: 0}}>
-                            Birthday:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            {birthDate.toLocaleDateString()}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="medium">Logout</Button>
-                    </CardActions>
-                </Card>
-            </Container>
-        );
+    const {email, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...details};
+    return (
+        <Container fixed>
+            <Card style={{padding: 10}}>
+                <CardContent>
+                    <Typography component="h2" variant="h2">
+                        {firstName} {lastName}
+                    </Typography>
+                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                        Email:
+                    </Typography>
+                    <Typography component="h4" variant="h5">
+                        {email}
+                    </Typography>
+                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                        Phone:
+                    </Typography>
+                    <Typography component="h4" variant="h5">
+                        {phone}
+                    </Typography>
+                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                        Birthday:
+                    </Typography>
+                    <Typography component="h4" variant="h5">
+                        //{birthDate}
+                    </Typography>
+                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                        Bio:
+                    </Typography>
+                    <Typography component="h4" variant="h5">
+                        {bio}
+                    </Typography>
+                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                        Address:
+                    </Typography>
+                    <Typography component="h4" variant="h5">
+                        {address1} {city} , {state} {zip}
+                    </Typography>
+                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                        Facebook:
+                    </Typography>
+                    <Typography component="h4" variant="h5">
+                        <a href={link1}>My facebook profile</a>
+                    </Typography>
+                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                        LinkedIN:
+                    </Typography>
+                    <Typography component="h4" variant="h5">
+                        <a href={link2}>My LinkedIN profile</a>
+                    </Typography>
+                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                        Facebook:
+                    </Typography>
+                    <Typography component="h4" variant="h5">
+                        <a href={link3}>My GitHub profile</a>
+                    </Typography>
+                </CardContent>
+                <CardActions>
+                    <Button size="medium">Logout</Button>
+                </CardActions>
+            </Card>
+        </Container>
+    );
 }
 
 // Profile Component - Container for UserDetails
 class Profile extends React.Component {
     constructor(props) {
         super(props);
-        // this.userDetails = {
-        //     // call service to grab user details
-        // };
-        this.userDetails = user;
+
         this.state = {
             isLoggedIn: false
         };
+        
         // this.checkLoggedIn = this.checkLoggedIn.bind(this);
+    }
+
+    getUserDetails(){
+        var statusCode;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+    
+        const init = {
+            method: 'GET',
+            headers
+        };
+    
+        fetch('https://cooliocoders.ddns.net/api/user/profile', init)
+        .then((response) => {
+            statusCode = response.status;
+            return response.json(); // or .text() or .blob() ...
+        })
+        .then((text) => this.setState({userDetails:
+                {
+                    email: text["email"],
+                    firstName: text["firstName"],
+                    lastName: text["lastName"],
+                    phone: text["phone"],
+                    birthDate: text["birthDate"],
+                    state: text["state"],
+                    city: text["city"],
+                    zip: text["zip"],
+                    address1: text["address1"],
+                    bio: text["bio"],
+                    avatar: text["avatar"],
+                    link1: text["link1"],
+                    link3: text["link3"],
+                    link2: text["link2"]
+                }
+            }
+        ))
+        .catch((e) => {
+            // error in e.message
+        }); 
     }
 
     // check that the user is logged in before component is loaded into DOM
@@ -62,13 +126,17 @@ class Profile extends React.Component {
         this.setState(state => ({
             isLoggedIn: true // call method from user/authentication controller/service
         }));
+        // this.state = {userDetails: user}
+        this.getUserDetails();
+        console.log("current state.userDetails : "+JSON.stringify(this.state.userDetails));
     }
 
     render() {
+        
         return (
             <div className="header">
                 <h1>{this.state.isLoggedIn
-                    ? <UserDetails details={this.userDetails} />
+                    ? <UserDetails details={this.state.userDetails} />
                     : '(redirect to login page)'}</h1>
             </div>
         );
