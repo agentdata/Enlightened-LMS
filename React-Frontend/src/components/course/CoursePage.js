@@ -27,14 +27,14 @@ class CoursePage extends Component {
         return (
             <Router>
                 <div className={classes.main}>
-                <CourseSidebar />
-                <Switch>
-                    <Route path="/course-page" component={CourseHome} />
-                    <Route path="/course-assignments" exact component={CourseAssignments} />
-                    <Route path="/course-grades" exact component={CourseGrades} />
-                    <Route path="/course-announcements" exact component={CourseAnnouncements} />
-                    <Route path="/course-discussions" exact component={CourseDiscussions} />
-                </Switch>
+                    <CourseSidebar />
+                    <Switch>
+                        <Route path="/course-page" component={CourseHome} />
+                        <Route path="/course-assignments" exact component={CourseAssignments} />
+                        <Route path="/course-grades" exact component={CourseGrades} />
+                        <Route path="/course-announcements" exact component={CourseAnnouncements} />
+                        <Route path="/course-discussions" exact component={CourseDiscussions} />
+                    </Switch>
                 </div>
             </Router>
         )

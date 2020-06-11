@@ -65,7 +65,7 @@ class Home extends Component {
         <div>
           <Navbar className={classes.nav}/>
           <div className={classes.main}>
-            <HomeToDo className={classes.todo} />
+            <Route path="/" exact component={HomeToDo} />
             <Switch>
               <Route path="/" exact component={CourseList} />
               <Route path="/calendar" exact component={Calendar} />
