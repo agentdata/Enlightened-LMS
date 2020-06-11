@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Course from './Course';
 import { withStyles } from "@material-ui/core/styles"
-import HomeToDo from "./HomeToDo"
-
 
 const styles = theme => ({
 

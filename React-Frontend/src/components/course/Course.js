@@ -5,12 +5,12 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles'
+import Container from "@material-ui/core/Container"
 
 const styles = theme => ({
     courseCard: {
         display: "table-cell",
         wordWrap: "break-word",
-        paddingTop: "150px" /* this will most likely be removed when an image is added to card */
     },
     courseContainer: {
         tableLayout: "fixed",
@@ -24,6 +24,10 @@ const styles = theme => ({
     cardRoot: {
         display: "flex",
         flexDirection: "column"
+    },
+    cardColor: {
+        height: "200px",
+        backgroundColor: "#7C91BF"
     }
 })
 
@@ -34,10 +38,14 @@ const Course = (props) => {
             { props.course ? (
                 <Link to="course-page" style={{textDecoration: 'none'}} className={classes.cardRoot}>
                     <Card className={classes.courseCard}>
-                        <CardMedia
+                        <Container className={classes.cardColor} 
+                        /* style={{backgroundColor: props.course.cardColor}}
+                        For now this uses a default color, later maybe settable by user */
+                        />
+                        {/* <CardMedia
                             // image={props.course.image}
                             image = 'nothing to see here...'
-                        />
+                        /> */}
                         <CardContent className={classes.cardContent}>
                             <Typography gutterBottom variant="h6" component="h2">
                                 {props.course.title}

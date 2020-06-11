@@ -45,9 +45,6 @@ const styles = () => ({
     display: "flex",
     flexDirection: "row"
   },
-  todo: {
-    width: "200px"
-  }
 
 });
 
@@ -76,37 +73,6 @@ class Home extends Component {
           </div>
         </div>
       </Router>
-
-      // <Container component="main" maxWidth="xs">
-      //   <Profile></Profile>
-      //   <Paper className={classes.paper}>
-      //     <Avatar className={classes.avatar} style={{marginBottom: 10}}>
-      //     <AlternateEmail />
-      //     </Avatar>
-      //     <Typography component="h1" variant="h5" align="center">
-      //     Hello! Please check your email to confirm your account.
-      //     </Typography>
-      //     <Button
-      //     type="button"
-      //     fullWidth
-      //     variant="contained"
-      //     color="primary"
-      //     className={classes.submit}
-      //     onClick={this.handleResendEmail}
-      //     style={{marginTop: 10}}
-      //     >
-      //     Re-Send Email
-      //     </Button>
-      //     <Button
-      //     type="button"
-      //     fullWidth
-      //     variant="contained"
-      //     color="secondary"
-      //     className={classes.Button}
-      //     onClick={this.handleLogout}
-      //     >Sign Out</Button>
-      //   </Paper>
-      // </Container>
     );
     
   }
