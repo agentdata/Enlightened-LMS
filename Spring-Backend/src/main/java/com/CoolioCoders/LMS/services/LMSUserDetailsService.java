@@ -135,4 +135,8 @@ public class LMSUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(), authorities);
     }
+
+    public void invokeSave(User user){
+        userRepository.save(user);
+    }
 }

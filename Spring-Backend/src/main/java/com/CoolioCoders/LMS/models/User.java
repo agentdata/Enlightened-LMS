@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 
 @Document(collection = "users")
@@ -34,8 +33,9 @@ public class User {
     @DBRef
     private Set<Role> roles;
 
-    public User(String firstName, String lastName, LocalDate birthDate, String email, 
-    String password, String bio, String link1, String link2, String link3, String avatar, 
+
+    public User(String firstName, String lastName, LocalDate birthDate, String email,
+    String password, String bio, String link1, String link2, String link3, String avatar,
     String phone, String address1, String address2, String city, String state, String zip, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
