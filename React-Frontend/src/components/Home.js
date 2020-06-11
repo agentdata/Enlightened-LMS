@@ -9,6 +9,7 @@ import Navbar from "./sitewide/Navbar"
 import CoursePage from "./course/CoursePage"
 import Calendar from "./calendar/Calendar"
 import Messages from "./messages/Messages"
+import HomeToDo from "./course/HomeToDo"
 
 // styles for sign in page
 const styles = () => ({
@@ -40,6 +41,13 @@ const styles = () => ({
   Button: {
       marginTop: 10
   },
+  main: {
+    display: "flex",
+    flexDirection: "row"
+  },
+  todo: {
+    width: "200px"
+  }
 
 });
 
@@ -56,13 +64,16 @@ class Home extends Component {
       <Router>
         <div>
           <Navbar className={classes.nav}/>
-          <Switch>
-            <Route path="/course-list" exact component={CourseList} />
-            <Route path="/calendar" exact component={Calendar} />
-            <Route path="/messages" exact component={Messages} />
-            <Route path="/profile" exact component={Profile} />
-            <Route path="/course-page" exact component={CoursePage} />
-          </Switch>
+          <div className={classes.main}>
+            <HomeToDo className={classes.todo} />
+            <Switch>
+              <Route path="/" exact component={CourseList} />
+              <Route path="/calendar" exact component={Calendar} />
+              <Route path="/messages" exact component={Messages} />
+              <Route path="/profile" exact component={Profile} />
+              <Route path="/course-page" exact component={CoursePage} />
+            </Switch>
+          </div>
         </div>
       </Router>
 

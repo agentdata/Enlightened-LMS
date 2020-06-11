@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Course from './Course';
+import { withStyles } from "@material-ui/core/styles"
+
+
+const styles = theme => ({
+    course: {
+        
+    }
+})
 
 class CourseList extends Component {
     state = {
@@ -61,13 +69,14 @@ class CourseList extends Component {
     }
 
     render() {
+        const { classes } = this.props
         return (
             <div>
                 {this.state.courses ? (
                     <div>
                         <Grid container spacing={2} style ={{padding: 24}}>
                             {this.state.courses.map(currentCourse => (
-                                <Grid item xs={6} s={4} lg={3} xl={3} key={currentCourse.title}>
+                                <Grid item xs={6} s={4} lg={3} xl={3} key={currentCourse.title} className={classes.course}>
                                     <Course course={currentCourse} />
                                 </Grid>
                             ))}
@@ -79,4 +88,4 @@ class CourseList extends Component {
     }
 }
 
-export default CourseList;
+export default withStyles(styles)(CourseList);

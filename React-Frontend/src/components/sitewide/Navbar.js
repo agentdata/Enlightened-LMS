@@ -158,7 +158,7 @@ const Navbar = () => {
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}>
                   <Tooltip title="Courses" arrow>
-                    <Link to="course-list">
+                    <Link to="/">
                       <IconButton color="inherit">
                           <Badge color="secondary">
                             <DashboardIcon />
