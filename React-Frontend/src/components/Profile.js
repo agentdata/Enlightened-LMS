@@ -1,7 +1,9 @@
 import React from 'react';
 import { Container, Card, CardContent, CardActions, 
         Typography, Button } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import SelectInput from '@material-ui/core/Select/SelectInput';
+import FileUploader from './sitewide/FileUploader';
 
         // UserDetails Component - renders/displays user info
 function UserDetails ({details}) {
@@ -10,6 +12,11 @@ function UserDetails ({details}) {
         <Container fixed>
             <Card style={{padding: 10}}>
                 <CardContent>
+                    <Grid>
+                        <Grid item xs={6} s={4} lg={3} xl={3}>
+                            <FileUploader uploadType="avatar"/>
+                        </Grid>
+                    </Grid>
                     <Typography component="h2" variant="h2">
                         {firstName} {lastName}
                     </Typography>
@@ -78,8 +85,6 @@ class Profile extends React.Component {
         this.state = {
             isLoggedIn: false
         };
-        
-        // this.checkLoggedIn = this.checkLoggedIn.bind(this);
     }
 
     getUserDetails(){
