@@ -1,81 +1,102 @@
 import React from 'react';
 import { Container, Card, CardContent, CardActions, 
-        Typography, Button } from '@material-ui/core';
+        Typography, Button, Avatar } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import SelectInput from '@material-ui/core/Select/SelectInput';
 import FileUploader from './sitewide/FileUploader';
 
         // UserDetails Component - renders/displays user info
-function UserDetails ({details}) {
-    const {email, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...details};
-    return (
-        <Container fixed>
-            <Card style={{padding: 10}}>
-                <CardContent>
-                    <Grid>
-                        <Grid item xs={6} s={4} lg={3} xl={3}>
-                            <FileUploader uploadType="avatar"/>
+
+class UserDetails extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            changesMade: false,
+            userUIDetails: this.props.details
+        };
+    }
+
+    componentDidUpdate() {
+
+    }
+
+    render() {
+        const {email, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...this.props.details};
+        return (
+            <Container fixed>
+                <Card style={{padding: 10}}>
+                    <CardContent>
+                        <Grid>
+                            <Grid item xs={6} s={4} lg={3} xl={3}>
+                                <Card>
+                                    <Avatar alt={firstName + '\'s avatar'} src={avatar} style={{ width: '80px', height: '80px', margin: '0 auto'}}/>
+                                    <FileUploader uploadType="new avatar"/>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Typography component="h2" variant="h2">
-                        {firstName} {lastName}
-                    </Typography>
-                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                        Email:
-                    </Typography>
-                    <Typography component="h4" variant="h5">
-                        {email}
-                    </Typography>
-                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                        Phone:
-                    </Typography>
-                    <Typography component="h4" variant="h5">
-                        {phone}
-                    </Typography>
-                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                        Birthday:
-                    </Typography>
-                    <Typography component="h4" variant="h5">
-                        //{birthDate}
-                    </Typography>
-                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                        Bio:
-                    </Typography>
-                    <Typography component="h4" variant="h5">
-                        {bio}
-                    </Typography>
-                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                        Address:
-                    </Typography>
-                    <Typography component="h4" variant="h5">
-                        {address1} {city} , {state} {zip}
-                    </Typography>
-                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                        Facebook:
-                    </Typography>
-                    <Typography component="h4" variant="h5">
-                        <a href={link1}>My facebook profile</a>
-                    </Typography>
-                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                        LinkedIN:
-                    </Typography>
-                    <Typography component="h4" variant="h5">
-                        <a href={link2}>My LinkedIN profile</a>
-                    </Typography>
-                    <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                        Facebook:
-                    </Typography>
-                    <Typography component="h4" variant="h5">
-                        <a href={link3}>My GitHub profile</a>
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="medium">Logout</Button>
-                </CardActions>
-            </Card>
-        </Container>
-    );
-}
+                        <Typography component="h2" variant="h2">
+                            {firstName} {lastName}
+                        </Typography>
+                        <Button>Edit</Button>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            Email:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            {email}
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            Phone:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            {phone}
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            Birthday:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            //{birthDate}
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            Bio:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            {bio}
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            Address:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            {address1} {city} , {state} {zip}
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            Facebook:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            <a href={link1}>My facebook profile</a>
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            LinkedIN:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            <a href={link2}>My LinkedIN profile</a>
+                        </Typography>
+                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
+                            Facebook:
+                        </Typography>
+                        <Typography component="h4" variant="h5">
+                            <a href={link3}>My GitHub profile</a>
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        {this.state.changesMade && <Button size="medium">Save changes</Button>}
+                        <Button size="medium">Logout</Button>
+                    </CardActions>
+                </Card>
+            </Container>
+        );
+    }
+}    
 
 // Profile Component - Container for UserDetails
 class Profile extends React.Component {
@@ -83,8 +104,19 @@ class Profile extends React.Component {
         super(props);
 
         this.state = {
-            isLoggedIn: false
+            error: null
         };
+
+        this.getUserDetails = this.getUserDetails.bind(this);
+        this.setUserDetails = this.setUserDetails.bind(this);
+    }
+
+    // implement post api call to update user profile
+    setUserDetails() {
+        // set the state to reflect changes based on user input
+        // passing data through props? Probably use methods instead.
+        // push the changes to the API
+
     }
 
     getUserDetails(){
@@ -122,27 +154,27 @@ class Profile extends React.Component {
             }
         ))
         .catch((e) => {
-            // error in e.message
+            console.warn('There was an error retrieving user details: ', e)
+
+            this.setState({
+                error: 'There was an error retrieving user details.'
+            })
         }); 
     }
 
     // check that the user is logged in before component is loaded into DOM
     componentDidMount() {
-        this.setState(state => ({
-            isLoggedIn: true // call method from user/authentication controller/service
-        }));
-        // this.state = {userDetails: user}
+        // this.setState(state => ({
+        //     isLoggedIn: true // call method from user/authentication controller/service
+        // }));
         this.getUserDetails();
         console.log("current state.userDetails : "+JSON.stringify(this.state.userDetails));
     }
 
     render() {
-        
         return (
-            <div className="header">
-                <h1>{this.state.isLoggedIn
-                    ? <UserDetails details={this.state.userDetails} />
-                    : '(redirect to login page)'}</h1>
+            <div>
+                <UserDetails details={this.state.userDetails} />
             </div>
         );
     }

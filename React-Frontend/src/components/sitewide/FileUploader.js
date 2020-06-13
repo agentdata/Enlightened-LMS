@@ -29,10 +29,9 @@ export default class FileUploader extends React.Component {
     render() {
         return (
             <div>
-                <Card>
-                    <label>Upload {this.props.uploadType}</label>
+                <Card style={{display: 'flex', flexFlow: 'wrap', justifyContent: 'center', alignContent: 'center'}}>
                     <Button>
-                    <input type="file" name="file" onChange={this.onChangeHandler} multiple=""/>
+                        <input type="file" name="file" onChange={this.onChangeHandler} multiple=""/>
                     </Button>
                     <Button onClick={this.onClickHandler}>
                         Upload
