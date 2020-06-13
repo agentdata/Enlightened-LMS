@@ -16,9 +16,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
@@ -40,14 +41,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.httpBasic().disable().csrf().disable().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers("/api/auth/login").permitAll().antMatchers("/api/auth/register").permitAll()
-                // See endpoints in controllers for authorization rules
-//                .antMatchers("api/user/**").hasAnyAuthority("ADMIN", "INSTRUCTOR", "STUDENT")
-//                .antMatchers("api/instructor/**").hasAuthority("INSTRUCTOR")
-//                .antMatchers("api/student/**").hasAuthority("STUDENT")
-//                .antMatchers("api/**").hasAuthority("ADMIN")
-                .anyRequest().authenticated().and().csrf()
-                .disable().exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint()).and()
-                .apply(new JwtConfigurer(jwtTokenProvider));
+                .anyRequest().authenticated().and().csrf().disable()
+                .exceptionHandling()
+                    .accessDeniedHandler(accessDeniedHandler()).authenticationEntryPoint(unauthorizedEntryPoint()).and()
+                //.apply(new JwtConfigurer(jwtTokenProvider));
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
@@ -67,9 +65,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new ApiAccessDeniedHandler();
+    }
+
+    @Bean
     public AuthenticationEntryPoint unauthorizedEntryPoint() {
-        return (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                "Unauthorized");
+        return new APIAuthenticationEntryPoint();
+    }
+
+    @Bean
+    public Filter jwtTokenFilter(){
+        return new JwtTokenFilter(jwtTokenProvider);
     }
 
     @Bean
