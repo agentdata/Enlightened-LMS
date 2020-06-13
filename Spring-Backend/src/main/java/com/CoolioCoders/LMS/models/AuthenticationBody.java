@@ -1,4 +1,4 @@
-package com.CoolioCoders.LMS.controllers;
+package com.CoolioCoders.LMS.models;
 
 public class AuthenticationBody {
     private String email;

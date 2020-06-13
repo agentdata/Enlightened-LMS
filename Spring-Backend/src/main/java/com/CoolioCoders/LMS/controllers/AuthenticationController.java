@@ -1,6 +1,7 @@
 package com.CoolioCoders.LMS.controllers;
 
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
+import com.CoolioCoders.LMS.models.AuthenticationBody;
 import com.CoolioCoders.LMS.models.Role;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.repositories.UserRepository;
