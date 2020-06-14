@@ -7,6 +7,31 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link'
+
+const state = {
+  isLoggedIn: false,
+  assignments: [
+      {
+          title: 'Assignment 3',
+          course: 'CS 3100',
+          due: '2020-06-13T23:59:59Z',
+          link: 'http://www.google.com'
+      },
+      {
+          title: 'Quiz 3',
+          course: 'CS 3260',
+          due: '2020-06-14T23:59:59Z',
+          link: 'link to assignment'
+      },
+      {
+          title: 'Assignment 4',
+          course: 'CS 3260',
+          due: '2020-06-16T23:59:59Z',
+          link: 'link to assignment'
+      }
+  ]
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,69 +50,39 @@ export default function HomeToDo() {
 
   return (
     <List className={classes.root}>
+
       <ListItem alignItems="flex-start">
           <ListItemText primary="Upcoming Assignments" />
       </ListItem>
       <Divider component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary="Assignment 3"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                CS 3100
-              </Typography>
-              <br />
-              {"Due: 06/13/2020 at 11:59pm"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary="Quiz 3"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                CS 3260
-              </Typography>
-              <br />
-              {"Due: 06/14/2020 at 11:59pm"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary="Assignment 4"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                CS 3260
-              </Typography>
-              <br />
-              {"Due: 06/16/2020 at 11:59pm"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
+
+      {state.assignments ? ( 
+        state.assignments.map(currentAssignment => (
+          <ListItem alignItems="flex-start">
+            <Link href={currentAssignment.link}>
+              <ListItemText
+                primary={currentAssignment.title}
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      comopnent="span"
+                      variant="body2"
+                      className={classes.inline}
+                      color="textPrimary">
+                        {currentAssignment.course}
+                      </Typography>
+                      <br />
+                      {"Due: " + currentAssignment.due}
+                  </React.Fragment>
+                }
+                />
+              <Divider component="li" />
+            </Link>
+          </ListItem>
+        ))
+        
+      ) : <div>No upcoming assignments</div>
+    }
     </List>
   );
 }
