@@ -13,13 +13,15 @@ import AssignmentIcon from '@material-ui/icons/Assignment'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import AnnouncementIcon from '@material-ui/icons/Announcement'
 import ChatIcon from '@material-ui/icons/Chat'
+import CourseToDo from './CourseToDo'
 
-const drawerWidth = 240;
+const drawerWidth = 220;
 
 const styles = theme => ({
     mainDrawer: {
         //zIndex: -1,
         position: "relative",
+        height: "100%"
     },
     drawer: {
       width: drawerWidth,
@@ -97,9 +99,17 @@ const styles = theme => ({
                         </ListItem>
                     </Link>
                 </List>
+                <Divider />
+                <List>
+                    <ListItem>
+                        <CourseToDo />
+                    </ListItem>
+                </List>
             </div>
             </Drawer>
+            
         </div>
+        
         );
     }
 }

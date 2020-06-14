@@ -7,11 +7,23 @@ import CourseGrades from './CourseGrades'
 import CourseAnnouncements from './CourseAnnouncements'
 import CourseDiscussions from './CourseDiscussions'
 import { withStyles } from '@material-ui/core/styles'
+import CourseToDo from './CourseToDo'
 
 
 const styles = theme => ({
     main: {
-        display: "flex"
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "100%"
+    },
+    left: {
+        display: "flex",
+        justifyContent: "flex-start"
+    },
+    side: {
+        display: "flex",
+        flexDirection: 'column'
     }
 })
 
@@ -27,14 +39,19 @@ class CoursePage extends Component {
         return (
             <Router>
                 <div className={classes.main}>
-                    <CourseSidebar />
-                    <Switch>
-                        <Route path="/course-page" component={CourseHome} />
-                        <Route path="/course-assignments" exact component={CourseAssignments} />
-                        <Route path="/course-grades" exact component={CourseGrades} />
-                        <Route path="/course-announcements" exact component={CourseAnnouncements} />
-                        <Route path="/course-discussions" exact component={CourseDiscussions} />
-                    </Switch>
+                    <div className={classes.left}>
+                        <div className={classes.side}>
+                        <CourseSidebar />
+                        </div>
+                        <Switch>
+                            <Route path="/course-page" component={CourseHome} />
+                            <Route path="/course-assignments" exact component={CourseAssignments} />
+                            <Route path="/course-grades" exact component={CourseGrades} />
+                            <Route path="/course-announcements" exact component={CourseAnnouncements} />
+                            <Route path="/course-discussions" exact component={CourseDiscussions} />
+                        </Switch>
+                    </div>
+                    {/* <Route path="/course-page" component={CourseToDo} /> */}
                 </div>
             </Router>
         )
