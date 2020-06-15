@@ -156,6 +156,8 @@ class Profile extends React.Component {
             return false;
         }
         function isUrl(url) {
+            if(url == null || url == "")
+                return true;
             try{new URL(url);}
             catch (_){return false;}
             return true;
