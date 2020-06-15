@@ -5,6 +5,7 @@ import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.repositories.UserRepository;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,10 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.security.Principal;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -72,27 +70,41 @@ public class UserController {
     }
 
     //TODO POST method for setting avatar
-    @PostMapping(value = "/profile/avatar")
-    public void setUserAvatar(Principal principalUser, @RequestBody User updateUser){
+    @PutMapping(value = "/profile/avatar")
+    public ResponseEntity<Map<Object, Object>> setUserAvatar(Principal principalUser, @RequestBody JSONObject body){
 
-        File file = new File("This is where you put the file path");		//Get file
-        String stringFile = "";												        //Store encoded string
+//        String stringFile = "";												        //Store encoded string
+//
+//        try {
+//            FileInputStream fileInput = new FileInputStream(file);			        //Set up reading from a file as a stream of bytes
+//            byte[] bytes = new byte[(int)file.length()];					        //Allocate enough space
+//            fileInput.read(bytes);											        //Read file into bytes
+//            fileInput.close();
+//            stringFile = Base64.getEncoder().encodeToString(bytes);			        //Encode the bytes into a string
+//
+//            updateUser.setAvatar(stringFile);                                       //Set user's avatar
+//        }
+//        catch(Exception e){
+//            // File is missing or invalid
+//            e.printStackTrace();
+//        }
+//
+//        userService.update(principalUser.getName(), updateUser);                    //Updates current user
+//        userService.invokeSave(updateUser);                                         //Invokes save() from UserRepository
 
-        try {
-            FileInputStream fileInput = new FileInputStream(file);			        //Set up reading from a file as a stream of bytes
-            byte[] bytes = new byte[(int)file.length()];					        //Allocate enough space
-            fileInput.read(bytes);											        //Read file into bytes
-            fileInput.close();
-            stringFile = Base64.getEncoder().encodeToString(bytes);			        //Encode the bytes into a string
+        //Update user and save
+        String fileBinary = body.get("newAvatar").toString();           //Get value for the key "newAvatar"
+        String email = principalUser.getName();                         //Get email of the current user
+        User currentUser = userService.findUserProfileByEmail(email);   //Find the user using the email
 
-            updateUser.setAvatar(stringFile);                                       //Set user's avatar
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        currentUser.setAvatar(fileBinary);                              //Set avatar to value
+        userService.update(email, currentUser);                         //Update the user
+        userService.invokeSave(currentUser);                            //Save user to database
 
-        userService.update(principalUser.getName(), updateUser);                    //Updates current user
-        userService.invokeSave(updateUser);                                         //Invokes save() from UserRepository
+        //Return successful
+        Map<Object, Object> model = new HashMap<>();
+        model.put("message", "User registered successfully");
+        return ok(model);
     }
 
 }
