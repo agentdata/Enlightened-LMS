@@ -1,103 +1,19 @@
 import React from 'react';
 import { Container, Card, CardContent, CardActions, 
-        Typography, Button, Avatar } from '@material-ui/core';
+        Typography, Button, Avatar, List, ListItem } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import SelectInput from '@material-ui/core/Select/SelectInput';
 import FileUploader from './sitewide/FileUploader';
+import { withStyles } from '@material-ui/core/styles'
+import UserDetails from './UserDetails'
 
         // UserDetails Component - renders/displays user info
 
-class UserDetails extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            changesMade: false,
-            userUIDetails: this.props.details
-        };
+const styles = theme => ({
+    main: {
+        width: "100%"
     }
-
-    componentDidUpdate() {
-
-    }
-
-    render() {
-        const {email, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...this.props.details};
-        return (
-            <Container fixed>
-                <Card style={{padding: 10}}>
-                    <CardContent>
-                        <Grid>
-                            <Grid item xs={6} s={4} lg={3} xl={3}>
-                                <Card>
-                                    <Avatar alt={firstName + '\'s avatar'} src={avatar} style={{ width: '80px', height: '80px', margin: '0 auto'}}/>
-                                    <FileUploader uploadType="new avatar"/>
-                                </Card>
-                            </Grid>
-                        </Grid>
-                        <Typography component="h2" variant="h2">
-                            {firstName} {lastName}
-                        </Typography>
-                        <Button>Edit</Button>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            Email:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            {email}
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            Phone:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            {phone}
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            Birthday:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            //{birthDate}
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            Bio:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            {bio}
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            Address:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            {address1} {city} , {state} {zip}
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            Facebook:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            <a href={link1}>My facebook profile</a>
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            LinkedIN:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            <a href={link2}>My LinkedIN profile</a>
-                        </Typography>
-                        <Typography component="h3" variant="h4" style={{marginTop: 10, marginBottom: 0}}>
-                            Facebook:
-                        </Typography>
-                        <Typography component="h4" variant="h5">
-                            <a href={link3}>My GitHub profile</a>
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        {this.state.changesMade && <Button size="medium" 
-                            onClick={() => this.props.updateCallback(this.state.userUIDetails)}>Save changes</Button>}
-                        <Button size="medium">Logout</Button>
-                    </CardActions>
-                </Card>
-            </Container>
-        );
-    }
-}    
+})
 
 // Profile Component - Container for UserDetails
 class Profile extends React.Component {
@@ -219,12 +135,13 @@ class Profile extends React.Component {
     }
 
     render() {
+        const { classes } = this.props
         return (
-            <div>
+            <div className={classes.main}>
                 <UserDetails details={this.state.userDetails} updateCallback={this.initializeUserChanges} />
             </div>
         );
     }
 }
 
-export default Profile;
+export default withStyles(styles)(Profile);
