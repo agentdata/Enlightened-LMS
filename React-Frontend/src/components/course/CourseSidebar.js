@@ -13,13 +13,15 @@ import AssignmentIcon from '@material-ui/icons/Assignment'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import AnnouncementIcon from '@material-ui/icons/Announcement'
 import ChatIcon from '@material-ui/icons/Chat'
+import CourseToDo from './CourseToDo'
 
-const drawerWidth = 240;
+const drawerWidth = 220;
 
 const styles = theme => ({
     mainDrawer: {
         //zIndex: -1,
         position: "relative",
+        height: "100%"
     },
     drawer: {
       width: drawerWidth,
@@ -53,53 +55,51 @@ const styles = theme => ({
             <Toolbar />
             <div className={classes.drawerContainer}>
                 <List>
-                    <Link to="course-page" style={{textDecoration: 'none'}}>
-                        <ListItem button key="Home">
-                            <ListItemIcon>
-                                <HomeIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Home" />
-                        </ListItem>
-                    </Link>
-                    <Link to="course-assignments" style={{textDecoration: 'none'}}>
-                        <ListItem button key="Assignments">
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Assignments" />
-                        </ListItem>
-                    </Link>
-                    <Link to="course-grades" style={{textDecoration: 'none'}}>
-                        <ListItem button key="Grades">
-                            <ListItemIcon>
-                                <CheckBoxIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Grades" />
-                        </ListItem>
-                    </Link>
+                    <ListItem button key="Home" component={Link} to="course-page">
+                        <ListItemIcon>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Home" />
+                    </ListItem>
+                    <ListItem button key="Assignments" component={Link} to="course-assignments">
+                        <ListItemIcon>
+                            <AssignmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Assignments" />
+                    </ListItem>
+                    <ListItem button key="Grades" component={Link} to="course-grades">
+                        <ListItemIcon>
+                            <CheckBoxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Grades" />
+                    </ListItem>
                 </List>
                 <Divider />
                 <List>
-                    <Link to="course-announcements" style={{textDecoration: 'none'}}>
-                        <ListItem button key="Announcements">
-                            <ListItemIcon>
-                                <AnnouncementIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Announcements" />
-                        </ListItem>
-                    </Link>
-                    <Link to="course-discussions" style={{textDecoration: 'none'}}>
-                        <ListItem button key="Discussions">
-                            <ListItemIcon>
-                                <ChatIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Discussions" />
-                        </ListItem>
-                    </Link>
+                    <ListItem button key="Announcements" component={Link} to="course-announcements">
+                        <ListItemIcon>
+                            <AnnouncementIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Announcements" />
+                    </ListItem>
+                    <ListItem button key="Discussions" component={Link} to="course-discussions">
+                        <ListItemIcon>
+                            <ChatIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Discussions" />
+                    </ListItem>
+                </List>
+                <Divider />
+                <List>
+                    <ListItem>
+                        <CourseToDo />
+                    </ListItem>
                 </List>
             </div>
             </Drawer>
+            
         </div>
+        
         );
     }
 }

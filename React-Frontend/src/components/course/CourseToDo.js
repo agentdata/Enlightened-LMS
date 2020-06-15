@@ -35,16 +35,14 @@ const state = {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: "25px",
-    marginLeft: "25px",
     minWidth: '220px',
-    height: '100%',
     backgroundColor: theme.palette.background.paper,
+    position: "relative",
+    left: "-15px"
   },
   inline: {
     display: 'inline',
   },
-  
 }));
 
 export default function HomeToDo() {

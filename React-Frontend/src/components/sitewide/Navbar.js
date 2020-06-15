@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
       },
     },
+    dropdown: {
+      marginTop: "42px"
+    }
   }));
 
 // const preventDefault = (event) => event.preventDefault();
@@ -75,7 +78,7 @@ const Navbar = () => {
     const menuId = 'navbar';
 
     const renderMenu = (
-      <Menu
+      <Menu className={classes.dropdown}
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         id={menuId}
@@ -84,16 +87,16 @@ const Navbar = () => {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
-        <Link to="profile" style={{textDecoration: 'none'}}>
-          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-        </Link>
+
+        <MenuItem onClick={handleMenuClose} to="profile" component={Link}>Profile</MenuItem>
+
         <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
       </Menu>
     );
   
     const mobileMenuId = 'navbar-mobile';
     const renderMobileMenu = (
-      <Menu
+      <Menu className={classes.dropdown}
         anchorEl={mobileMoreAnchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         id={mobileMenuId}
@@ -102,7 +105,7 @@ const Navbar = () => {
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
       >
-        <MenuItem>
+        <MenuItem component={Link} to="/">
           <IconButton color="inherit">
             <Badge color="secondary">
               <DashboardIcon />
@@ -110,7 +113,7 @@ const Navbar = () => {
           </IconButton>
           <p>Courses</p>
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="calendar">
           <IconButton color="inherit">
             <Badge color="secondary">
               <DateRangeIcon/>
@@ -118,7 +121,7 @@ const Navbar = () => {
           </IconButton>
           <p>Calendar</p>
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="messages">
           <IconButton color="inherit">
             <Badge color="secondary">
               <MailIcon />
@@ -157,32 +160,26 @@ const Navbar = () => {
               </Typography>
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}>
-                  <Tooltip title="Courses" arrow>
-                    <Link to="/">
-                      <IconButton color="inherit">
-                          <Badge color="secondary">
-                            <DashboardIcon />
-                          </Badge>
-                      </IconButton>
-                    </Link>
-                  </Tooltip>
-                  <Tooltip title="Calendar" arrow>
-                    <Link to="calendar" style={{textDecoration: 'none'}}>
-                      <IconButton color="inherit">
-                          <Badge color="secondary">
-                            <DateRangeIcon/>
-                          </Badge>
-                      </IconButton>
-                    </Link>
-                  </Tooltip>
-                  <Tooltip title="Messages" arrow>
-                    <Link to="messages" style={{textDecoration: 'none'}}>
-                      <IconButton color="inherit">
+                  <Tooltip title="Courses" arrow component={Link} to="/">
+                    <IconButton color="inherit">
                         <Badge color="secondary">
-                          <MailIcon />
+                          <DashboardIcon />
                         </Badge>
-                      </IconButton>
-                    </Link>
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Calendar" arrow component={Link} to="calendar">
+                    <IconButton color="inherit">
+                        <Badge color="secondary">
+                          <DateRangeIcon/>
+                        </Badge>
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Messages" arrow component={Link} to="messages">
+                    <IconButton color="inherit">
+                      <Badge color="secondary">
+                        <MailIcon />
+                      </Badge>
+                    </IconButton>
                   </Tooltip>
                   <Tooltip title="Notifications" arrow>
                     <IconButton color="inherit">

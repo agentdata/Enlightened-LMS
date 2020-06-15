@@ -4,7 +4,9 @@ import Course from './Course';
 import { withStyles } from "@material-ui/core/styles"
 
 const styles = theme => ({
-
+    course: {
+        minWidth: "300px"
+    },
 })
 
 class CourseList extends Component {
@@ -68,7 +70,7 @@ class CourseList extends Component {
     render() {
         const { classes } = this.props
         return (
-            <div>
+            <div className={classes.main}>
                 {this.state.courses ? (
                     <div>
                         <Grid container spacing={2} style ={{padding: 24}}>
