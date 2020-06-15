@@ -124,46 +124,81 @@ class Profile extends React.Component {
     setUserDetails(updatedFields) {
         // set the state to reflect changes based on user input
 
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+        //TODO Validate URL and email fields
+        let valid = true;
+        let email = this.getUserDetails.email;
+        let link1 = this.getUserDetails.link1;
+        let link2 = this.getUserDetails.link2;
+        let link3 = this.getUserDetails.link3;
 
-        const init = {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(updatedFields)
-        };
+        function isEmail(email)
+        {
+            let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;    //email regex
 
-        fetch('https://cooliocoders.ddns.net/api/user/profile', init)
-            .then(async response => {
-                const text = await response.json();
-                statusCode = response.status;
+            if (regex.test(email))
+                return true;
+            return false;
+        }
 
-                this.setState({userDetails:
-                    {
-                        email: text["email"],
-                        firstName: text["firstName"],
-                        lastName: text["lastName"],
-                        phone: text["phone"],
-                        birthDate: text["birthDate"],
-                        state: text["state"],
-                        city: text["city"],
-                        zip: text["zip"],
-                        address1: text["address1"],
-                        bio: text["bio"],
-                        avatar: text["avatar"],
-                        link1: text["link1"],
-                        link3: text["link3"],
-                        link2: text["link2"]
-                    }
-                })
-            }).catch((e) => {
+        function isUrl(url) {   //takes advantage of the url constructor to test if the structure is correct
+            try //Try creating a new url
+            {
+                new URL(url);
+            }
+            catch (_)   //Exception is thrown if url does not exist
+            {
+                return false;
+            }
+            return true;
+        }
+
+        if(false)
+        {
+            var statusCode;
+            const headers = new Headers();
+            headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+
+            const init = {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(updatedFields)
+            };
+
+            fetch('https://cooliocoders.ddns.net/api/user/profile', init)
+                .then(async response => {
+                    const text = await response.json();
+                    statusCode = response.status;
+
+                    this.setState({userDetails:
+                            {
+                                email: text["email"],
+                                firstName: text["firstName"],
+                                lastName: text["lastName"],
+                                phone: text["phone"],
+                                birthDate: text["birthDate"],
+                                state: text["state"],
+                                city: text["city"],
+                                zip: text["zip"],
+                                address1: text["address1"],
+                                bio: text["bio"],
+                                avatar: text["avatar"],
+                                link1: text["link1"],
+                                link3: text["link3"],
+                                link2: text["link2"]
+                            }
+                    })
+                }).catch((e) => {
                 console.warn('There was an error saving user details: ', e)
 
                 this.setState({
                     error: 'There was an error saving user details.'
-            })
-        });
+                })
+            });
+        }
+        else
+        {
+            //TODO Email or URL is invalid
+        }
     }
 
     getUserDetails(){

@@ -89,22 +89,11 @@ public class UserController {
 //            e.printStackTrace();
 //        }
 //
-//        userService.update(principalUser.getName(), updateUser);                    //Updates current user
-//        userService.invokeSave(updateUser);                                         //Invokes save() from UserRepository
-
-        //Update user and save
-        String fileBinary = body.get("newAvatar").toString();           //Get value for the key "newAvatar"
-        String email = principalUser.getName();                         //Get email of the current user
-        User currentUser = userService.findUserProfileByEmail(email);   //Find the user using the email
-
-        currentUser.setAvatar(fileBinary);                              //Set avatar to value
-        userService.update(email, currentUser);                         //Update the user
-        userService.invokeSave(currentUser);                            //Save user to database
+//        userService.(principalUser.getName(), updateUser);                    //Updates current user
+//        userService.updateinvokeSave(updateUser);                             //Invokes save() from UserRepository
 
         //Return successful
-        Map<Object, Object> model = new HashMap<>();
-        model.put("message", "User registered successfully");
-        return ok(model);
+        return ok(userService.saveAvatar(principalUser.getName(), body));
     }
 
 }
