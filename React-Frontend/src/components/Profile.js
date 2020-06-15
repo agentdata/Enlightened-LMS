@@ -28,9 +28,21 @@ class Profile extends React.Component {
         this.setUserDetails = this.setUserDetails.bind(this);
     }
 
+    initializeAvatarChange = (avatar) => {
+        this.setState((prevState) => ({
+            userDetails: {
+                ...prevState.userDetails,
+                avatar: avatar
+            }
+        }))
+
+        this.setUserDetails(this.state.userDetails)
+    }
+
     initializeUserChanges = (updatedFields) => {
+
         this.setState({
-            userDetails: updatedFields
+            userDetails: updatedFields,
         })
 
         this.setUserDetails(this.state.userDetails)
@@ -40,46 +52,80 @@ class Profile extends React.Component {
     setUserDetails(updatedFields) {
         // set the state to reflect changes based on user input
 
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+        //Validate URL and email fields
+        let valid = true;
+        let email = updatedFields.email;
+        let link1 = updatedFields.link1;
+        let link2 = updatedFields.link2;
+        let link3 = updatedFields.link3;
 
-        const init = {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(updatedFields)
-        };
+        if(!isEmail(email)){valid = false;}
+        else if(!isUrl(link1)){valid = false;}
+        else if(!isUrl(link2)){valid = false;}
+        else if(!isUrl(link3)){valid = false;}
 
-        fetch('https://cooliocoders.ddns.net/api/user/profile', init)
-            .then(async response => {
-                const text = await response.json();
-                statusCode = response.status;
+        function isEmail(email)
+        {
+            let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;    //email regex
+            if (regex.test(email))
+                return true;
+            return false;
+        }
+        function isUrl(url) {
+            if(url == null || url == "")
+                return true;
+            try{new URL(url);}
+            catch (_){return false;}
+            return true;
+        }
 
-                this.setState({userDetails:
-                    {
-                        email: text["email"],
-                        firstName: text["firstName"],
-                        lastName: text["lastName"],
-                        phone: text["phone"],
-                        birthDate: text["birthDate"],
-                        state: text["state"],
-                        city: text["city"],
-                        zip: text["zip"],
-                        address1: text["address1"],
-                        bio: text["bio"],
-                        avatar: text["avatar"],
-                        link1: text["link1"],
-                        link3: text["link3"],
-                        link2: text["link2"]
-                    }
-                })
-            }).catch((e) => {
+        if(valid)   //This only runs if the email and urls are valid
+        {
+            var statusCode;
+            const headers = new Headers();
+            headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+
+            const init = {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(updatedFields)
+            };
+
+            fetch('https://cooliocoders.ddns.net/api/user/profile', init)
+                .then(async response => {
+                    const text = await response.json();
+                    statusCode = response.status;
+
+                    this.setState({userDetails:
+                            {
+                                email: text["email"],
+                                firstName: text["firstName"],
+                                lastName: text["lastName"],
+                                phone: text["phone"],
+                                birthDate: text["birthDate"],
+                                state: text["state"],
+                                city: text["city"],
+                                zip: text["zip"],
+                                address1: text["address1"],
+                                bio: text["bio"],
+                                avatar: text["avatar"],
+                                link1: text["link1"],
+                                link3: text["link3"],
+                                link2: text["link2"]
+                            }
+                    })
+                }).catch((e) => {
                 console.warn('There was an error saving user details: ', e)
 
                 this.setState({
                     error: 'There was an error saving user details.'
-            })
-        });
+                })
+            });
+        }
+        else
+        {
+            //TODO Email or URL is invalid
+        }
     }
 
     getUserDetails(){
@@ -137,8 +183,8 @@ class Profile extends React.Component {
     render() {
         const { classes } = this.props
         return (
-            <div className={classes.main}>
-                <UserDetails details={this.state.userDetails} updateCallback={this.initializeUserChanges} />
+            <div>
+                <UserDetails details={this.state.userDetails} updateCallback={this.initializeUserChanges} updateFileCallback={this.initializeAvatarChange}/>
             </div>
         );
     }

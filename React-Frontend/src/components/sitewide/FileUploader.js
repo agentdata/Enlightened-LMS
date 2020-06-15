@@ -24,6 +24,7 @@ export default class FileUploader extends React.Component {
     onClickHandler = () => {
         const data = new FormData()
         data.append('file', this.state.selectedFile)
+        this.props.updateFileCallback(this.state.selectedFile)
     }
 
     render() {

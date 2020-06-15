@@ -6,6 +6,7 @@ import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.models.UserProfile;
 import com.CoolioCoders.LMS.repositories.RoleRepository;
 import com.CoolioCoders.LMS.repositories.UserRepository;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.*;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @Service
 public class LMSUserDetailsService implements UserDetailsService {
@@ -136,7 +140,15 @@ public class LMSUserDetailsService implements UserDetailsService {
                 user.getEmail(), user.getPassword(), authorities);
     }
 
-    public void invokeSave(User user){
-        userRepository.save(user);
+    public Map<Object, Object> saveAvatar(String email, JSONObject body)
+    {
+        User currentUser = findUserByEmail(email);
+        currentUser.setAvatar(body.get("newAvatar").toString());
+
+        userRepository.save(currentUser);
+
+        Map<Object, Object> model = new HashMap<>();
+        model.put("message", "User registered successfully");
+        return model;
     }
 }
