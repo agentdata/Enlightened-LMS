@@ -31,7 +31,7 @@ class UserDetails extends React.Component {
                             <Grid item xs={6} s={4} lg={3} xl={3}>
                                 <Card>
                                     <Avatar alt={firstName + '\'s avatar'} src={avatar} style={{ width: '80px', height: '80px', margin: '0 auto'}}/>
-                                    <FileUploader uploadType="new avatar"/>
+                                    <FileUploader uploadType="new avatar" updateFileCallback={this.props.updateFileCallback}/>
                                 </Card>
                             </Grid>
                         </Grid>
@@ -112,9 +112,21 @@ class Profile extends React.Component {
         this.setUserDetails = this.setUserDetails.bind(this);
     }
 
+    initializeAvatarChange = (avatar) => {
+        this.setState((prevState) => ({
+            userDetails: {
+                ...prevState.userDetails,
+                avatar: avatar
+            }
+        }))
+
+        this.setUserDetails(this.state.userDetails)
+    }
+
     initializeUserChanges = (updatedFields) => {
+
         this.setState({
-            userDetails: updatedFields
+            userDetails: updatedFields,
         })
 
         this.setUserDetails(this.state.userDetails)
@@ -126,10 +138,10 @@ class Profile extends React.Component {
 
         //Validate URL and email fields
         let valid = true;
-        let email = this.getUserDetails.email;
-        let link1 = this.getUserDetails.link1;
-        let link2 = this.getUserDetails.link2;
-        let link3 = this.getUserDetails.link3;
+        let email = updatedFields.email;
+        let link1 = updatedFields.link1;
+        let link2 = updatedFields.link2;
+        let link3 = updatedFields.link3;
 
         if(!isEmail(email)){valid = false;}
         else if(!isUrl(link1)){valid = false;}
@@ -253,7 +265,7 @@ class Profile extends React.Component {
     render() {
         return (
             <div>
-                <UserDetails details={this.state.userDetails} updateCallback={this.initializeUserChanges} />
+                <UserDetails details={this.state.userDetails} updateCallback={this.initializeUserChanges} updateFileCallback={this.initializeAvatarChange}/>
             </div>
         );
     }
