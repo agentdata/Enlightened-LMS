@@ -124,35 +124,32 @@ class Profile extends React.Component {
     setUserDetails(updatedFields) {
         // set the state to reflect changes based on user input
 
-        //TODO Validate URL and email fields
+        //Validate URL and email fields
         let valid = true;
         let email = this.getUserDetails.email;
         let link1 = this.getUserDetails.link1;
         let link2 = this.getUserDetails.link2;
         let link3 = this.getUserDetails.link3;
 
+        if(!isEmail(email)){valid = false;}
+        else if(!isUrl(link1)){valid = false;}
+        else if(!isUrl(link2)){valid = false;}
+        else if(!isUrl(link3)){valid = false;}
+
         function isEmail(email)
         {
             let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;    //email regex
-
             if (regex.test(email))
                 return true;
             return false;
         }
-
-        function isUrl(url) {   //takes advantage of the url constructor to test if the structure is correct
-            try //Try creating a new url
-            {
-                new URL(url);
-            }
-            catch (_)   //Exception is thrown if url does not exist
-            {
-                return false;
-            }
+        function isUrl(url) {
+            try{new URL(url);}
+            catch (_){return false;}
             return true;
         }
 
-        if(false)
+        if(valid)   //This only runs if the email and urls are valid
         {
             var statusCode;
             const headers = new Headers();
