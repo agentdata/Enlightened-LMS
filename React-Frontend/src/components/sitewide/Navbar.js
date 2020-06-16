@@ -21,6 +21,7 @@ import ReactDOM from "react-dom";
 import {connect, Provider} from "react-redux";
 import App from "../../App";
 import configureStore from "../../configureStore";
+import Notifications from "./../Notifications"
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -62,9 +63,11 @@ const Navbar = (props) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [notificationsAnchorEl, setNotificationsAnchorEl] = React.useState(null);
   
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const isNotificationsOpen = Boolean(notificationsAnchorEl);
   
     const handleProfileMenuOpen = (event) => {
       setAnchorEl(event.currentTarget);
@@ -83,6 +86,18 @@ const Navbar = (props) => {
       setMobileMoreAnchorEl(event.currentTarget);
     };
 
+    const handleNotificationsOpen = (event) => {
+      if (notificationsAnchorEl !== null) {
+        handleNotificationsClose();
+      } else {
+        setNotificationsAnchorEl(event.currentTarget)
+      }
+    }
+
+    const handleNotificationsClose = () => {
+      setNotificationsAnchorEl(null);
+    }
+
     const handleLogout = () => {
        // const { dispatch } = this.props;
         dispatch(logoutUser());
@@ -98,6 +113,21 @@ const Navbar = (props) => {
     }
   
     const menuId = 'navbar';
+
+    const renderNotifications = (
+      <Menu className={classes.dropdown}
+      anchorEl={notificationsAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      open={isNotificationsOpen}
+      onClose={handleNotificationsClose}
+      >
+        <MenuItem disableGutters>
+          <Notifications />
+        </MenuItem>
+      </Menu>
+    )
 
     const renderMenu = (
       <Menu className={classes.dropdown}
@@ -151,7 +181,7 @@ const Navbar = (props) => {
           </IconButton>
           <p>Messages</p>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleNotificationsOpen} >
           <IconButton color="inherit">
             <Badge color="secondary">
               <NotificationsIcon />
@@ -204,7 +234,7 @@ const Navbar = (props) => {
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Notifications" arrow>
-                    <IconButton color="inherit">
+                    <IconButton color="inherit" onClick={handleNotificationsOpen}>
                       <Badge color="secondary">
                           <NotificationsIcon />
                       </Badge>
@@ -238,6 +268,7 @@ const Navbar = (props) => {
           </AppBar>
           {renderMobileMenu}
           {renderMenu}
+          {renderNotifications}
         </div>
     );
 }
