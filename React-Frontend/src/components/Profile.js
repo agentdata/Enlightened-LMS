@@ -125,6 +125,7 @@ class Profile extends React.Component {
         else
         {
             //TODO Email or URL is invalid
+            alert("Email or URL is invalid");
         }
     }
 
