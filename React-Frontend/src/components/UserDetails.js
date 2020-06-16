@@ -2,8 +2,6 @@ import React from 'react';
 import { Container, Card, CardContent, CardActions, 
         Typography, Button, Avatar, List, ListItem, 
         Divider, TextField, TextareaAutosize } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import SelectInput from '@material-ui/core/Select/SelectInput';
 import FileUploader from './sitewide/FileUploader';
 import { withStyles } from '@material-ui/core/styles'
 
@@ -30,6 +28,9 @@ const styles = theme => ({
         textAlign: "center"
     },
     email: {
+        justifyContent: "center"
+    },
+    birthDate: {
         justifyContent: "center"
     },
     right: {
@@ -63,8 +64,40 @@ class UserDetails extends React.Component {
         this.state = {
             changesMade: false,
             userUIDetails: this.props.details,
-            editing: false
+            editing: false,
+            updatedUserDetails: {
+                bio: props.bio,
+                phone: props.phone,
+                address1: props.address1,
+                link1: props.link1,
+                link2: props.link2,
+                link3: props.link3
+            }
         };
+    }
+
+    handleBioChange = ({ target }) => {
+        this.setState({ updatedUserDetails: { ...this.state.updatedUserDetails, bio: target.value} })
+    }
+
+    handlePhoneChange = ({ target }) => {
+        this.setState({ updatedUserDetails: { ...this.state.updatedUserDetails, phone: target.value } })
+    }
+
+    handleAddressChange = ({ target }) => {
+        this.setState({ updatedUserDetails: { ...this.state.updatedUserDetails, address: target.value } })
+    }
+
+    handleLink1Change = ({ target }) => {
+        this.setState({ updatedUserDetails: { ...this.state.updatedUserDetails, link1: target.value } })
+    }
+
+    handleLink2Change = ({ target }) => {
+        this.setState({ updatedUserDetails: { ...this.state.updatedUserDetails, link2: target.value } })
+    }
+
+    handleLink3Change = ({ target }) => {
+        this.setState({ updatedUserDetails: { ...this.state.updatedUserDetails, link3: target.value } })
     }
 
     componentDidUpdate() {
@@ -120,7 +153,15 @@ class UserDetails extends React.Component {
                                         {email}
                                     </Typography>
                                 </ListItem>
-                                <Divider variant="li"></Divider>
+                                <ListItem className={classes.birthDate}>
+                                    <Typography className={classes.detailTitle} variant="body1" >
+                                        Birthday:
+                                    </Typography>
+                                    <Typography>
+                                        {birthDate}
+                                    </Typography>
+                                </ListItem>
+                                <Divider />
                             </List>
                         </div>
                         <div className={classes.right}>
@@ -128,59 +169,51 @@ class UserDetails extends React.Component {
                             <List>
                                 <Button className={classes.editButton} onClick={this.editButtonPressed}>Edit</Button>
                                 <ListItem className={classes.bioTitle}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Bio:
                                     </Typography>
                                     
-                                    <Typography component="p" variant="p">
+                                    <Typography variant="body1">
                                         {bio}
                                     </Typography>
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Phone:
                                     </Typography>
-                                    <Typography component="p" variant="p">
+                                    <Typography variant="body1">
                                         {phone}
                                     </Typography>
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
-                                        Birthday:
-                                    </Typography>
-                                    <Typography component="p" variant="p">
-                                        //{birthDate}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Address:
                                     </Typography>
-                                    <Typography component="p" variant="p">
+                                    <Typography variant="body1">
                                         {address1} {city} , {state} {zip}
                                     </Typography>
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Facebook:
                                     </Typography>
-                                    <Typography component="p" variant="p">
+                                    <Typography variant="body1">
                                         <a href={link1}>My facebook profile</a>
                                     </Typography>
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         LinkedIN:
                                     </Typography>
-                                    <Typography component="p" variant="p">
+                                    <Typography variant="body1">
                                         <a href={link2}>My LinkedIN profile</a>
                                     </Typography>
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Github:
                                     </Typography>
-                                    <Typography component="p" variant="p">
+                                    <Typography variant="body1">
                                         <a href={link3}>My GitHub profile</a>
                                     </Typography>
                                 </ListItem>
@@ -188,48 +221,48 @@ class UserDetails extends React.Component {
                             <List>
                                 <Button className={classes.editButton} onClick={this.editButtonPressed}>Cancel</Button>
                                 <ListItem className={classes.bioTitle}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Bio:
                                     </Typography>
-                                    <TextareaAutosize>
+                                    <TextareaAutosize onChange={this.handleBioChange}>
                                         {bio}
                                     </TextareaAutosize>
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Phone:
                                     </Typography>
-                                    <TextField className={classes.textInput} inputProps={phone} defaultValue={phone} />
+                                    <TextField className={classes.textInput} inputProps={phone} defaultValue={phone} 
+                                    onChange={this.handlePhoneChange} />
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
-                                        Birthday:
-                                    </Typography>
-                                    <TextField className={classes.textInput} defaultValue={birthDate} />
-                                </ListItem>
-                                <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Address:
                                     </Typography>
-                                    <TextField className={classes.textInput} defaultValue={address1 + " " + city + ", " + state + " " + zip} />
+                                    <TextField className={classes.textInput} 
+                                    defaultValue={address1 + " " + city + ", " + state + " " + zip} 
+                                    onChange={this.handleAddressChange} />
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Facebook:
                                     </Typography>
-                                    <TextField className={classes.textInput} defaultValue={link1} />
+                                    <TextField className={classes.textInput} defaultValue={link1} 
+                                    onChange={this.handleLink1Change} />
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         LinkedIN:
                                     </Typography>
-                                    <TextField className={classes.textInput} defaultValue={link2} />
+                                    <TextField className={classes.textInput} defaultValue={link2} 
+                                    onChange={this.handleLink2Change} />
                                 </ListItem>
                                 <ListItem className={classes.listItem}>
-                                    <Typography className={classes.detailTitle} component="p" variant="p" >
+                                    <Typography className={classes.detailTitle} variant="body1" >
                                         Github:
                                     </Typography>
-                                    <TextField className={classes.textInput} defaultValue={link3} />
+                                    <TextField className={classes.textInput} defaultValue={link3} 
+                                    onChange={this.handleLink3Change} />
                                 </ListItem>
                             </List>
                             }
@@ -238,7 +271,7 @@ class UserDetails extends React.Component {
                     <CardActions>
                         <Button size="medium" className={classes.editButton}>Logout</Button>
                         {this.state.editing && <Button size="medium" className={classes.editButton}
-                            onClick={() => this.props.updateCallback(this.state.userUIDetails)}>Save changes</Button>}
+                            onClick={() => this.props.updateCallback(this.state.updatedUserDetails)}>Save changes</Button>}
                     </CardActions>
                 </Card>
             </Container>

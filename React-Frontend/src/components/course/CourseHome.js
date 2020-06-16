@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core/styles"
-import CourseToDo from './CourseToDo'
 
 const styles = theme => ({
 

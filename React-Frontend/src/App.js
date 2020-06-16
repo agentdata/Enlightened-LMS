@@ -28,7 +28,7 @@ function App(props) {
       </Switch>
     </div>
     // for testing Home Page without needing to sign in, comment above and uncomment <Home />
-    //<Home />
+    // <Home />
   );
 }
 // maps state to App props

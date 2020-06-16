@@ -1,8 +1,4 @@
 import React from 'react';
-import { Container, Card, CardContent, CardActions, 
-        Typography, Button, Avatar, List, ListItem } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import SelectInput from '@material-ui/core/Select/SelectInput';
 import { withStyles } from '@material-ui/core/styles'
 import UserDetails from './UserDetails'
 
@@ -101,13 +97,13 @@ class Profile extends React.Component {
 
         function isEmail(email)
         {
-            let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;    //email regex
+            let regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;    //email regex
             if (regex.test(email))
                 return true;
             return false;
         }
         function isUrl(url) {
-            if(url == null || url == "")
+            if(url === null || url === "")
                 return true;
             try{new URL(url);}
             catch (_){return false;}

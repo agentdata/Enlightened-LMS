@@ -16,7 +16,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Tooltip from '@material-ui/core/Tooltip';
-import {logoutUser, registerUser} from "../../actions";
+import {logoutUser} from "../../actions";
 import ReactDOM from "react-dom";
 import {connect, Provider} from "react-redux";
 import App from "../../App";

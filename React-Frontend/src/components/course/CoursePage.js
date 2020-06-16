@@ -7,7 +7,6 @@ import CourseGrades from './CourseGrades'
 import CourseAnnouncements from './CourseAnnouncements'
 import CourseDiscussions from './CourseDiscussions'
 import { withStyles } from '@material-ui/core/styles'
-import CourseToDo from './CourseToDo'
 
 
 const styles = theme => ({
