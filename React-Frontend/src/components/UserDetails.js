@@ -86,17 +86,17 @@ class UserDetails extends React.Component {
 
     render() {
         const { classes } = this.props
-        const {/*email, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, */avatar, link1, link2, link3} = {...this.props.details};
-        const email = 'testemail@gmail.com'
-        const firstName = 'Justin'
-        const lastName = 'Edwards'
-        const phone = '208-403-8421'
-        const birthDate = "February 9, 1999"
-        const state = "UT"
-        const city = "Ogden"
-        const zip = "84403"
-        const address1 = "4239 Monroe Blvd"
-        const bio = "this is my bio. it has a lot of neat information about me which is pretty neat huh. lol. whattup dude"
+        const {email, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...this.props.details};
+        // const email = 'testemail@gmail.com'
+        // const firstName = 'Justin'
+        // const lastName = 'Edwards'
+        // const phone = '208-403-8421'
+        // const birthDate = "February 9, 1999"
+        // const state = "UT"
+        // const city = "Ogden"
+        // const zip = "84403"
+        // const address1 = "4239 Monroe Blvd"
+        // const bio = "this is my bio. it has a lot of neat information about me which is pretty neat huh. lol. whattup dude"
         return (
             <Container >
                 <Card className={classes.main} style={{padding: 10}}>
