@@ -183,7 +183,7 @@ class Profile extends React.Component {
     render() {
         const { classes } = this.props
         return (
-            <div>
+            <div className={classes.main}>
                 <UserDetails details={this.state.userDetails} updateCallback={this.initializeUserChanges} updateFileCallback={this.initializeAvatarChange}/>
             </div>
         );
