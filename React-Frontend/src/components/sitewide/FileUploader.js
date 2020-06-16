@@ -27,6 +27,11 @@ export default class FileUploader extends React.Component {
         this.props.updateFileCallback(this.state.selectedFile)
     }
 
+    // convert upload to valid img data
+    convertToImg() {
+
+    }
+
     render() {
         return (
             <div>

@@ -28,15 +28,56 @@ class Profile extends React.Component {
         this.setUserDetails = this.setUserDetails.bind(this);
     }
 
+    // set new avatar on front end
     initializeAvatarChange = (avatar) => {
-        this.setState((prevState) => ({
-            userDetails: {
-                ...prevState.userDetails,
-                avatar: avatar
-            }
-        }))
 
-        this.setUserDetails(this.state.userDetails)
+        if(valid) { //only sets new avatar if string is valid
+            this.setState((prevState) => ({
+                userDetails: {
+                    ...prevState.userDetails,
+                    avatar: avatar
+                }
+            }));
+
+            this.setUserAvatar(avatar);
+        }
+        else
+        {
+            alert("Avatar URL invalid. Please upload a valid image.");
+        }
+    }
+
+    // update user avatar (independent of rest of user profile)
+    setUserAvatar(avatar) {
+
+        var statusCode;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+
+        const init = {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(avatar)
+        };
+
+        fetch('https://cooliocoders.ddns.net/api/user/profile/avatar', init)
+            .then(async response => {
+                const text = await response.json();
+                statusCode = response.status;
+
+                this.setState((prevState) => ({
+                    userDetails: {
+                        ...prevState.userDetails,
+                        avatar: text["avatar"]
+                    }
+                }))
+            }).catch((e) => {
+            console.warn('There was an error saving user avatar: ', e)
+
+            this.setState({
+                error: 'There was an error saving user avatar.'
+            })
+        });
     }
 
     initializeUserChanges = (updatedFields) => {
