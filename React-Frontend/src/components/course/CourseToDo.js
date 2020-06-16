@@ -56,14 +56,14 @@ export default function HomeToDo() {
 
       {state.assignments ? ( 
         state.assignments.map(currentAssignment => (
-          <ListItem alignItems="flex-start">
+          <ListItem alignItems="flex-start" key={currentAssignment.title + " " + currentAssignment.due}>
             <Link href={currentAssignment.link}>
               <ListItemText
                 primary={currentAssignment.title}
                 secondary={
                   <React.Fragment>
                     <Typography
-                      comopnent="span"
+                      component="span"
                       variant="body2"
                       className={classes.inline}
                       color="textPrimary">
@@ -74,7 +74,7 @@ export default function HomeToDo() {
                   </React.Fragment>
                 }
                 />
-              <Divider component="li" />
+              <Divider />
             </Link>
           </ListItem>
         ))

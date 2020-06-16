@@ -40,11 +40,13 @@ const Course = (props) => {
                         <Container className={classes.cardColor} 
                         /* style={{backgroundColor: props.course.cardColor}}
                         For now this uses a default color, later maybe settable by user */
-                        />
+                        >
+                            <div></div> {/* container requires a child and this is it */}
+                        </Container>
                         {/* <CardMedia
                             // image={props.course.image}
                             image = 'nothing to see here...'
-                        /> */}
+                        /> */} 
                         <CardContent className={classes.cardContent}>
                             <Typography gutterBottom variant="h6" component="h2">
                                 {props.course.title}
