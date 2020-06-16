@@ -60,7 +60,7 @@ class Home extends Component {
         
       <Router>
         <div>
-          <Navbar className={classes.nav}/>
+          <Navbar className={classes.nav} dispatch={this.handleLogout}/>
           <div className={classes.main}>
             <Route path="/" exact component={HomeToDo} />
             <Switch>

@@ -123,8 +123,7 @@ export const loginUser = (email, password) => dispatch => {
 export const logoutUser = () => dispatch => {
     dispatch(requestLogout());
 
-    // TODO: invalidate token with api call on server
-    // TODO: reset local session
+    sessionStorage.removeItem("token");
     var loggedOut = true;
 
     // if user is logged out

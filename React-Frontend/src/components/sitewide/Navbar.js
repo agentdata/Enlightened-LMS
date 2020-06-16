@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import {BrowserRouter as Router, Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from "@material-ui/core/styles";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,6 +16,11 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Tooltip from '@material-ui/core/Tooltip';
+import {logoutUser, registerUser} from "../../actions";
+import ReactDOM from "react-dom";
+import {connect, Provider} from "react-redux";
+import App from "../../App";
+import configureStore from "../../configureStore";
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -49,8 +55,10 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 // const preventDefault = (event) => event.preventDefault();
+const store = configureStore();
 
-const Navbar = () => {
+const Navbar = (props) => {
+    const {dispatch} = props;
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -74,6 +82,20 @@ const Navbar = () => {
     const handleMobileMenuOpen = (event) => {
       setMobileMoreAnchorEl(event.currentTarget);
     };
+
+    const handleLogout = () => {
+       // const { dispatch } = this.props;
+        dispatch(logoutUser());
+
+        ReactDOM.render(
+            <Provider store={store}>
+                <Router>
+                    <App />
+                </Router>
+            </Provider>,
+            document.getElementById('root')
+        );
+    }
   
     const menuId = 'navbar';
 
@@ -90,7 +112,7 @@ const Navbar = () => {
 
         <MenuItem onClick={handleMenuClose} to="profile" component={Link}>Profile</MenuItem>
 
-        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     );
   
@@ -219,5 +241,11 @@ const Navbar = () => {
         </div>
     );
 }
-
-export default Navbar;
+function mapStateToProps(state) {
+    return {
+        isLoggingIn: state.auth.isLoggingIn,
+        registerError: state.auth.loginError,
+        isAuthenticated: state.auth.isAuthenticated
+    };
+}
+export default withStyles(useStyles)(connect(mapStateToProps)(Navbar));
