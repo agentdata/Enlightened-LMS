@@ -7,7 +7,7 @@ export default class FileUploader extends React.Component {
         super(props)
 
         this.state = {
-            selectedFile: null
+            selectedFile: []
         }
 
         this.onChangeHandler = this.onChangeHandler.bind(this)
@@ -15,10 +15,24 @@ export default class FileUploader extends React.Component {
     }
 
     onChangeHandler = event => {
-        this.setState({
-            selectedFile: event.target.files[0],
-            loaded: 0
-        })
+
+        const input = document.querySelector('input');
+        const files = input.files;
+
+        if (files.length !== 0) {
+
+            for (const file of files) {
+                if (this.validFileType(file)) {
+                    this.setState({
+                        selectedFile: URL.createObjectURL(file),
+                        loaded: 0
+                    });
+                }
+                else {
+                    alert('File type not supported. Please update your selection.');
+                }
+            }
+        }
     }
 
     onClickHandler = () => {
@@ -27,9 +41,12 @@ export default class FileUploader extends React.Component {
         this.props.updateFileCallback(this.state.selectedFile)
     }
 
-    // convert upload to valid img data
-    convertToImg() {
+    // convert to valid img data
+    validFileType(file) {
+        return this.props.validFileTypes.includes(file.type);
+    }
 
+    componentDidUpdate() {
     }
 
     render() {
@@ -37,7 +54,7 @@ export default class FileUploader extends React.Component {
             <div>
                 <Card style={{display: 'flex', flexFlow: 'wrap', justifyContent: 'center', alignContent: 'center'}}>
                     <Button>
-                        <input type="file" name="file" onChange={this.onChangeHandler} multiple=""/>
+                        <input type="file" name={this.props.name} accept={this.props.uploadTypes} onChange={this.onChangeHandler} />
                     </Button>
                     <Button onClick={this.onClickHandler}>
                         Upload

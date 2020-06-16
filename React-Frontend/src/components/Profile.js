@@ -3,7 +3,6 @@ import { Container, Card, CardContent, CardActions,
         Typography, Button, Avatar, List, ListItem } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import SelectInput from '@material-ui/core/Select/SelectInput';
-import FileUploader from './sitewide/FileUploader';
 import { withStyles } from '@material-ui/core/styles'
 import UserDetails from './UserDetails'
 
@@ -28,23 +27,17 @@ class Profile extends React.Component {
         this.setUserDetails = this.setUserDetails.bind(this);
     }
 
-    // set new avatar on front end
+    // initializeAvatarChange -- called by UserDetails->FileUploader child component
     initializeAvatarChange = (avatar) => {
+        
+        this.setState((prevState) => ({
+            userDetails: {
+                ...prevState.userDetails,
+                avatar: avatar
+            }
+        }));
 
-        if(valid) { //only sets new avatar if string is valid
-            this.setState((prevState) => ({
-                userDetails: {
-                    ...prevState.userDetails,
-                    avatar: avatar
-                }
-            }));
-
-            this.setUserAvatar(avatar);
-        }
-        else
-        {
-            alert("Avatar URL invalid. Please upload a valid image.");
-        }
+        this.setUserAvatar(avatar);
     }
 
     // update user avatar (independent of rest of user profile)
@@ -80,6 +73,7 @@ class Profile extends React.Component {
         });
     }
 
+    // initializeUserChanges -- called by UserDetails child component
     initializeUserChanges = (updatedFields) => {
 
         this.setState({

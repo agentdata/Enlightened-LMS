@@ -104,7 +104,10 @@ class UserDetails extends React.Component {
                         <div className={classes.left}>
                             <Card className={classes.profilePic}>
                                 <Avatar alt={firstName + '\'s avatar'} src={avatar} style={{ width: '80px', height: '80px', margin: '0 auto'}}/>
-                                <FileUploader uploadType="new avatar" updateFileCallback={this.props.updateFileCallback}/>
+                                <FileUploader name="avatar" 
+                                    uploadTypes=".png, .jpeg, .jpg" 
+                                    validFileTypes={["image/apng", "image/bmp", "image/gif", "image/jpeg", "image/pjpeg", "image/png"]} 
+                                    updateFileCallback={this.props.updateFileCallback}/>
                             </Card>
                             <List>
                                 <ListItem>
