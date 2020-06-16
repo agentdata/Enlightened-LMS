@@ -76,7 +76,7 @@ class Profile extends React.Component {
             userDetails: updatedFields,
         })
 
-        this.setUserDetails(this.state.userDetails)
+        this.setUserDetails(updatedFields)
     }
 
     // implement post api call to update user profile - child component uses callback
@@ -110,14 +110,16 @@ class Profile extends React.Component {
             return true;
         }
 
-        if(valid)   //This only runs if the email and urls are valid
+        if(true)   //This only runs if the email and urls are valid
         {
             var statusCode;
             const headers = new Headers();
             headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-
+            headers.append('Content-Type', 'application/json');
+            headers.append('Access-Control-Allow-Origin','*');
+            headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
             const init = {
-                method: 'POST',
+                method: 'PUT',
                 headers,
                 body: JSON.stringify(updatedFields)
             };
@@ -164,7 +166,8 @@ class Profile extends React.Component {
         var statusCode;
         const headers = new Headers();
         headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-    
+        headers.append('Access-Control-Allow-Origin','*');
+        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
         const init = {
             method: 'GET',
             headers

@@ -32,7 +32,7 @@ public class UserController {
     JwtTokenProvider jwtTokenProvider;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping
+    @GetMapping("/allusers")
     public List<User> findAll(){
         return userService.findAll();
     }
@@ -49,51 +49,24 @@ public class UserController {
         return userService.findUserByEmail(email);
     }
 
-    @PutMapping
-    public User update(Principal principalUser, @RequestBody User updatedUser) {
-        return userService.update(principalUser.getName(), updatedUser);
-        // See findUserProfile Method
-    }
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable String id) {
         userService.deleteById(id);
     }
 
+    @PutMapping("/profile")
+    public User update(Principal principalUser, @RequestBody User updatedUser) {
+        return userService.update(principalUser.getName(), updatedUser);
+    }
+
     @GetMapping("/profile")
     public ResponseEntity<Map<Object, Object>> findUserProfile(Principal principalUser){
-        //Returns the user profile based on their authorization token
-        //Users can only see their profile
-
         return ok(userService.findUserProfileByEmail(principalUser.getName()).getUserProfile());
     }
 
-    //TODO POST method for setting avatar
     @PutMapping(value = "/profile/avatar")
     public ResponseEntity<Map<Object, Object>> setUserAvatar(Principal principalUser, @RequestBody JSONObject body){
-
-//        String stringFile = "";												        //Store encoded string
-//
-//        try {
-//            FileInputStream fileInput = new FileInputStream(file);			        //Set up reading from a file as a stream of bytes
-//            byte[] bytes = new byte[(int)file.length()];					        //Allocate enough space
-//            fileInput.read(bytes);											        //Read file into bytes
-//            fileInput.close();
-//            stringFile = Base64.getEncoder().encodeToString(bytes);			        //Encode the bytes into a string
-//
-//            updateUser.setAvatar(stringFile);                                       //Set user's avatar
-//        }
-//        catch(Exception e){
-//            // File is missing or invalid
-//            e.printStackTrace();
-//        }
-//
-//        userService.(principalUser.getName(), updateUser);                    //Updates current user
-//        userService.updateinvokeSave(updateUser);                             //Invokes save() from UserRepository
-
-        //Return successful
         return ok(userService.saveAvatar(principalUser.getName(), body));
     }
-
 }

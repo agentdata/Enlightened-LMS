@@ -86,7 +86,8 @@ export const loginUser = (email, password) => dispatch => {
     //build http request
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-
+    headers.append('Access-Control-Allow-Origin','*');
+    headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
     const body = JSON.stringify({
         "email": email,
         "password": password
@@ -145,6 +146,8 @@ export const registerUser = (firstName, lastName, birthDate, email, password, in
     //build HTTP request
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Access-Control-Allow-Origin','*');
+    headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
     const body = JSON.stringify({
         "firstName": firstName,
         "lastName": lastName,
