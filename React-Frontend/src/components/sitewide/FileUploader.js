@@ -7,7 +7,8 @@ export default class FileUploader extends React.Component {
         super(props)
 
         this.state = {
-            selectedFile: []
+            selectedFile: [],
+            displayFile: ''
         }
 
         this.onChangeHandler = this.onChangeHandler.bind(this)
@@ -26,6 +27,7 @@ export default class FileUploader extends React.Component {
                     this.setState({
                         //selectedFile: URL.createObjectURL(file),
                         selectedFile: file,
+                        displayFile: URL.createObjectURL(file),
                         loaded: 0
                     });
                 }
@@ -39,7 +41,7 @@ export default class FileUploader extends React.Component {
     onClickHandler = () => {
         const data = new FormData()
         data.append('file', this.state.selectedFile)
-        this.props.updateFileCallback(this.state.selectedFile)
+        this.props.updateFileCallback(this.state.selectedFile, this.state.displayFile)
     }
 
     // convert to valid img data
