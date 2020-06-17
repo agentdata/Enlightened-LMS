@@ -105,6 +105,21 @@ public class LMSUserDetailsService implements UserDetailsService {
         return new UserProfile(user);
     }
 
+    public Map<Object, Object> saveAvatar(String email, JSONObject body)
+    {
+        User currentUser = findUserByEmail(email);
+        currentUser.setAvatar(body.get("avatar").toString());
+
+        userRepository.save(currentUser);
+
+        Map<Object, Object> model = new HashMap<>();
+        model.put("message", "Avatar saved successfully");
+        return model;
+    }
+
+
+    //region User Details Service Methods for Security Configuration
+    //------------------------------------------------------------------------------------------------------------------
     public void saveUser(User user, Role role) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Role userRole = roleRepository.findByRole(role.getRole());
@@ -139,17 +154,6 @@ public class LMSUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(), authorities);
     }
-
-    public Map<Object, Object> saveAvatar(String email, JSONObject body)
-    {
-        User currentUser = findUserByEmail(email);
-//        currentUser.setAvatar(avatar);
-        currentUser.setAvatar(body.get("avatar").toString());
-
-        userRepository.save(currentUser);
-
-        Map<Object, Object> model = new HashMap<>();
-        model.put("message", "User registered successfully");
-        return model;
-    }
+    //------------------------------------------------------------------------------------------------------------------
+    //endregion
 }
