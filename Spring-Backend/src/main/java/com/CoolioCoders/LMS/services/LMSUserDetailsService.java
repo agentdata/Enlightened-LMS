@@ -140,10 +140,11 @@ public class LMSUserDetailsService implements UserDetailsService {
                 user.getEmail(), user.getPassword(), authorities);
     }
 
-    public Map<Object, Object> saveAvatar(String email, String avatar)
+    public Map<Object, Object> saveAvatar(String email, JSONObject body)
     {
         User currentUser = findUserByEmail(email);
-        currentUser.setAvatar(avatar);
+//        currentUser.setAvatar(avatar);
+        currentUser.setAvatar(body.get("avatar").toString());
 
         userRepository.save(currentUser);
 

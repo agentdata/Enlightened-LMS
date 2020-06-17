@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/profile/avatar")
-    public ResponseEntity<Map<Object, Object>> setUserAvatar(Principal principalUser, @RequestBody String avatar){
-        return ok(userService.saveAvatar(principalUser.getName(), avatar));
+    public ResponseEntity<Map<Object, Object>> setUserAvatar(Principal principalUser, @RequestBody JSONObject body){
+        return ok(userService.saveAvatar(principalUser.getName(), body));
     }
 }

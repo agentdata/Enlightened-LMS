@@ -56,7 +56,7 @@ class Profile extends React.Component {
             const init = {
                 method: 'PUT',
                 headers,
-                body: JSON.stringify(reader.result)
+                body: JSON.stringify({"avatar": reader.result} )
             };
 
         fetch('https://cooliocoders.ddns.net/api/user/profile/avatar', init)
