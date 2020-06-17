@@ -49,6 +49,7 @@ class Profile extends React.Component {
             var statusCode;
             const headers = new Headers();
             headers.append('Authorization', 'Bearer ' + sessionStorage.getItem("token"));
+            headers.append('Content-Type', 'application/json');
             headers.append('Access-Control-Allow-Origin', '*');
             headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
 
