@@ -24,12 +24,12 @@ class Profile extends React.Component {
     }
 
     // initializeAvatarChange -- called by UserDetails->FileUploader child component
-    initializeAvatarChange = (avatar) => {
+    initializeAvatarChange = (avatar, displayAvatar) => {
         
         this.setState((prevState) => ({
             userDetails: {
                 ...prevState.userDetails,
-                avatar: avatar
+                avatar: displayAvatar
             }
         }));
 
