@@ -38,35 +38,45 @@ class Profile extends React.Component {
 
     // update user avatar (independent of rest of user profile)
     setUserAvatar(avatar) {
+        console.log(avatar);
 
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+        let reader = new FileReader();
+        reader.readAsDataURL(avatar);
+        reader.onloadend = () => {
 
-        const init = {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(avatar)
-        };
+            console.log(JSON.stringify(reader.result));
+
+            var statusCode;
+            const headers = new Headers();
+            headers.append('Authorization', 'Bearer ' + sessionStorage.getItem("token"));
+            headers.append('Access-Control-Allow-Origin', '*');
+            headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            const init = {
+                method: 'PUT',
+                headers,
+                body: JSON.stringify(reader.result)
+            };
 
         fetch('https://cooliocoders.ddns.net/api/user/profile/avatar', init)
             .then(async response => {
                 const text = await response.json();
                 statusCode = response.status;
 
-                this.setState((prevState) => ({
-                    userDetails: {
-                        ...prevState.userDetails,
-                        avatar: text["avatar"]
-                    }
-                }))
-            }).catch((e) => {
-            console.warn('There was an error saving user avatar: ', e)
+                    this.setState((prevState) => ({
+                        userDetails: {
+                            ...prevState.userDetails,
+                            avatar: text["avatar"]
+                        }
+                    }))
+                }).catch((e) => {
+                console.warn('There was an error saving user avatar: ', e)
 
-            this.setState({
-                error: 'There was an error saving user avatar.'
-            })
-        });
+                this.setState({
+                    error: 'There was an error saving user avatar.'
+                })
+            });
+        };
     }
 
     // initializeUserChanges -- called by UserDetails child component

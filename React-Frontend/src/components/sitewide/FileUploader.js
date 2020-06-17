@@ -24,7 +24,8 @@ export default class FileUploader extends React.Component {
             for (const file of files) {
                 if (this.validFileType(file)) {
                     this.setState({
-                        selectedFile: URL.createObjectURL(file),
+                        //selectedFile: URL.createObjectURL(file),
+                        selectedFile: file,
                         loaded: 0
                     });
                 }
