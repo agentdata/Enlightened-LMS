@@ -2,16 +2,48 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Course from './Course';
 import { withStyles } from "@material-ui/core/styles"
+import Button from '@material-ui/core/Button'
+import Modal from '@material-ui/core/Modal';
+import AddCourse from './AddCourse';
 
 const styles = theme => ({
     course: {
         minWidth: "300px"
     },
+    addCourseBtn: {
+        position: "relative",
+        backgroundColor: "#3f51b5",
+        color: "white",
+        width: "200px",
+        marginTop: "25px",
+        marginLeft: "23px"
+    },
+    main: {
+        display: "flex",
+        flexDirection: "column"
+    },
+    buttonDiv: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start"
+    },
+    paper: {
+        position: 'relative',
+        maxWidth: 400,
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        margin: "auto",
+        top: "100px"
+      },
 })
 
 class CourseList extends Component {
     state = {
         isLoggedIn: false,
+        isInstructor: true,
+        modalOpen: false,
         courses: [
             {
                 title: 'Dummy Course',
@@ -67,10 +99,39 @@ class CourseList extends Component {
         this.getCourses();
     }
 
+    handleOpen = () => {
+        this.setState({
+            modalOpen: true
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            modalOpen: false
+        })
+    }
+
     render() {
         const { classes } = this.props
+
         return (
             <div className={classes.main}>
+                <div className={classes.buttonDiv}>
+                    {this.state.isInstructor ? (
+                        <Button className={classes.addCourseBtn} onClick={this.handleOpen}>+ Add Course</Button>
+                    ) : null }
+                </div>
+                <Modal
+                    disableBackdropClick
+                    open={this.state.modalOpen}
+                    onClose={this.handleClose}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                >
+                    <div className={classes.paper}>
+                        <AddCourse />
+                    </div>
+                </Modal>
                 {this.state.courses ? (
                     <div>
                         <Grid container spacing={2} style ={{padding: 24}}>
