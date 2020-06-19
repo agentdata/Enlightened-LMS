@@ -1,9 +1,11 @@
 package com.CoolioCoders.LMS.services;
 
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
+import com.CoolioCoders.LMS.models.Course;
 import com.CoolioCoders.LMS.models.Role;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.models.UserProfile;
+import com.CoolioCoders.LMS.repositories.CourseRepository;
 import com.CoolioCoders.LMS.repositories.RoleRepository;
 import com.CoolioCoders.LMS.repositories.UserRepository;
 import net.minidev.json.JSONObject;
@@ -30,6 +32,8 @@ public class LMSUserDetailsService implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
     private PasswordEncoder bCryptPasswordEncoder;
 
     public List<User> findAll(){
@@ -43,6 +47,8 @@ public class LMSUserDetailsService implements UserDetailsService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public List<Course> findCoursesByUser(User user){return courseRepository.findByInstructor(user);}
 
     public User update(String email, User updatedUser) {
         User foundUser = userRepository.findByEmail(email);
@@ -105,6 +111,21 @@ public class LMSUserDetailsService implements UserDetailsService {
         return new UserProfile(user);
     }
 
+    public Map<Object, Object> saveAvatar(String email, JSONObject body)
+    {
+        User currentUser = findUserByEmail(email);
+        currentUser.setAvatar(body.get("avatar").toString());
+
+        userRepository.save(currentUser);
+
+        Map<Object, Object> model = new HashMap<>();
+        model.put("message", "Avatar saved successfully");
+        return model;
+    }
+
+
+    //region User Details Service Methods for Security Configuration
+    //------------------------------------------------------------------------------------------------------------------
     public void saveUser(User user, Role role) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Role userRole = roleRepository.findByRole(role.getRole());
@@ -139,17 +160,6 @@ public class LMSUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(), authorities);
     }
-
-    public Map<Object, Object> saveAvatar(String email, JSONObject body)
-    {
-        User currentUser = findUserByEmail(email);
-//        currentUser.setAvatar(avatar);
-        currentUser.setAvatar(body.get("avatar").toString());
-
-        userRepository.save(currentUser);
-
-        Map<Object, Object> model = new HashMap<>();
-        model.put("message", "User registered successfully");
-        return model;
-    }
+    //------------------------------------------------------------------------------------------------------------------
+    //endregion
 }

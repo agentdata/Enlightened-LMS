@@ -16,7 +16,7 @@ public class User {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
-    @Indexed(unique=true, direction = IndexDirection.DESCENDING)
+    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
     private String email;
     private String password;
     private String bio;
@@ -33,10 +33,13 @@ public class User {
     @DBRef
     private Set<Role> roles;
 
+    // Lazy load - prevents cyclical reference loop between courses and users
+    @DBRef(lazy = true)
+    private Set<Course> courses;
 
-    public User(String firstName, String lastName, LocalDate birthDate, String email,
-    String password, String bio, String link1, String link2, String link3, String avatar,
-    String phone, String address1, String address2, String city, String state, String zip, Set<Role> roles) {
+    public User(String firstName, String lastName, LocalDate birthDate, String email, String password, String bio,
+                String link1, String link2, String link3, String avatar, String phone, String address1, String address2,
+                String city, String state, String zip, Set<Role> roles, Set<Course> courses) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -54,6 +57,7 @@ public class User {
         this.state = state;
         this.zip = zip;
         this.roles = roles;
+        this.courses = courses;
     }
 
     public String getId() {
@@ -195,4 +199,7 @@ public class User {
 
     public void setRoles(Set<Role> roles) { this.roles = roles; }
 
+    public Set<Course> getCourses() { return courses; }
+
+    public void setCourses(Set<Course> courses) { this.courses = courses; }
 }

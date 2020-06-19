@@ -2,6 +2,7 @@ package com.CoolioCoders.LMS.controllers;
 
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
+import com.CoolioCoders.LMS.models.Course;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.repositories.UserRepository;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
@@ -68,5 +69,13 @@ public class UserController {
     @PutMapping(value = "/profile/avatar")
     public ResponseEntity<Map<Object, Object>> setUserAvatar(Principal principalUser, @RequestBody JSONObject body){
         return ok(userService.saveAvatar(principalUser.getName(), body));
+    }
+
+    @GetMapping("/profile/courses")
+    public List<Course> findCourses(Principal principalUser){
+        User user = userService.findUserByEmail(principalUser.getName());
+
+        System.out.println(userService.findCoursesByUser(user));
+        return userService.findCoursesByUser(user);
     }
 }
