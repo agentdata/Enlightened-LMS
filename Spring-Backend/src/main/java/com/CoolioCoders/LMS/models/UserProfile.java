@@ -13,6 +13,7 @@ public class UserProfile {
     public UserProfile(User user){
         this.user = user;
         profileMap = new HashMap<>();
+        profileMap.put("id", getId());
         profileMap.put("firstName", getFirstName());
         profileMap.put("lastName", getLastName());
         profileMap.put("email", getEmail());
@@ -100,4 +101,6 @@ public class UserProfile {
     public Map<Object, Object> getUserProfile(){
         return profileMap;
     }
+
+    public String getId(){return user.getId();}
 }
