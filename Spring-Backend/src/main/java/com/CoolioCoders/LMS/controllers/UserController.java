@@ -70,12 +70,4 @@ public class UserController {
     public ResponseEntity<Map<Object, Object>> setUserAvatar(Principal principalUser, @RequestBody JSONObject body){
         return ok(userService.saveAvatar(principalUser.getName(), body));
     }
-
-    @GetMapping("/profile/courses")
-    public List<Course> findCourses(Principal principalUser){
-        User user = userService.findUserByEmail(principalUser.getName());
-
-        System.out.println(userService.findCoursesByUser(user));
-        return userService.findCoursesByUser(user);
-    }
 }
