@@ -25,7 +25,7 @@ import java.util.*;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Service
-public class LMSUserDetailsService implements UserDetailsService {
+public class LMSUserDetailsService implements UserDetailsService{
 
     @Autowired
     private UserRepository userRepository;
@@ -47,8 +47,6 @@ public class LMSUserDetailsService implements UserDetailsService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
-    public List<Course> findCoursesByUser(User user){return courseRepository.findByInstructor(user);}
 
     public User update(String email, User updatedUser) {
         User foundUser = userRepository.findByEmail(email);
