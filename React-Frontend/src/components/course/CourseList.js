@@ -113,7 +113,6 @@ class CourseList extends Component {
     }
 
     componentDidMount() {
-        this.getLoggedIn();
         this.getCourses();
     }
 
