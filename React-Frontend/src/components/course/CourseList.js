@@ -101,12 +101,12 @@ class CourseList extends Component {
                 throw new Error(data.message)
             }
 
-            return this.setState({
+            return this.setState(({ courses }) => ({
                 courses: {
                     ...courses
                     // ...response.courses // commented this in to get it to compile
                 }
-            })
+            }))
         }).catch((e) => {
             console.warn("There was an error retrieving instructor courses: ", e);
 
@@ -122,8 +122,7 @@ class CourseList extends Component {
     }
 
     componentDidMount() {
-        this.getCourses();
-        // this.getInstructorCourses(); // commented this in to get it to compile
+        this.getInstructorCourses();
     }
 
     handleOpen = () => {
