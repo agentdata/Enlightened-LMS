@@ -40,10 +40,15 @@ const styles = theme => ({
 })
 
 class CourseList extends Component {
-    state = {
-        error: null,
-        modalOpen: false,
-        courses: [
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            error: null,
+            modalOpen: false,
+            courses: []
+
             // {
             //     title: 'Dummy Course',
             //     description: 'A dummy course description',
@@ -68,8 +73,10 @@ class CourseList extends Component {
             //     url: '/dummycourse4',
             //     image: ''
             // }
-        ]
-    };
+        }
+
+        this.getInstructorCourses = this.getInstructorCourses.bind(this);
+    }
 
     // get courses for instructor
     getInstructorCourses = async () => {
@@ -93,11 +100,11 @@ class CourseList extends Component {
                 throw new Error(data.message)
             }
 
-            return this.setState({
+            return this.setState(({ courses }) => ({
                 courses: {
                     ...courses
                 }
-            })
+            }))
         }).catch((e) => {
             console.warn("There was an error retrieving instructor courses: ", e);
 
@@ -108,12 +115,12 @@ class CourseList extends Component {
     }
 
     // get courses for student
-    getStudentCourses = async() => {
+    // getStudentCourses = async() => {
 
-    }
+    // }
 
     componentDidMount() {
-        this.getCourses();
+        this.getInstructorCourses();
     }
 
     handleOpen = () => {
