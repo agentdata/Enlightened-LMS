@@ -29,7 +29,8 @@ const styles = theme => ({
         paddingTop: "10px",
         textAlign: "center",
         color: "#3f51b5",
-        borderBottom: "2px solid #3f51b5"
+        borderBottom: "2px solid #3f51b5",
+        marginBottom: "10px"
     },
     dayTitle: {
         padding: "8px"
@@ -62,7 +63,16 @@ const styles = theme => ({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: "20px"
+        marginTop: "20px",
+        marginBottom: "10px"
+    },
+    buttons: {
+        display: "flex",
+        justifyContent: "space-around"
+    },
+    modalButton: {
+        paddingRight: "12px",
+        paddingLeft: "12px"
     }
 })
 
@@ -95,10 +105,8 @@ class AddCourse extends Component {
                     startTime: '',
                     endTime: '',
                     platform: '', // online, face-to-face, hybrid
-                    location: {
-                        building: '',
-                        room: ''
-                    }, // if online, grey out - building: building, room: room
+                    building: '',
+                    roomNumber: '',
                     capacity: '', // total students allowed
                     instructor: '', // automatically fill
                 }
@@ -189,8 +197,25 @@ class AddCourse extends Component {
         this.setState({ newCourse: { ...this.state.newCourse, endTime: target.value} })
     }
 
-    handleBlockChange = ({ target }) => {
-        this.setState({ newCourse: { ...this.state.newCourse, block: target.value} })
+    handlePlatformChange = ({ target }) => {
+        this.setState({ newCourse: { ...this.state.newCourse, platform: target.value} })
+    }
+
+    handleBuildingChange = ({ target }) => {
+        this.setState({ newCourse: { ...this.state.newCourse, building: target.value} })
+    }
+
+    handleRoomChange = ({ target }) => {
+        this.setState({ newCourse: { ...this.state.newCourse, roomNumber: target.value} })
+    }
+
+    handleCapacityChange = ({ target }) => {
+        this.setState({ newCourse: { ...this.state.newCourse, capacity: target.value} })
+    }
+
+    submitButtonPressed = () => {
+        console.log("button pressed")
+        // TODO: Add course with api
     }
 
     showDays = () => {
@@ -216,9 +241,8 @@ class AddCourse extends Component {
                     id="department"
                     label="Department"
                     style={{ margin: 8 }}
-                    placeholder="CS"
                     helperText="CS, HIST, etc"
-                    margin="dense"
+                    margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -228,7 +252,6 @@ class AddCourse extends Component {
                     id="number"
                     label="Number"
                     style={{ margin: 8 }}
-                    placeholder="1410"
                     helperText="1410, 2300, etc."
                     margin="normal"
                     InputLabelProps={{
@@ -241,25 +264,23 @@ class AddCourse extends Component {
                 id="name"
                 label="Name"
                 style={{ margin: 8 }}
-                placeholder="Object-Oriented Programming"
                 helperText="Full Course Name"
                 margin="normal"
                 InputLabelProps={{
                     shrink: true,
                 }}
-                onChange={this.handleTitleChange}
+                onChange={this.handleNameChange}
                 />
                 <TextField
                 id="description"
                 label="Description"
                 style={{ margin: 8 }}
-                placeholder="Introduction to Object Oriented Programming"
                 helperText="Brief Course Description"
                 margin="normal"
                 InputLabelProps={{
                     shrink: true,
                 }}
-                onChange={this.handleTitleChange}
+                onChange={this.handleDescriptionChange}
                 />
                 <div className={classes.horizontalFlex}>
                     <TextField
@@ -267,7 +288,6 @@ class AddCourse extends Component {
                     id="credits"
                     label="Credits"
                     style={{ margin: 8 }}
-                    placeholder="3"
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
@@ -279,7 +299,6 @@ class AddCourse extends Component {
                     id="semester"
                     label="Semester"
                     style={{ margin: 8 }}
-                    placeholder="Fall"
                     select
                     margin="normal"
                     InputLabelProps={{
@@ -302,7 +321,6 @@ class AddCourse extends Component {
                     id="year"
                     label="Year"
                     style={{ margin: 8 }}
-                    placeholder="2020"
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
@@ -314,7 +332,6 @@ class AddCourse extends Component {
                     id="block"
                     label="Block"
                     style={{ margin: 8 }}
-                    placeholder="Full"
                     select
                     margin="normal"
                     InputLabelProps={{
@@ -369,7 +386,6 @@ class AddCourse extends Component {
                     id="startTime"
                     label="Start Time"
                     type="time"
-                    defaultValue="07:30"
                     className={classes.thirds}
                     style={{ margin: 8 }}
                     InputLabelProps={{
@@ -384,7 +400,6 @@ class AddCourse extends Component {
                     id="endTime"
                     label="End Time"
                     type="time"
-                    defaultValue="09:30"
                     className={classes.thirds}
                     style={{ margin: 8 }}
                     InputLabelProps={{
@@ -401,13 +416,12 @@ class AddCourse extends Component {
                     id="platform"
                     label="Platform"
                     style={{ margin: 8 }}
-                    placeholder="Online"
                     select
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={this.handleBlockChange}
+                    onChange={this.handlePlatformChange}
                     >
                         <MenuItem key="online" value="online">
                             Online
@@ -422,10 +436,48 @@ class AddCourse extends Component {
 
                 </div>
 
+                <div className={classes.horizontalFlex}>
+                    <TextField
+                    disabled={this.state.newCourse.platform === "online" ? true : false}
+                    id="building"
+                    label="Building"
+                    style={{ margin: 8 }}
+                    margin="normal"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={this.handleBuildingChange}
+                    />
+                    <TextField
+                    className={classes.quarters}
+                    disabled={this.state.newCourse.platform === "online" ? true : false}
+                    id="roomNumber"
+                    label="Room #"
+                    style={{ margin: 8 }}
+                    margin="normal"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={this.handleRoomChange}
+                    />
+                    <TextField
+                    className={classes.quarters}
+                    disabled={this.state.newCourse.platform === "online" ? true : false}
+                    id="capacity"
+                    label="Capacity"
+                    style={{ margin: 8 }}
+                    margin="normal"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={this.handleCapacityChange}
+                    />
+                </div>
+
                 <List>
                     <ListItem className={classes.buttons}>
-                        <Button className={classes.editButton} onClick={this.cancelButtonPressed}>Cancel</Button>
-                        <Button className={classes.editButton} onClick={this.submitButtonPressed}>Add Course</Button>
+                        <Button className={classes.modalButton} onClick={this.props.closeModal}>Cancel</Button>
+                        <Button className={classes.modalButton} onClick={this.submitButtonPressed}>Add Course</Button>
                     </ListItem>
                 </List>
             </div>

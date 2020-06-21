@@ -40,43 +40,44 @@ const styles = theme => ({
 })
 
 class CourseList extends Component {
-
     constructor(props) {
         super(props)
+
+        this.handleClose = this.handleClose.bind(this)
 
         this.state = {
             error: null,
             modalOpen: false,
-            courses: []
-
-            // {
-            //     title: 'Dummy Course',
-            //     description: 'A dummy course description',
-            //     url: '/dummycourse',
-            //     image: ''
-            // },
-            // {
-            //     title: 'Another Course',
-            //     description: 'Another course description',
-            //     url: '/dummycourse2',
-            //     image: ''
-            // },
-            // {
-            //     title: 'One More Course',
-            //     description: 'Another course description',
-            //     url: '/dummycourse3',
-            //     image: ''
-            // },
-            // {
-            //     title: 'Final Course',
-            //     description: 'The last dummy course on here',
-            //     url: '/dummycourse4',
-            //     image: ''
-            // }
-        }
-
-        this.getInstructorCourses = this.getInstructorCourses.bind(this);
+            isInstructor: true,
+            courses: [
+                // {
+                //     title: 'Dummy Course',
+                //     description: 'A dummy course description',
+                //     url: '/dummycourse',
+                //     image: ''
+                // },
+                // {
+                //     title: 'Another Course',
+                //     description: 'Another course description',
+                //     url: '/dummycourse2',
+                //     image: ''
+                // },
+                // {
+                //     title: 'One More Course',
+                //     description: 'Another course description',
+                //     url: '/dummycourse3',
+                //     image: ''
+                // },
+                // {
+                //     title: 'Final Course',
+                //     description: 'The last dummy course on here',
+                //     url: '/dummycourse4',
+                //     image: ''
+                // }
+            ]
+        };
     }
+    
 
     // get courses for instructor
     getInstructorCourses = async () => {
@@ -100,11 +101,12 @@ class CourseList extends Component {
                 throw new Error(data.message)
             }
 
-            return this.setState(({ courses }) => ({
+            return this.setState({
                 courses: {
                     ...courses
+                    // ...response.courses // commented this in to get it to compile
                 }
-            }))
+            })
         }).catch((e) => {
             console.warn("There was an error retrieving instructor courses: ", e);
 
@@ -115,12 +117,13 @@ class CourseList extends Component {
     }
 
     // get courses for student
-    // getStudentCourses = async() => {
+    getStudentCourses = async() => {
 
-    // }
+    }
 
     componentDidMount() {
-        this.getInstructorCourses();
+        this.getCourses();
+        // this.getInstructorCourses(); // commented this in to get it to compile
     }
 
     handleOpen = () => {
@@ -153,7 +156,7 @@ class CourseList extends Component {
                     aria-describedby="simple-modal-description"
                 >
                     <div className={classes.paper}>
-                        <AddCourse />
+                        <AddCourse closeModal={this.handleClose}/>
                     </div>
                 </Modal>
                 {this.state.courses ? (
