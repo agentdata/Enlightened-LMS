@@ -84,7 +84,7 @@ class CourseList extends Component {
         };
 
         fetch('https://cooliocoders.ddns.net/api/course/instructor', init)
-        .then((response) => {
+        .then( async (response) => {
             statusCode = response.status;
             const data = await response.json();
             const items = await data.items;
