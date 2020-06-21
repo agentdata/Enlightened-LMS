@@ -41,57 +41,75 @@ const styles = theme => ({
 
 class CourseList extends Component {
     state = {
-        isLoggedIn: false,
-        isInstructor: true,
+        error: null,
         modalOpen: false,
         courses: [
-            {
-                title: 'Dummy Course',
-                description: 'A dummy course description',
-                url: '/dummycourse',
-                image: ''
-            },
-            {
-                title: 'Another Course',
-                description: 'Another course description',
-                url: '/dummycourse2',
-                image: ''
-            },
-            {
-                title: 'One More Course',
-                description: 'Another course description',
-                url: '/dummycourse3',
-                image: ''
-            },
-            {
-                title: 'Final Course',
-                description: 'The last dummy course on here',
-                url: '/dummycourse4',
-                image: ''
-            }
+            // {
+            //     title: 'Dummy Course',
+            //     description: 'A dummy course description',
+            //     url: '/dummycourse',
+            //     image: ''
+            // },
+            // {
+            //     title: 'Another Course',
+            //     description: 'Another course description',
+            //     url: '/dummycourse2',
+            //     image: ''
+            // },
+            // {
+            //     title: 'One More Course',
+            //     description: 'Another course description',
+            //     url: '/dummycourse3',
+            //     image: ''
+            // },
+            // {
+            //     title: 'Final Course',
+            //     description: 'The last dummy course on here',
+            //     url: '/dummycourse4',
+            //     image: ''
+            // }
         ]
     };
 
-    getLoggedIn = async () => {
-        // check if user logged in, set state accordingly
+    // get courses for instructor
+    getInstructorCourses = async () => {
+        var statusCode;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+        headers.append('Access-Control-Allow-Origin','*');
+        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
+        const init = {
+            method: 'GET',
+            headers
+        };
+
+        fetch('https://cooliocoders.ddns.net/api/course/instructor', init)
+        .then((response) => {
+            statusCode = response.status;
+            const data = await response.json();
+            const items = await data.items;
+
+            if(!items) {
+                throw new Error(data.message)
+            }
+
+            return this.setState({
+                courses: {
+                    ...courses
+                }
+            })
+        }).catch((e) => {
+            console.warn("There was an error retrieving instructor courses: ", e);
+
+            this.setState({
+                error: "There was an error retrieving instructor courses."
+            });
+        });
     }
 
-    getCourses = async () => {
-        
-        if (this.state.isLoggedIn) {
-            // request course list from API
-            // fetch(``)
-            //       .then(resp => resp.json())
-            //       .then((data) => {
-            //         this.setState( {courses: data} )
-            //       })
-            //       .catch((error) => {
-            //         console.log("Error occurred while fetching");
-            //         console.log(error);
-            //});  
-        } else {
-            // redirect to login page
-        }
+    // get courses for student
+    getStudentCourses = async() => {
+
     }
 
     componentDidMount() {

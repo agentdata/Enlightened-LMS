@@ -140,24 +140,24 @@ class Profile extends React.Component {
                     const text = await response.json();
                     statusCode = response.status;
 
-                    this.setState({userDetails:
-                            {
-                                email: text["email"],
-                                firstName: text["firstName"],
-                                lastName: text["lastName"],
-                                phone: text["phone"],
-                                birthDate: text["birthDate"],
-                                state: text["state"],
-                                city: text["city"],
-                                zip: text["zip"],
-                                address1: text["address1"],
-                                bio: text["bio"],
-                                avatar: text["avatar"],
-                                link1: text["link1"],
-                                link3: text["link3"],
-                                link2: text["link2"]
-                            }
-                    })
+                    // this.setState({userDetails:
+                    //         {
+                    //             email: text["email"],
+                    //             firstName: text["firstName"],
+                    //             lastName: text["lastName"],
+                    //             phone: text["phone"],
+                    //             birthDate: text["birthDate"],
+                    //             state: text["state"],
+                    //             city: text["city"],
+                    //             zip: text["zip"],
+                    //             address1: text["address1"],
+                    //             bio: text["bio"],
+                    //             avatar: text["avatar"],
+                    //             link1: text["link1"],
+                    //             link3: text["link3"],
+                    //             link2: text["link2"]
+                    //         }
+                    // })
                 }).catch((e) => {
                 console.warn('There was an error saving user details: ', e)
 
