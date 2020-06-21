@@ -23,6 +23,9 @@ const styles = theme => ({
     quarters: {
         width: "25%"
     },
+    halfs: {
+        width: "45%"
+    },
     title: {
         display: "flex",
         flexDirection: "column",
@@ -59,11 +62,18 @@ const styles = theme => ({
         justifyContent: "space-between",
         flexWrap: "wrap"
     },
+    daysError: {
+        textAlign: "center",
+        color: "#f44336",
+        fontWeight: "initial",
+        fontSize: "15px",
+        marginTop: "5px"
+    },
     timesFlex: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: "20px",
+        marginTop: "5px",
         marginBottom: "10px"
     },
     buttons: {
@@ -82,7 +92,6 @@ class AddCourse extends Component {
         super(props)
 
         this.state = {
-            isInstructor: true,
             newCourse:
                 {
                     department: '', // CS, PHIL, etc.
@@ -109,7 +118,19 @@ class AddCourse extends Component {
                     roomNumber: '',
                     capacity: '', // total students allowed
                     instructor: '', // automatically fill
-                }
+                },
+            departmentError: '',
+            numberError: '',
+            nameError: '',
+            descriptionError: '',
+            creditsError: '',
+            yearError: '',
+            daysError: '',
+            startTimeError: '',
+            endTimeError: '',
+            buildingError: '',
+            roomError: '',
+            capacityError: ''
     
                 // 5 - Frontend Courses - instructor can add a course - 
                 // includes title, number, dates, times, location, capacity, 
@@ -162,31 +183,31 @@ class AddCourse extends Component {
     }
 
     toggleMonday = () => {
-        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, mon: !this.state.newCourse.days.mon }}}, () => { this.showDays() })
+        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, mon: !this.state.newCourse.days.mon }}}, () => { this.validateDays() })
     }
 
     toggleTuesday = () => {
-        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, tues: !this.state.newCourse.days.tues }}}, () => { this.showDays() })
+        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, tues: !this.state.newCourse.days.tues }}}, () => { this.validateDays() })
     }
 
     toggleWednesday = () => {
-        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, wed: !this.state.newCourse.days.wed }}}, () => { this.showDays() })
+        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, wed: !this.state.newCourse.days.wed }}}, () => { this.validateDays() })
     }
 
     toggleThursday = () => {
-        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, thurs: !this.state.newCourse.days.thurs }}}, () => { this.showDays() })
+        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, thurs: !this.state.newCourse.days.thurs }}}, () => { this.validateDays() })
     }
 
     toggleFriday = () => {
-        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, fri: !this.state.newCourse.days.fri }}}, () => { this.showDays() })
+        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, fri: !this.state.newCourse.days.fri }}}, () => { this.validateDays() })
     }
 
     toggleSaturday = () => {
-        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, sat: !this.state.newCourse.days.sat }}}, () => { this.showDays() })
+        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, sat: !this.state.newCourse.days.sat }}}, () => { this.validateDays() })
     }
 
     toggleSunday = () => {
-        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, sun: !this.state.newCourse.days.sun }}}, () => { this.showDays() })
+        this.setState({ newCourse: { ...this.state.newCourse, days: { ...this.state.newCourse.days, sun: !this.state.newCourse.days.sun }}}, () => { this.validateDays() })
     }
 
     handleStartTimeChange = ({ target }) => {
@@ -198,7 +219,12 @@ class AddCourse extends Component {
     }
 
     handlePlatformChange = ({ target }) => {
-        this.setState({ newCourse: { ...this.state.newCourse, platform: target.value} })
+        this.setState({ newCourse: { ...this.state.newCourse, platform: target.value} }, () => {
+            this.validateBuilding()
+            this.validateRoom()
+            this.validateStartTime()
+            this.validateEndTime()
+        })
     }
 
     handleBuildingChange = ({ target }) => {
@@ -218,14 +244,169 @@ class AddCourse extends Component {
         // TODO: Add course with api
     }
 
-    showDays = () => {
-        console.log("Monday: " + this.state.newCourse.days.mon)
-        console.log("Tuesday: " + this.state.newCourse.days.tues)
-        console.log("Wednesday: " + this.state.newCourse.days.wed)
-        console.log("Thursday: " + this.state.newCourse.days.thurs)
-        console.log("Friday: " + this.state.newCourse.days.fri)
-        console.log("Saturday: " + this.state.newCourse.days.sat)
-        console.log("Sunday: " + this.state.newCourse.days.sun)
+    validateDepartment = () => {
+        if (this.state.newCourse.department === "") {
+            this.setState({departmentError: "Required"})
+        } else if (this.state.newCourse.department.includes(" ")) {
+            this.setState({departmentError: "No Spaces Allowed"})
+        } else if (/\d/.test(this.state.newCourse.department)) {
+            this.setState({departmentError: "No Numbers Allowed"})
+        } else {
+            this.setState({departmentError: ''})
+        }
+    }
+
+    validateNumber = () => {
+        if (this.state.newCourse.number === "") {
+            this.setState({numberError: "Required"})
+        } else if (this.state.newCourse.number.includes(" ")) {
+            this.setState({numberError: "No Spaces Allowed"})
+        } else if (!/^\d+$/.test(this.state.newCourse.number)) {
+            this.setState({numberError: "Numbers Only"})
+        } else {
+            this.setState({numberError: ''})
+        }
+    }
+
+    validateName = () => {
+        if (this.state.newCourse.name === "") {
+            this.setState({nameError: "Required"})
+        } else {
+            this.setState({nameError: ""})
+        }
+    }
+
+    validateDescription = () => {
+        if (this.state.newCourse.description === "") {
+            this.setState({descriptionError: "Required"})
+        } else {
+            this.setState({descriptionError: ""})
+        }
+    }
+
+    validateCredits = () => {
+        if (this.state.newCourse.credits === "") {
+            this.setState({creditsError: "Required"})
+        } else if (!/^\d+$/.test(this.state.newCourse.credits)) {
+            this.setState({creditsError: "Numbers Only"})
+            return
+        } else if (parseInt(this.state.newCourse.credits) < 0 ||
+                parseInt(this.state.newCourse.credits) > 5) {
+            this.setState({creditsError: "Between 0-5"})
+        } else {
+            this.setState({creditsError: ""})
+        }
+    }
+
+    validateYear = () => {
+        if (this.state.newCourse.year === "") {
+            this.setState({yearError: "Required"})
+        } else if (!/^\d+$/.test(this.state.newCourse.year)) {
+            this.setState({yearError: "Numbers Only"})
+            return
+        } else if (parseInt(this.state.newCourse.year) < 2020) {
+            this.setState({yearError: "Current or Future"})
+        } else {
+            this.setState({yearError: ""})
+        }
+    }
+
+    validateDays = () => {
+        if (this.state.newCourse.platform != "online" &&
+        this.state.newCourse.days.mon === false &&
+        this.state.newCourse.days.tues === false &&
+        this.state.newCourse.days.wed === false &&
+        this.state.newCourse.days.thurs === false &&
+        this.state.newCourse.days.fri === false &&
+        this.state.newCourse.days.sat === false &&
+        this.state.newCourse.days.sun === false
+        ) {
+            this.setState({daysError: "Select Day(s)"})
+        } else {
+            this.setState({daysError: ""})
+        }
+    }
+
+    validateStartTime = () => {
+        if (this.state.newCourse.startTime === "" && this.state.newCourse.platform != "online") {
+            this.setState({startTimeError: "Required"})
+        } else {
+            this.setState({startTimeError: ""})
+        }
+    }
+
+    validateEndTime = () => {
+        if (this.state.newCourse.endTime === "" && this.state.newCourse.platform != "online") {
+            this.setState({endTimeError: "Required"})
+        } else {
+            this.setState({endTimeError: ""})
+        }
+    }
+
+    validateBuilding = () => {
+        if (this.state.newCourse.building === "" && this.state.newCourse.platform != "online") {
+            this.setState({buildingError: "Required"})
+        } else {
+            this.setState({buildingError: ""})
+        }
+    }
+
+    validateRoom = () => {
+        if (this.state.newCourse.roomNumber === "" && this.state.newCourse.platform != "online") {
+            this.setState({roomError: "Required"})
+        } else if (!/^\d+$/.test(this.state.newCourse.roomNumber) && this.state.newCourse.platform != "online") {
+            this.setState({roomError: "Numbers only"})
+        } else {
+            this.setState({roomError: ""})
+        }
+    }
+
+    validateCapacity = () => {
+        if (this.state.newCourse.capacity === "") {
+            this.setState({capacityError: "Required"})
+        } else if (!/^\d+$/.test(this.state.newCourse.capacity)) {
+            this.setState({capacityError: "Numbers only"})
+        }
+    }
+
+    checkErrors = () => {
+
+        this.validateDepartment()
+        this.validateNumber()
+        this.validateName()
+        this.validateDescription()
+        this.validateCredits()
+        this.validateYear()
+        this.validateDays();
+        this.validateStartTime()
+        this.validateEndTime()
+        this.validateBuilding()
+        this.validateRoom()
+        this.validateCapacity()
+
+        // no errors
+        if (this.state.newCourse.departmentError === "" &&
+        this.state.newCourse.numberError === "" &&
+        this.state.newCourse.nameError === "" &&
+        this.state.newCourse.descriptionError === "" &&
+        this.state.newCourse.creditsError === "" &&
+        this.state.newCourse.semesterError === "" &&
+        this.state.newCourse.yearError === "" &&
+        this.state.newCourse.blockError === "" &&
+        this.state.newCourse.daysError === "" &&
+        this.state.newCourse.startTimeError === "" &&
+        this.state.newCourse.endTimeError === "" &&
+        this.state.newCourse.platformError === "" &&
+        this.state.newCourse.buildingError === "" &&
+        this.state.newCourse.roomError === "" &&
+        this.state.newCourse.capacityError === "") {
+            this.addCourseToDb()
+        }
+
+    }
+
+    addCourseToDb = () => {
+        // add course with api
     }
 
     render() {
@@ -238,61 +419,75 @@ class AddCourse extends Component {
                 </div>
                 <div className={classes.horizontalFlex}>
                     <TextField
+                    className={classes.halfs}
+                    required
                     id="department"
                     label="Department"
                     style={{ margin: 8 }}
-                    helperText="CS, HIST, etc"
+                    helperText={this.state.departmentError === '' ? "CS, HIST, etc" : "CS, HIST, etc | " + this.state.departmentError}
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
                     onChange={this.handleDepartmentChange}
+                    onBlur={this.validateDepartment}
+                    error={this.state.departmentError === '' ? false : true}
                     />
                     <TextField
+                    className={classes.halfs}
                     id="number"
                     label="Number"
                     style={{ margin: 8 }}
-                    helperText="1410, 2300, etc."
+                    helperText={this.state.numberError === '' ? "1410, 2300, etc." : "1410, 2300, etc. | " + this.state.numberError}
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
                     onChange={this.handleNumberChange}
+                    onBlur={this.validateNumber}
+                    error={this.state.numberError === '' ? false : true}
                     />
                 </div>
                 <TextField
                 id="name"
                 label="Name"
                 style={{ margin: 8 }}
-                helperText="Full Course Name"
+                helperText={this.state.nameError === '' ? "Full Course Name" : "Full Course Name | " + this.state.nameError}
                 margin="normal"
                 InputLabelProps={{
                     shrink: true,
                 }}
                 onChange={this.handleNameChange}
+                onBlur={this.validateName}
+                error={this.state.nameError === '' ? false : true}
                 />
                 <TextField
                 id="description"
                 label="Description"
                 style={{ margin: 8 }}
-                helperText="Brief Course Description"
+                helperText={this.state.descriptionError === '' ? "Brief Course Description" : "Brief Course Description | " + this.state.descriptionError}
                 margin="normal"
                 InputLabelProps={{
                     shrink: true,
                 }}
                 onChange={this.handleDescriptionChange}
+                onBlur={this.validateDescription}
+                error={this.state.descriptionError === '' ? false : true}
                 />
                 <div className={classes.horizontalFlex}>
                     <TextField
                     className={classes.eighths}
                     id="credits"
                     label="Credits"
+                    helperText={this.state.creditsError === '' ? '' : this.state.creditsError}
                     style={{ margin: 8 }}
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
                     onChange={this.handleCreditsChange}
+                    onBlur={this.validateCredits}
+                    error={this.state.creditsError === '' ? false : true}
                     />
                     <TextField
                     className={classes.quarters}
@@ -300,6 +495,7 @@ class AddCourse extends Component {
                     label="Semester"
                     style={{ margin: 8 }}
                     select
+                    defaultValue="fall"
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
@@ -320,12 +516,15 @@ class AddCourse extends Component {
                     className={classes.quarters}
                     id="year"
                     label="Year"
+                    helperText={this.state.yearError === "" ? '' : this.state.yearError}
                     style={{ margin: 8 }}
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
                     onChange={this.handleYearChange}
+                    onBlur={this.validateYear}
+                    error={this.state.yearError === "" ? false : true}
                     />
                     <TextField
                     className={classes.quarters}
@@ -333,6 +532,7 @@ class AddCourse extends Component {
                     label="Block"
                     style={{ margin: 8 }}
                     select
+                    defaultValue="full"
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
@@ -381,12 +581,14 @@ class AddCourse extends Component {
                         Sun
                     </Button>
                 </div>
+                {this.state.daysError === '' ? null : <Typography className={classes.daysError}>{this.state.daysError}</Typography> }
                 <div className={classes.timesFlex}>
                     <TextField
                     id="startTime"
                     label="Start Time"
                     type="time"
                     className={classes.thirds}
+                    helperText={this.state.startTimeError === '' ? '' : this.state.startTimeError}
                     style={{ margin: 8 }}
                     InputLabelProps={{
                     shrink: true,
@@ -395,12 +597,15 @@ class AddCourse extends Component {
                     step: 300, // 5 min
                     }}
                     onChange={this.handleStartTimeChange}
+                    onBlur={this.validateStartTime}
+                    error={this.state.startTimeError === '' ? false : true}
                     />
                     <TextField
                     id="endTime"
                     label="End Time"
                     type="time"
                     className={classes.thirds}
+                    helperText={this.state.endTimeError === '' ? '' : this.state.endTimeError}
                     style={{ margin: 8 }}
                     InputLabelProps={{
                     shrink: true,
@@ -409,6 +614,8 @@ class AddCourse extends Component {
                     step: 300, // 5 min
                     }}
                     onChange={this.handleEndTimeChange}
+                    onBlur={this.validateEndTime}
+                    error={this.state.endTimeError === '' ? false : true}
                     />
                     <TextField
                     className={classes.thirds}
@@ -417,6 +624,7 @@ class AddCourse extends Component {
                     label="Platform"
                     style={{ margin: 8 }}
                     select
+                    defaultValue="inPerson"
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
@@ -441,43 +649,51 @@ class AddCourse extends Component {
                     disabled={this.state.newCourse.platform === "online" ? true : false}
                     id="building"
                     label="Building"
+                    helperText={this.state.buildingError === '' ? '' : this.state.buildingError}
                     style={{ margin: 8 }}
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
                     onChange={this.handleBuildingChange}
+                    onBlur={this.validateBuilding}
+                    error={this.state.buildingError === '' ? false : true}
                     />
                     <TextField
                     className={classes.quarters}
                     disabled={this.state.newCourse.platform === "online" ? true : false}
                     id="roomNumber"
                     label="Room #"
+                    helperText={this.state.roomError === '' ? '' : this.state.roomError}
                     style={{ margin: 8 }}
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
                     onChange={this.handleRoomChange}
+                    onBlur={this.validateRoom}
+                    error={this.state.roomError === '' ? false : true}
                     />
                     <TextField
                     className={classes.quarters}
-                    disabled={this.state.newCourse.platform === "online" ? true : false}
                     id="capacity"
                     label="Capacity"
+                    helperText={this.state.capacityError === '' ? '' : this.state.capacityError}
                     style={{ margin: 8 }}
                     margin="normal"
                     InputLabelProps={{
                         shrink: true,
                     }}
                     onChange={this.handleCapacityChange}
+                    onBlur={this.validateCapacity}
+                    error={this.state.capacityError === '' ? false : true}
                     />
                 </div>
 
                 <List>
                     <ListItem className={classes.buttons}>
                         <Button className={classes.modalButton} onClick={this.props.closeModal}>Cancel</Button>
-                        <Button className={classes.modalButton} onClick={this.submitButtonPressed}>Add Course</Button>
+                        <Button className={classes.modalButton} onClick={this.checkErrors}>Add Course</Button>
                     </ListItem>
                 </List>
             </div>
