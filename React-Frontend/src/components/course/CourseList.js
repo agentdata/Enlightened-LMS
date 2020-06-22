@@ -80,7 +80,7 @@ class CourseList extends Component {
     
 
     // get courses for instructor
-    getInstructorCourses = async () => {
+    getInstructorCourses() {
         var statusCode;
         const headers = new Headers();
         headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
@@ -117,7 +117,7 @@ class CourseList extends Component {
     }
 
     // get courses for student
-    getStudentCourses = async() => {
+    getStudentCourses() {
 
     }
 

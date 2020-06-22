@@ -53,7 +53,6 @@ export default class FileUploader extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log(JSON.stringify(this.state.selectedFile))
     }
 
     render() {

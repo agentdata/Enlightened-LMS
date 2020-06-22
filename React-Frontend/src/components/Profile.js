@@ -185,12 +185,12 @@ class Profile extends React.Component {
         };
     
         fetch('https://cooliocoders.ddns.net/api/user/profile', init)
-        .then((response) => {
+        .then( async (response) => {
             statusCode = response.status;
-            return response.json(); // or .text() or .blob() ...
-        })
-        .then((text) => this.setState({userDetails:
-                {
+            const text = await response.json();
+
+            return this.setState({
+                userDetails: {
                     email: text["email"],
                     firstName: text["firstName"],
                     lastName: text["lastName"],
@@ -206,8 +206,8 @@ class Profile extends React.Component {
                     link3: text["link3"],
                     link2: text["link2"]
                 }
-            }
-        ))
+            })
+        })
         .catch((e) => {
             console.warn('There was an error retrieving user details: ', e)
 
