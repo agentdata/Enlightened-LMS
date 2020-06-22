@@ -42,6 +42,9 @@ export default class FileUploader extends React.Component {
         const data = new FormData()
         data.append('file', this.state.selectedFile)
         this.props.updateFileCallback(this.state.selectedFile, this.state.displayFile)
+        this.setState({
+            selectedFile: []
+        })
     }
 
     // convert to valid img data
@@ -50,6 +53,7 @@ export default class FileUploader extends React.Component {
     }
 
     componentDidUpdate() {
+        console.log(JSON.stringify(this.state.selectedFile))
     }
 
     render() {
@@ -59,9 +63,11 @@ export default class FileUploader extends React.Component {
                     <Button>
                         <input type="file" name={this.props.name} accept={this.props.uploadTypes} onChange={this.onChangeHandler} />
                     </Button>
+                    { (JSON.stringify(this.state.selectedFile) !== '[]') &&
                     <Button onClick={this.onClickHandler}>
                         Upload
                     </Button>
+                    }
                 </Card>
             </div>
         )
