@@ -121,6 +121,42 @@ class CourseList extends Component {
 
     }
 
+    // add course to list (instructor)
+    addInstructorCourse(newCourse) {
+
+        // for UI rendering
+        this.setState(state => {
+            const courses = [...courses, newCourse];
+
+            return {
+                courses: courses
+            }
+        })
+
+        var statusCode;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+        headers.append('Access-Control-Allow-Origin','*');
+        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
+        const init = {
+            method: 'PUT',
+            headers
+        };
+
+        fetch('https://cooliocoders.ddns.net/api/course/instructor')
+        .then( async(response) => {
+            statusCode = response.status;
+            const data = await response.json();
+        })
+        .catch((e) => {
+            console.warn("There was an error adding the course to the list: ", e);
+
+            this.setState({
+                error: "There was an error adding the course to the list."
+            })
+        })
+    }
+
     componentDidMount() {
         this.getInstructorCourses();
     }
