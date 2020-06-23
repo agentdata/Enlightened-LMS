@@ -3,35 +3,54 @@ package com.CoolioCoders.LMS.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.DayOfWeek;
-import java.util.Date;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 
 @Document(collection="courses")
 public class Course {
     @Id
     private String id;
+    private String department;
     private String courseName;
     private String courseNumber;
+    private String description;
 
     // Lazy load - prevents cyclical reference loop between courses and users
     @DBRef(lazy = true)
     private User instructor;
     // Lazy load - prevents cyclical references loop between courses and users
     @DBRef(lazy = true)
-    private List<User> students;
-
-    private Date startDate;   //set date to first date & set time to meeting beginning time
-    private Date endDate;     //set date to last date & set time to meeting ending time
-    private Set<DayOfWeek> meetingDays;
-    private String location;
+    private int year;
+    private String block;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private String semester;
+    private MeetingDays meetingDays;
+    private String buildingName;
+    private String roomNumber;
     private int capacity;
-    private int creditHours;
+    private int credits;
 
-    public Course(){ }
+    public Course(String courseName, String courseNumber, User instructor,
+                  LocalTime startTime, LocalTime endTime, MeetingDays meetingDays,
+                  String buildingName, String roomNumber,
+                  int capacity, int credits, int year, String description, String department, String semester) {
+        this.courseName = courseName;
+        this.courseNumber = courseNumber;
+        this.instructor = instructor;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.meetingDays = meetingDays;
+        this.buildingName = buildingName;
+        this.roomNumber = roomNumber;
+        this.capacity = capacity;
+        this.credits = credits;
+        this.year = year;
+        this.description = description;
+        this.department = department;
+        this.semester = semester;
+    }
 
     public String getId() {
         return id;
@@ -65,59 +84,83 @@ public class Course {
         this.instructor = instructor;
     }
 
-    public List<User> getStudents() {
-        return students;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setStudents(List<User> students) {
-        this.students = students;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public MeetingDays getMeetingDays() { return meetingDays; }
+
+    public void setMeetingDays(MeetingDays meetingDays) { this.meetingDays = meetingDays; }
+
+    public LocalTime getEndTime() {
+        return endTime;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Set<DayOfWeek> getMeetingDays() {
-        return meetingDays;
-    }
-
-    public void setMeetingDays(Set<DayOfWeek> meetingDays) {
-        this.meetingDays = meetingDays;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public void setCapacity(int capacity) { this.capacity = capacity; }
+
+    public int getCredits() {
+        return credits;
     }
 
-    public int getCreditHours() {
-        return creditHours;
+    public void setCredits(int credits) { this.credits = credits; }
+
+    public String getBuildingName() { return buildingName; }
+
+    public void setBuildingName(String buildingName) { this.buildingName = buildingName; }
+
+    public String getRoomNumber() { return roomNumber; }
+
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
+
+    public int getYear() {
+        return year;
     }
 
-    public void setCreditHours(int creditHours) {
-        this.creditHours = creditHours;
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
     }
 }

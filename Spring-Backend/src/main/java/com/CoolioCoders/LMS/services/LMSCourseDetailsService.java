@@ -33,9 +33,6 @@ public class LMSCourseDetailsService implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired
-    private PasswordEncoder bCryptPasswordEncoder;
-
 
     public List<Course> findAll(){
         return courseRepository.findAll();
@@ -71,5 +68,11 @@ public class LMSCourseDetailsService implements UserDetailsService {
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(), authorities);
+    }
+
+    //region Course Details Service Methods for Security Configuration
+    //------------------------------------------------------------------------------------------------------------------
+    public void savecourse(Course newcourse) {
+        courseRepository.save(newcourse);
     }
 }
