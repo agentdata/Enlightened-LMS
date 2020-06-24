@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.security.Principal;
 import java.util.*;
@@ -34,9 +35,17 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public List<Course> findCoursesByUser(User user){return courseRepository.findByInstructor(user);}
+    public Course findById(String id) { return courseRepository.findById(id).orElseThrow(EntityNotFoundException::new); }
+
+    public List<Course> findCoursesByInstructor(User user){return courseRepository.findByInstructor(user);}
 
     public void saveCourse(Course newCourse) {
         courseRepository.save(newCourse);
+    }
+
+    public void enrollUserInCourse(User user, Course course){
+        //TODO: implement enrolling user
+        //Need to make sure to add references to both the user and the course
+        throw new NotImplementedException();
     }
 }

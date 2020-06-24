@@ -40,9 +40,7 @@ public class LMSUserDetailsService implements UserDetailsService{
         return userRepository.findAll();
     }
 
-    public User findById(String id) {
-        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
+    public User findById(String id) { return userRepository.findById(id).orElseThrow(EntityNotFoundException::new); }
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
