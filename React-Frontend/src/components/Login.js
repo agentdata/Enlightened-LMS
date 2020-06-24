@@ -123,6 +123,15 @@ class Login extends Component {
     // render sign in page
     render() {
         const { classes, loginError /*, isAuthenticated */} = this.props;
+
+        // Add event listener for enter key
+        document.addEventListener('keyup', (e) => {
+            if(e.code === "Enter" || e.code === "NumpadEnter") {
+                // Submit form
+                this.handleSubmit();
+            }
+        });
+
         return (
             <Grid container component="main" className={classes.root}>
                 <CssBaseline />
