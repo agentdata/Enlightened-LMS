@@ -1,10 +1,11 @@
 package com.CoolioCoders.LMS.controllers;
 
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
+import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
 import com.CoolioCoders.LMS.models.Course;
 import com.CoolioCoders.LMS.models.MeetingDays;
 import com.CoolioCoders.LMS.models.User;
-import com.CoolioCoders.LMS.services.LMSCourseDetailsService;
+import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class CourseController {
     @Autowired
     private LMSUserDetailsService userService;
     @Autowired
-    private LMSCourseDetailsService courseService;
+    private CourseService courseService;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -36,17 +37,17 @@ public class CourseController {
     @GetMapping("instructor")
     public List<Course> findCourses(Principal principalUser){
         User user = userService.findUserByEmail(principalUser.getName());
-        return courseService.findCoursesByUser(user);
+        return courseService.findCoursesByInstructor(user);
     }
 
     @PreAuthorize("hasAuthority('INSTRUCTOR')")
     @PostMapping("new")
-    public ResponseEntity insructorCourses(Principal principalUser, @RequestBody JSONObject body){
+    public ResponseEntity instructorCourses(Principal principalUser, @RequestBody JSONObject body){
         Map<Object, Object> model = new HashMap<>();
         try {
             MeetingDays days = new MeetingDays();
             days.parseMeetingDays(body.get("days").toString());
-            courseService.savecourse(
+            courseService.saveCourse(
                     new Course(
                             body.get("name").toString(),
                             body.get("number").toString(),
@@ -62,7 +63,7 @@ public class CourseController {
                             body.get("department").toString(),
                             body.get("semester").toString()
                     )
-            );
+             );
 
             //if no error then return success message and OK status
             model.put("message", "Successfully added New Course");
@@ -76,5 +77,31 @@ public class CourseController {
             model.put("message", "Bad exception");
             return ok(model);
         }
+    }
+
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @PostMapping("/enroll")
+    public ResponseEntity<Map<Object, Object>> enrollStudent(Principal principalUser, @RequestBody JSONObject body) {
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User student = userService.findUserByEmail(principalUser.getName());
+            //TODO: verify array is being parsed correctly
+            String[] courses = (String[]) body.get("courses");
+
+            for(String courseId : courses) {
+                Course course = courseService.findById(courseId);
+                courseService.enrollUserInCourse(student, course);
+            }
+            model.put("message", "Student registration successful");
+        }
+        catch (EntityNotFoundException e){  //extend EntityNotFoundException for courses to return the bad course id
+            e.printStackTrace();
+            model.put("message", "Course not found");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", "Bad Exception");
+        }
+        return ok(model);
     }
 }
