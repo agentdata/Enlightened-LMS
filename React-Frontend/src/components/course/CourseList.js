@@ -50,42 +50,39 @@ class CourseList extends Component {
             modalOpen: false,
             isInstructor: true,
             courses: [
-                // {
-                //     title: 'Dummy Course',
-                //     description: 'A dummy course description',
-                //     url: '/dummycourse',
-                //     image: ''
-                // },
-                // {
-                //     title: 'Another Course',
-                //     description: 'Another course description',
-                //     url: '/dummycourse2',
-                //     image: ''
-                // },
-                // {
-                //     title: 'One More Course',
-                //     description: 'Another course description',
-                //     url: '/dummycourse3',
-                //     image: ''
-                // },
-                // {
-                //     title: 'Final Course',
-                //     description: 'The last dummy course on here',
-                //     url: '/dummycourse4',
-                //     image: ''
-                // }
+                {
+                    title: 'Dummy Course',
+                    description: 'A dummy course description',
+                    url: '/dummycourse',
+                    image: ''
+                },
+                {
+                    title: 'Another Course',
+                    description: 'Another course description',
+                    url: '/dummycourse2',
+                    image: ''
+                },
+                {
+                    title: 'One More Course',
+                    description: 'Another course description',
+                    url: '/dummycourse3',
+                    image: ''
+                },
+                {
+                    title: 'Final Course',
+                    description: 'The last dummy course on here',
+                    url: '/dummycourse4',
+                    image: ''
+                }
             ]
         };
     }
-    
 
-    // get courses for instructor
-    getInstructorCourses() {
+     // get courses for instructor
+     getInstructorCourses() {
         var statusCode;
         const headers = new Headers();
         headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        headers.append('Access-Control-Allow-Origin','*');
-        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
         const init = {
             method: 'GET',
             headers
@@ -93,20 +90,11 @@ class CourseList extends Component {
 
         fetch('https://cooliocoders.ddns.net/api/course/instructor', init)
         .then( async (response) => {
-            statusCode = response.status;
-            const data = await response.json();
-            const items = await data.items;
+            response = await response.json();
+            console.log("----\nCourses in DB\n----\n"+JSON.stringify(response)+"----");
 
-            if(!items) {
-                throw new Error(data.message)
-            }
+            //TODO, add courses info from response to course cards and display.
 
-            return this.setState(({ courses }) => ({
-                courses: {
-                    ...courses
-                    // ...response.courses // commented this in to get it to compile
-                }
-            }))
         }).catch((e) => {
             console.warn("There was an error retrieving instructor courses: ", e);
 
@@ -117,44 +105,8 @@ class CourseList extends Component {
     }
 
     // get courses for student
-    getStudentCourses() {
+    getStudentCourses = async() => {
 
-    }
-
-    // add course to list (instructor)
-    addInstructorCourse(newCourse) {
-
-        // for UI rendering
-        this.setState(state => {
-            const courses = [...courses, newCourse];
-
-            return {
-                courses: courses
-            }
-        })
-
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        headers.append('Access-Control-Allow-Origin','*');
-        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
-        const init = {
-            method: 'PUT',
-            headers
-        };
-
-        fetch('https://cooliocoders.ddns.net/api/course/instructor')
-        .then( async(response) => {
-            statusCode = response.status;
-            const data = await response.json();
-        })
-        .catch((e) => {
-            console.warn("There was an error adding the course to the list: ", e);
-
-            this.setState({
-                error: "There was an error adding the course to the list."
-            })
-        })
     }
 
     componentDidMount() {

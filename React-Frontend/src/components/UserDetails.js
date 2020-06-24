@@ -121,8 +121,7 @@ class UserDetails extends React.Component {
 
     render() {
         const { classes } = this.props
-        const {email, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...this.props.details};
-        const eNumber = 35390
+        const {email, eNumber, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...this.props.details};
         // const email = 'testemail@gmail.com'
         // const firstName = 'Justin'
         // const lastName = 'Edwards'

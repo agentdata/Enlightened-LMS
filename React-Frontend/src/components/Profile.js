@@ -192,7 +192,7 @@ class Profile extends React.Component {
             return this.setState({
                 userDetails: {
                     email: text["email"],
-                    // eNumber: text["enumber"],
+                    eNumber: text["id"],
                     firstName: text["firstName"],
                     lastName: text["lastName"],
                     phone: text["phone"],
