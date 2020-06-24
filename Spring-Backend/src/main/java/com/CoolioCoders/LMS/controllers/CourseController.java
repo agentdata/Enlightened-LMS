@@ -4,7 +4,7 @@ import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
 import com.CoolioCoders.LMS.models.Course;
 import com.CoolioCoders.LMS.models.MeetingDays;
 import com.CoolioCoders.LMS.models.User;
-import com.CoolioCoders.LMS.services.LMSCourseDetailsService;
+import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class CourseController {
     @Autowired
     private LMSUserDetailsService userService;
     @Autowired
-    private LMSCourseDetailsService courseService;
+    private CourseService courseService;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -41,12 +41,12 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority('INSTRUCTOR')")
     @PostMapping("new")
-    public ResponseEntity insructorCourses(Principal principalUser, @RequestBody JSONObject body){
+    public ResponseEntity instructorCourses(Principal principalUser, @RequestBody JSONObject body){
         Map<Object, Object> model = new HashMap<>();
         try {
             MeetingDays days = new MeetingDays();
             days.parseMeetingDays(body.get("days").toString());
-            courseService.savecourse(
+            courseService.saveCourse(
                     new Course(
                             body.get("name").toString(),
                             body.get("number").toString(),
@@ -62,7 +62,7 @@ public class CourseController {
                             body.get("department").toString(),
                             body.get("semester").toString()
                     )
-            );
+             );
 
             //if no error then return success message and OK status
             model.put("message", "Successfully added New Course");

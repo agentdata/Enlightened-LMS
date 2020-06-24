@@ -19,6 +19,8 @@ public class Course {
     // Lazy load - prevents cyclical reference loop between courses and users
     @DBRef(lazy = true)
     private User instructor;
+    @DBRef(lazy = true)
+    private List<User> students;
 
     private int year;
     private String block;
@@ -30,6 +32,8 @@ public class Course {
     private String roomNumber;
     private int capacity;
     private int credits;
+
+    public Course(){}
 
     public Course(String courseName, String courseNumber, User instructor,
                   LocalTime startTime, LocalTime endTime, MeetingDays meetingDays,
@@ -161,5 +165,13 @@ public class Course {
 
     public void setSemester(String semester) {
         this.semester = semester;
+    }
+
+    public List<User> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<User> students) {
+        this.students = students;
     }
 }
