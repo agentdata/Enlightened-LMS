@@ -99,9 +99,9 @@ class AddCourse extends Component {
                     name: '', // full course name
                     description: '', // brief description
                     credits: '', // number of credits
-                    semester: '', // fall, summer, spring
+                    semester: 'Fall', // fall, summer, spring
                     year: '', // 2020
-                    block: '', // first, second, full
+                    block: 'Full', // first, second, full
                     days: {
                         mon: false,
                         tues: false,
@@ -113,7 +113,7 @@ class AddCourse extends Component {
                     }, // days of week: [monday, tuesday, etc.]
                     startTime: '',
                     endTime: '',
-                    platform: '', // online, face-to-face, hybrid
+                    platform: 'In Person', // online, face-to-face, hybrid
                     building: '',
                     roomNumber: '',
                     capacity: '', // total students allowed
@@ -148,10 +148,7 @@ class AddCourse extends Component {
     }
 
     handleDepartmentChange = ({ target }) => {
-        this.setState({ newCourse: { ...this.state.newCourse, department: target.value} }, () => {
-            this.showDays()
-        })
-        console.log(this.state.newCourse.department)
+        this.setState({ newCourse: { ...this.state.newCourse, department: target.value} })
     }
 
     handleNumberChange = ({ target }) => {
@@ -400,13 +397,40 @@ class AddCourse extends Component {
         this.state.newCourse.buildingError === "" &&
         this.state.newCourse.roomError === "" &&
         this.state.newCourse.capacityError === "") {
-            this.addCourseToDb()
+            
         }
-
+        this.addInstructorCourse(this.state.newCourse);        
     }
 
-    addCourseToDb = () => {
-        // add course with api
+    // add course to list (instructor)
+    addInstructorCourse(newCourse) {
+        console.log("---------\nnew course\n"+JSON.stringify(newCourse)+"\n---------");
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+        headers.append('Content-Type', 'application/json');
+        const init = {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(newCourse)
+        };
+
+        fetch('https://cooliocoders.ddns.net/api/course/new', init)
+        .then( response => {
+            if(response.status == 200){
+                console.log("course added to backend successfully")
+                this.props.closeModal();
+            }
+            else{
+                console.log("server error adding course");
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error adding the course to the list: ", e);
+
+            this.setState({
+                error: "There was an error adding the course to the list."
+            })
+        })
     }
 
     render() {
@@ -500,7 +524,7 @@ class AddCourse extends Component {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={this.handleCreditsChange}
+                    onChange={this.handleSemesterChange}
                     >
                         <MenuItem key="fall" value="fall">
                             Fall

@@ -34,7 +34,9 @@ const styles = theme => ({
         justifyContent: "center"
     },
     right: {
-        maxWidth: "400px"
+        maxWidth: "400px",
+        display: "flex",
+        justifyContent: "space-around"
     },
     cardContent: {
         display: "flex",
@@ -119,7 +121,7 @@ class UserDetails extends React.Component {
 
     render() {
         const { classes } = this.props
-        const {email, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...this.props.details};
+        const {email, eNumber, firstName, lastName, phone, birthDate, state, city, zip, address1, bio, avatar, link1, link2, link3} = {...this.props.details};
         // const email = 'testemail@gmail.com'
         // const firstName = 'Justin'
         // const lastName = 'Edwards'
@@ -159,6 +161,14 @@ class UserDetails extends React.Component {
                                     </Typography>
                                     <Typography>
                                         {birthDate}
+                                    </Typography>
+                                </ListItem>
+                                <ListItem className={classes.birthDate}>
+                                    <Typography className={classes.detailTitle} variant="body1">
+                                        E#: 
+                                    </Typography>
+                                    <Typography>
+                                        {eNumber}
                                     </Typography>
                                 </ListItem>
                                 <Divider />

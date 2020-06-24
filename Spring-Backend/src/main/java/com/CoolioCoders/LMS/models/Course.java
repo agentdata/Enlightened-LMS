@@ -19,8 +19,7 @@ public class Course {
     // Lazy load - prevents cyclical reference loop between courses and users
     @DBRef(lazy = true)
     private User instructor;
-    // Lazy load - prevents cyclical references loop between courses and users
-    @DBRef(lazy = true)
+
     private int year;
     private String block;
     private LocalTime startTime;
