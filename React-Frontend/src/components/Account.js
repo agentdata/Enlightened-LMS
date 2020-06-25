@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Container, Card, CardContent, Typography } from '@material-ui/core';
 
 export default class Account extends React.Component {
 
@@ -12,7 +13,15 @@ export default class Account extends React.Component {
 
     render() {
         return (
-            ""
+            <Container >
+                <Card style={{padding: 10}}>
+                    <CardContent>
+                        <Typography variant="h3">
+                            Account Details
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Container>
         );
     }
 }

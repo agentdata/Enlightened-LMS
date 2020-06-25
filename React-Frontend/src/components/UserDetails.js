@@ -4,6 +4,7 @@ import { Container, Card, CardContent, CardActions,
         Divider, TextField, TextareaAutosize } from '@material-ui/core';
 import FileUploader from './sitewide/FileUploader';
 import { withStyles } from '@material-ui/core/styles'
+import {BrowserRouter as Router, Link} from "react-router-dom";
 
 const styles = theme => ({
     profilePic: {
@@ -172,6 +173,13 @@ class UserDetails extends React.Component {
                                     </Typography>
                                 </ListItem>
                                 <Divider />
+                                <ListItem>
+                                    <Link to="account">
+                                        <Button className={classes.editButton}>
+                                            Account Details
+                                        </Button>
+                                    </Link>
+                                </ListItem>
                             </List>
                         </div>
                         <div className={classes.right}>
