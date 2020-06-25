@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.*;
 
 @Document(collection = "users")
 public class User {
@@ -32,16 +32,13 @@ public class User {
     private String zip;
     @DBRef
     private Set<Role> roles;
-
-    // Lazy load - prevents cyclical reference loop between courses and users
-    @DBRef(lazy = true)
-    private Set<Course> courses;
+    private Set<String> courseIds;
 
     public User(){}
 
     public User(String firstName, String lastName, LocalDate birthDate, String email, String password, String bio,
                 String link1, String link2, String link3, String avatar, String phone, String address1, String address2,
-                String city, String state, String zip, Set<Role> roles, Set<Course> courses) {
+                String city, String state, String zip, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -59,11 +56,14 @@ public class User {
         this.state = state;
         this.zip = zip;
         this.roles = roles;
-        this.courses = courses;
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -201,7 +201,31 @@ public class User {
 
     public void setRoles(Set<Role> roles) { this.roles = roles; }
 
-    public Set<Course> getCourses() { return courses; }
+    public Set<String> getCourseIds() {
+        if(courseIds == null){
+            return new HashSet<>();
+        }
+        return courseIds;
+    }
 
-    public void setCourses(Set<Course> courses) { this.courses = courses; }
+    public void setCourseIds(Set<String> courseIds) {
+        this.courseIds = courseIds;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User)o;
+        return getId().equals(user.getId()) &&
+               Objects.equals(getFirstName(), user.getFirstName()) &&
+               Objects.equals(getLastName(), user.getLastName()) &&
+               Objects.equals(getBirthDate(), user.getBirthDate()) &&
+               getEmail().equals(user.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFirstName(), getLastName(), getBirthDate(), getEmail());
+    }
 }

@@ -33,11 +33,65 @@ public class CourseController {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    @PreAuthorize("hasAuthority('INSTRUCTOR')")
-    @GetMapping("instructor")
-    public List<Course> findCourses(Principal principalUser){
-        User user = userService.findUserByEmail(principalUser.getName());
-        return courseService.findCoursesByInstructor(user);
+    @PreAuthorize("hasAnyAuthority({'STUDENT', 'INSTRUCTOR'})")
+    @GetMapping
+    public ResponseEntity<Map<Object, Object>> getAllCourses(){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            List<Course> courseList = courseService.findAll();
+            List<Object> courseResponseObjects = new ArrayList<>();
+            courseList.forEach((course -> courseResponseObjects.add(courseService.courseToJSONResponse(course, false))));
+            model.put("courses", courseResponseObjects);
+            model.put("message", "success");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<Map<Object, Object>> getUsersCourses(Principal principalUser){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+            List<Course> courseList = courseService.findCoursesByUser(user);
+            List<Object> courseStrings = new ArrayList<>();
+            courseList.forEach((course) -> courseStrings.add(courseService.courseToJSONResponse(course)));
+            model.put("courses", courseStrings);
+            model.put("message", "success");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
+
+    @GetMapping("/{courseId}")
+    public ResponseEntity<Map<Object, Object>> getEnrolledStudents(Principal principalUser, @PathVariable String courseId){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+            Course course = courseService.findById(courseId);
+            List<User> studentsInCourse = courseService.findStudentsInCourse(course);
+            if (studentsInCourse.contains(user) || user.getId().equals(course.getInstructor().getId())) {
+                List<Object> studentStrings = new ArrayList<>();
+                studentsInCourse.forEach((student) -> studentStrings.add(userService.userToJSONResponse(student)));
+                model.put("students", studentStrings);
+                model.put("message", "success");
+            }
+            else {
+                model.put("message", "User must be the course instructor or an enrolled " +
+                                     "student in order to view the student list");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
     }
 
     @PreAuthorize("hasAuthority('INSTRUCTOR')")
@@ -81,26 +135,25 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority('STUDENT')")
     @PostMapping("/enroll")
-    public ResponseEntity<Map<Object, Object>> enrollStudent(Principal principalUser, @RequestBody JSONObject body) {
+    public ResponseEntity<Map<Object, Object>> enrollStudent(Principal principalUser, @RequestBody Map<String, String[]> body) {
         Map<Object, Object> model = new HashMap<>();
         try {
             User student = userService.findUserByEmail(principalUser.getName());
-            //TODO: verify array is being parsed correctly
-            String[] courses = (String[]) body.get("courses");
+            String[] courseIds = body.get("courses");
 
-            for(String courseId : courses) {
+            for(String courseId : courseIds) {
                 Course course = courseService.findById(courseId);
                 courseService.enrollUserInCourse(student, course);
             }
             model.put("message", "Student registration successful");
         }
-        catch (EntityNotFoundException e){  //extend EntityNotFoundException for courses to return the bad course id
+        catch (EntityNotFoundException e){
             e.printStackTrace();
             model.put("message", "Course not found");
         }
         catch (Exception e){
             e.printStackTrace();
-            model.put("message", "Bad Exception");
+            model.put("message", e.getMessage());
         }
         return ok(model);
     }

@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalTime;
-import java.util.List;
+import java.util.*;
 
 @Document(collection="courses")
 public class Course {
@@ -19,9 +19,8 @@ public class Course {
     // Lazy load - prevents cyclical reference loop between courses and users
     @DBRef(lazy = true)
     private User instructor;
-    @DBRef(lazy = true)
-    private List<User> students;
 
+    private Set<String> studentIds;
     private int year;
     private String block;
     private LocalTime startTime;
@@ -167,11 +166,14 @@ public class Course {
         this.semester = semester;
     }
 
-    public List<User> getStudents() {
-        return students;
+    public Set<String> getStudentIds() {
+        if(studentIds == null){
+            return new HashSet<>();
+        }
+        return studentIds;
     }
 
-    public void setStudents(List<User> students) {
-        this.students = students;
+    public void setStudentIds(Set<String> studentIds) {
+        this.studentIds = studentIds;
     }
 }
