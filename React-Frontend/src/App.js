@@ -15,20 +15,20 @@ function App(props) {
 
   return (
     // returns protected route if user authenticated, otherwise login page
-    // <div className="App">
-    //   <Switch>
-    //     <ProtectedRoute
-    //       exact
-    //       path="/"
-    //       component={Home}
-    //       isAuthenticated={isAuthenticated}
-    //       isVerifying={isVerifying}
-    //     />
-    //     <Route path="/login" component={Login} />
-    //   </Switch>
-    // </div>
+    <div className="App">
+      <Switch>
+        <ProtectedRoute
+          exact
+          path="/"
+          component={Home}
+          isAuthenticated={isAuthenticated}
+          isVerifying={isVerifying}
+        />
+        <Route path="/login" component={Login} />
+      </Switch>
+    </div>
     // for testing Home Page without needing to sign in, comment above and uncomment <Home />
-    <Home />
+    //<Home />
   );
 }
 // maps state to App props

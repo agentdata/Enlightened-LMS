@@ -123,6 +123,7 @@ class Login extends Component {
     // render sign in page
     render() {
         const { classes, loginError /*, isAuthenticated */} = this.props;
+
         return (
             <Grid container component="main" className={classes.root}>
                 <CssBaseline />
@@ -172,7 +173,7 @@ class Login extends Component {
                             )}
                             
                             <Button
-                                type="button"
+                                type="submit"
                                 fullWidth
                                 variant="contained"
                                 color="primary"
