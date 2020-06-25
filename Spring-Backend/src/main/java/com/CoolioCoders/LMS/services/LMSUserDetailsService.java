@@ -1,11 +1,9 @@
 package com.CoolioCoders.LMS.services;
 
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
-import com.CoolioCoders.LMS.models.Course;
 import com.CoolioCoders.LMS.models.Role;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.models.UserProfile;
-import com.CoolioCoders.LMS.repositories.CourseRepository;
 import com.CoolioCoders.LMS.repositories.RoleRepository;
 import com.CoolioCoders.LMS.repositories.UserRepository;
 import net.minidev.json.JSONObject;
@@ -17,9 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -32,9 +28,9 @@ public class LMSUserDetailsService implements UserDetailsService{
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
     private PasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private CourseService courseService;
 
     public List<User> findAll(){
         return userRepository.findAll();
@@ -119,6 +115,29 @@ public class LMSUserDetailsService implements UserDetailsService{
         return model;
     }
 
+    public Map<Object, Object> userToJSONResponse(User user){
+        return userToJSONResponse(user, true);
+    }
+
+    protected Map<Object, Object> userToJSONResponse(User user, Boolean includeCourseList){
+        Map<Object, Object> body = new LinkedHashMap<>();
+        body.put("id", user.getId());
+        body.put("firstName", user.getFirstName());
+        body.put("lastName", user.getLastName());
+        body.put("email", user.getEmail());
+        Role[] rolesArray = {};
+        body.put("role", user.getRoles().toArray(rolesArray)[0].getRole());
+
+        if(includeCourseList) {
+            List<Object> courseStrings = new ArrayList<>();
+            user.getCourseIds().forEach(
+                (courseId) -> {
+                    courseStrings.add(courseService.courseToJSONResponse(courseService.findById(courseId), false));
+                });
+            body.put("courses", courseStrings);
+        }
+        return body;
+    }
 
     //region User Details Service Methods for Security Configuration
     //------------------------------------------------------------------------------------------------------------------
