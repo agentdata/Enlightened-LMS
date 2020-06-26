@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Card, CardContent, Typography } from '@material-ui/core';
+import { Container, Card, CardContent, Typography, List, ListItem } from '@material-ui/core';
 
 export default class Account extends React.Component {
 
@@ -7,11 +7,57 @@ export default class Account extends React.Component {
         super(props);
 
         this.state = {
+            account: {
+                currentBalance: '',
+                paymentsDue: [],
+            },
+            error: null
+        };
 
-        }
+        this.getUserAccountInfo = this.getUserAccountInfo.bind(this);
+        this.setUserAccountInfo = this.setUserAccountInfo.bind(this);
+    }
+
+    getUserAccountInfo() {
+        var statusCode;
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+        headers.append('Access-Control-Allow-Origin','*');
+        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
+        const init = {
+            method: 'GET',
+            headers
+        };
+
+        fetch('https://cooliocoders.ddns.net/api/user/account', init)
+        .then( async(res) => {
+            statusCode = res.status;
+            const data = await res.json();
+
+            return this.setState({
+                account: {
+                    currentBalance: data["currentBalance"],
+                    paymentsDue: data["paymentsDue"]
+                }
+            })
+        })
+        .catch((e) => {
+            console.warn("There was an error fetching account details: ", e)
+
+            this.setState({
+                error: 'There was an error retrieving user details.'
+            })
+        });
+    }
+
+    setUserAccountInfo() {
+        // set fields, update on backend thru API call
     }
 
     render() {
+        const { account } = this.state;
+        const { currentBalance, paymentsDue } = this.state.account;
+
         return (
             <Container >
                 <Card style={{padding: 10}}>
@@ -19,6 +65,26 @@ export default class Account extends React.Component {
                         <Typography variant="h3">
                             Account Details
                         </Typography>
+                        { account ? (
+                            <List>
+                                <ListItem>
+                                    <Typography variant="h5">Current balance: {currentBalance}</Typography>
+                                </ListItem>
+                                <ListItem>
+                                    <Typography variant="h5">
+                                        Upcoming payments:
+                                        <List>
+                                        {paymentsDue.map((payment) => (
+                                            <ListItem>
+                                                {payment}
+                                            </ListItem>
+                                        ))}
+                                        </List>
+                                    </Typography>
+                                </ListItem>
+                            </List>
+                            ) : <Typography variant="h5">No Info to display!</Typography>
+                        }
                     </CardContent>
                 </Card>
             </Container>
