@@ -10,6 +10,7 @@ import CoursePage from "./course/CoursePage"
 import Calendar from "./calendar/Calendar"
 import Messages from "./messages/Messages"
 import HomeToDo from "./course/HomeToDo"
+import Account from "./Account"
 
 // styles for sign in page
 const styles = () => ({
@@ -68,6 +69,7 @@ class Home extends Component {
               <Route path="/calendar" exact component={Calendar} />
               <Route path="/messages" exact component={Messages} />
               <Route path="/profile" exact component={Profile} />
+              <Route path="/account" exact component={Account} />
               <Route path="/course-page" exact component={CoursePage} />
             </Switch>
           </div>
