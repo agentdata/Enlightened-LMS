@@ -88,7 +88,7 @@ class CourseList extends Component {
             headers
         };
 
-        fetch('https://cooliocoders.ddns.net/api/course/instructor', init)
+        fetch('https://cooliocoders.ddns.net/api/course/user', init)
         .then( async (response) => {
             response = await response.json();
             console.log("----\nCourses in DB\n----\n"+JSON.stringify(response)+"----");
