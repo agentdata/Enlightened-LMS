@@ -9,7 +9,7 @@ export default class Account extends React.Component {
         this.state = {
             account: {
                 currentBalance: '',
-                totalCreditHours,
+                totalCreditHours: 0,
             },
             error: null
         };
