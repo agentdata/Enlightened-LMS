@@ -34,6 +34,13 @@ public class Course {
 
     public Course(){}
 
+    public Course(String courseName, String courseNumber, String roomNumber, int credits){
+        this.courseName = courseName;
+        this.courseNumber = courseNumber;
+        this.roomNumber = roomNumber;
+        this.credits = credits;
+    }
+
     public Course(String courseName, String courseNumber, User instructor,
                   LocalTime startTime, LocalTime endTime, MeetingDays meetingDays,
                   String buildingName, String roomNumber,

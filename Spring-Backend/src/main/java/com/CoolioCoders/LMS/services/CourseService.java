@@ -37,6 +37,10 @@ public class CourseService {
         return usersCourses;
     }
 
+    public void deleteCourse(Course course){
+        courseRepository.delete(course);
+    }
+
     public List<User> findStudentsInCourse(Course course) {
         List<User> studentsInCourse = new ArrayList<>();
         course.getStudentIds().forEach(

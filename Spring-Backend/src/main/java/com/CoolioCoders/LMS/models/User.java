@@ -36,6 +36,13 @@ public class User {
 
     public User(){}
 
+    public User(String id, String firstName, String lastName, String email){
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
     public User(String firstName, String lastName, LocalDate birthDate, String email, String password, String bio,
                 String link1, String link2, String link3, String avatar, String phone, String address1, String address2,
                 String city, String state, String zip, Set<Role> roles) {
