@@ -146,6 +146,8 @@ public class CourseController {
                 courseService.enrollUserInCourse(student, course);
             }
             model.put("message", "Student registration successful");
+
+            // TODO Trigger recalculation of balance
         }
         catch (EntityNotFoundException e){
             e.printStackTrace();

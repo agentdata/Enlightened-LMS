@@ -3,6 +3,7 @@ package com.CoolioCoders.LMS.controllers;
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
 import com.CoolioCoders.LMS.models.Balance;
 import com.CoolioCoders.LMS.models.Course;
+import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.services.BalanceService;
 import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,12 @@ public class BalanceController {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/amount")
+    @GetMapping("/amount")
+    public Balance getEnrolledStudents(Principal principalUser){
+        return balanceService.getBalance(userService.findUserByEmail(principalUser.getName()));
+    }
+
+    @PostMapping("/newbalance")
     public ResponseEntity<Map<Object, Object>> calculateBalance(Principal principalUser, @RequestBody Balance balance) {
         Map<Object, Object> model = new HashMap<>();
         int totalCredits = 0;
