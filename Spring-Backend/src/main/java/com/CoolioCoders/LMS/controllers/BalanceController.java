@@ -42,8 +42,24 @@ public class BalanceController {
         return balanceService.getBalance(userService.findUserByEmail(principalUser.getName()));
     }
 
-    @PostMapping("/newbalance")
-    public ResponseEntity<Map<Object, Object>> calculateBalance(Principal principalUser, @RequestBody Balance balance) {
+    @PostMapping("/new")
+    public ResponseEntity<Map<Object, Object>> addBalance(Principal principalUser, @RequestBody Balance balance) {
+        Map<Object, Object> model = new HashMap<>();
+
+        try{
+            balanceService.saveBalance(balance);
+
+            model.put("message", "Sucessfully added new balance");
+        }
+        catch(Exception e) {
+            model.put("message", e.getMessage());
+        }
+
+        return ok(model);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Map<Object, Object>> updateBalance(Principal principalUser, @RequestBody Balance balance) {
         Map<Object, Object> model = new HashMap<>();
         int totalCredits = 0;
         float totalCost;
