@@ -29,15 +29,15 @@ export default class Account extends React.Component {
             headers
         };
 
-        fetch('https://cooliocoders.ddns.net/api/user/account', init)
+        fetch('https://cooliocoders.ddns.net/api/balance/amount', init)
         .then( async(res) => {
             statusCode = res.status;
             const data = await res.json();
 
             return this.setState({
                 account: {
-                    currentBalance: data["currentBalance"],
-                    totalCreditHours: data["totalCreditHours"]
+                    currentBalance: data["balance"],
+                    totalCreditHours: data["totalCredits"]
                 }
             })
         })
