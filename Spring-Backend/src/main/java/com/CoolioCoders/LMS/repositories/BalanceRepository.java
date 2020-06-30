@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface BalanceRepository extends MongoRepository<Balance, String> {
-    List<Balance> findByUser(User user);
+    Balance findByUser(User user);
 }
