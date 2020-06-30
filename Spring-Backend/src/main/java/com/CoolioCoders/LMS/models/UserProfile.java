@@ -17,7 +17,7 @@ public class UserProfile {
         profileMap.put("firstName", getFirstName());
         profileMap.put("lastName", getLastName());
         profileMap.put("email", getEmail());
-        profileMap.put("birthday", getBirthdayAsString());
+        profileMap.put("birthDate", getBirthdayAsString());
 
         profileMap.put("bio", getBio());
         profileMap.put("link1", getLink(1));
