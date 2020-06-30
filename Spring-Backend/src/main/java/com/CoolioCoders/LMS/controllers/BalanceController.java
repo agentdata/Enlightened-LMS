@@ -20,8 +20,7 @@ import java.util.Map;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@CrossOrigin
-@RequestMapping(value="/api/balance")
+@RequestMapping("/api/balance")
 public class BalanceController {
 
     // ASSUME ONE CREDIT IS $300.00

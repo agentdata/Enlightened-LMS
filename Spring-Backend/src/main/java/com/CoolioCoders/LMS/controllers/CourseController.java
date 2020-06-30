@@ -21,8 +21,7 @@ import java.util.*;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
-@CrossOrigin("*")
-@RequestMapping(value="/api/course")
+@RequestMapping("/api/course")
 public class CourseController {
 
     @Autowired
@@ -33,8 +32,7 @@ public class CourseController {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    @PreAuthorize("hasAnyAuthority({'STUDENT', 'INSTRUCTOR'})")
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Map<Object, Object>> getAllCourses(){
         Map<Object, Object> model = new HashMap<>();
         try {
@@ -51,8 +49,28 @@ public class CourseController {
         return ok(model);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<Map<Object, Object>> getUsersCourses(Principal principalUser){
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @GetMapping("/student")
+    public ResponseEntity<Map<Object, Object>> getStudentsCourses(Principal principalUser){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+            List<Course> courseList = courseService.findCoursesByUser(user);
+            List<Object> courseStrings = new ArrayList<>();
+            courseList.forEach((course) -> courseStrings.add(courseService.courseToJSONResponse(course)));
+            model.put("courses", courseStrings);
+            model.put("message", "success");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
+
+    @PreAuthorize("hasAuthority('INSTRUCTOR')")
+    @GetMapping("/instructor")
+    public ResponseEntity<Map<Object, Object>> getInstructorsCourses(Principal principalUser){
         Map<Object, Object> model = new HashMap<>();
         try {
             User user = userService.findUserByEmail(principalUser.getName());
@@ -95,7 +113,7 @@ public class CourseController {
     }
 
     @PreAuthorize("hasAuthority('INSTRUCTOR')")
-    @PostMapping("new")
+    @PostMapping("/new")
     public ResponseEntity instructorCourses(Principal principalUser, @RequestBody JSONObject body){
         Map<Object, Object> model = new HashMap<>();
         try {
