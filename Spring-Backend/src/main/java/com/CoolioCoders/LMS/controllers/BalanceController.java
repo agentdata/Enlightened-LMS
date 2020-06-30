@@ -42,12 +42,11 @@ public class BalanceController {
         float totalCost;
 
         //Find all courses for specific user
-        try{
+        try {
             List<Course> courses = courseService.findCoursesByUser(userService.findUserByEmail(principalUser.getName()));
 
             //Find credit hours for each course and total them up
-            for(int i = 0; i < courses.size(); i++)
-            {
+            for (int i = 0; i < courses.size(); i++) {
                 totalCredits += courses.get(i).getCredits();
             }
 
@@ -59,8 +58,7 @@ public class BalanceController {
             //Save to database
             balanceService.saveBalance(balance);
             model.put("message", "Balance successfully updated");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             model.put("message", e.getMessage());
         }
 
