@@ -26,5 +26,11 @@ public class Balance {
     public String getSemester(){return semester;}
     public int getTotalCredits(){return getTotalCredits();}
 
+    public void setBalance(float balance){this.balance = balance;}
+    public void setIsPaid(boolean paid){this.paid = paid;}
+    public void setYear(int year){this.year = year;}
+    public void setSemester(String semester){this.semester = semester;}
+    public void setTotalCredits(int totalCredits){this.totalCredits = totalCredits;}
+
     public Balance(){ }
 }
