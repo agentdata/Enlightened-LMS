@@ -61,30 +61,30 @@ class CourseList extends Component {
             modalOpen: false,
             isInstructor: false,
             courses: [
-                {
-                    title: 'Dummy Course',
-                    description: 'A dummy course description',
-                    url: '/dummycourse',
-                    image: ''
-                },
-                {
-                    title: 'Another Course',
-                    description: 'Another course description',
-                    url: '/dummycourse2',
-                    image: ''
-                },
-                {
-                    title: 'One More Course',
-                    description: 'Another course description',
-                    url: '/dummycourse3',
-                    image: ''
-                },
-                {
-                    title: 'Final Course',
-                    description: 'The last dummy course on here',
-                    url: '/dummycourse4',
-                    image: ''
-                }
+                // {
+                //     title: 'Dummy Course',
+                //     description: 'A dummy course description',
+                //     url: '/dummycourse',
+                //     image: ''
+                // },
+                // {
+                //     title: 'Another Course',
+                //     description: 'Another course description',
+                //     url: '/dummycourse2',
+                //     image: ''
+                // },
+                // {
+                //     title: 'One More Course',
+                //     description: 'Another course description',
+                //     url: '/dummycourse3',
+                //     image: ''
+                // },
+                // {
+                //     title: 'Final Course',
+                //     description: 'The last dummy course on here',
+                //     url: '/dummycourse4',
+                //     image: ''
+                // }
             ]
         };
     }
@@ -99,12 +99,15 @@ class CourseList extends Component {
             headers
         };
 
-        fetch('https://cooliocoders.ddns.net/api/course/instructor', init)
+        fetch('https://cooliocoders.ddns.net/api/course/user', init)
         .then( async (response) => {
             response = await response.json();
             console.log("----\nCourses in DB\n----\n"+JSON.stringify(response)+"----");
 
             //TODO, add courses info from response to course cards and display.
+            return this.setState({
+                courses: response["courses"]
+            })
 
         }).catch((e) => {
             console.warn("There was an error retrieving instructor courses: ", e);

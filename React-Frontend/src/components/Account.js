@@ -9,7 +9,7 @@ export default class Account extends React.Component {
         this.state = {
             account: {
                 currentBalance: '',
-                paymentsDue: [],
+                totalCreditHours: 0,
             },
             error: null
         };
@@ -37,7 +37,7 @@ export default class Account extends React.Component {
             return this.setState({
                 account: {
                     currentBalance: data["currentBalance"],
-                    paymentsDue: data["paymentsDue"]
+                    totalCreditHours: data["totalCreditHours"]
                 }
             })
         })
@@ -56,7 +56,7 @@ export default class Account extends React.Component {
 
     render() {
         const { account } = this.state;
-        const { currentBalance, paymentsDue } = this.state.account;
+        const { currentBalance, totalCreditHours } = this.state.account;
 
         return (
             <Container >
@@ -72,14 +72,7 @@ export default class Account extends React.Component {
                                 </ListItem>
                                 <ListItem>
                                     <Typography variant="h5">
-                                        Upcoming payments:
-                                        <List>
-                                        {paymentsDue.map((payment) => (
-                                            <ListItem>
-                                                {payment}
-                                            </ListItem>
-                                        ))}
-                                        </List>
+                                        Total credit hours: { totalCreditHours }
                                     </Typography>
                                 </ListItem>
                             </List>
