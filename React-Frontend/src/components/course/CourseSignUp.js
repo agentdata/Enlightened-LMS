@@ -20,25 +20,19 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import Button from '@material-ui/core/Button'
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(department, number, name, instructor, credits, days, time, id) {
+  return { department, number, name, instructor, credits, days, time, id };
 }
 
+// TODO: GET ALL COURSES FROM DB AND ADD THEM TO rows IN THIS FORM
+// note: id is the object id, used for storing which courses are selected
+// and pushing to backend
 const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
+  createData('CS', 2750, 'Software Engineering 1', 'Linda DuHadway', 4, 'MWF', '9:30-11:20', '12345'),
+  createData('CS', 3100, 'Operating Systems', 'Mark Huson', 4, 'Online', '7:30-9:20', '12346'),
+  createData('HIST', 1700, 'American History', 'Gene Sessions', 3, 'TW', '9:30-10:20', '123457')
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -68,11 +62,13 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-  { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-  { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-  { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-  { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+  { id: 'department', numeric: false, disablePadding: false, label: 'Department' },
+  { id: 'number', numeric: true, disablePadding: false, label: 'Number' },
+  { id: 'name', numeric: false, disablePadding: false, label: 'Course Name' },
+  { id: 'instructor', numeric: false, disablePadding: false, label: "Instructor"},
+  { id: 'credits', numeric: true, disablePadding: false, label: 'Credits' },
+  { id: 'days', numeric: false, disablePadding: false, label: 'Days' },
+  { id: 'time', numeric: false, disablePadding: false, label: 'Time'}
 ];
 
 function EnhancedTableHead(props) {
@@ -84,18 +80,10 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align= 'left'//{headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -151,6 +139,18 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
+  const { selected } = props;
+
+  const addCoursesPressed = () => {
+    // TODO: add courses to student courselist by object id
+    // stored in array in state.selected
+
+    selected.forEach(id =>  {
+
+        // use id to add courses to students course list
+        console.log(id)
+    })
+  }
 
   return (
     <Toolbar
@@ -164,16 +164,17 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
+          Add Courses
         </Typography>
       )}
 
+        {// TODO: change to add courses button
+        }
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        <Button onClick={addCoursesPressed}
+            className={classes.addCoursesButton}>
+            Add Courses
+        </Button>
       ) : (
         <Tooltip title="Filter list">
           <IconButton aria-label="filter list">
@@ -216,7 +217,7 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('department');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -272,7 +273,7 @@ export default function EnhancedTable() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} selected = {selected}/>
         <TableContainer>
           <Table
             className={classes.table}
@@ -293,32 +294,26 @@ export default function EnhancedTable() {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
+                      onClick={(event) => handleClick(event, row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      
+                      <TableCell align="left">{row.department}</TableCell>
+                      <TableCell align="left">{row.number}</TableCell>
+                      <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">{row.instructor}</TableCell>
+                      <TableCell align="left">{row.credits}</TableCell>
+                      <TableCell align="left">{row.days}</TableCell>
+                      <TableCell align="left">{row.time}</TableCell>
                     </TableRow>
                   );
                 })}
