@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles"
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal';
 import AddCourse from './AddCourse';
+import CourseSignUp from './CourseSignUp'
 
 const styles = theme => ({
     course: {
@@ -37,6 +38,16 @@ const styles = theme => ({
         margin: "auto",
         top: "100px"
       },
+    signUpTable: {
+        display: "flex",
+        justifyContent: "center",
+        width: "90%",
+        margin: "auto",
+        marginTop: "100px"
+    },
+    modal: {
+        overflow: "scroll"
+    }
 })
 
 class CourseList extends Component {
@@ -48,7 +59,7 @@ class CourseList extends Component {
         this.state = {
             error: null,
             modalOpen: false,
-            isInstructor: true,
+            isInstructor: false,
             courses: [
                 // {
                 //     title: 'Dummy Course',
@@ -136,18 +147,27 @@ class CourseList extends Component {
                 <div className={classes.buttonDiv}>
                     {this.state.isInstructor ? (
                         <Button className={classes.addCourseBtn} onClick={this.handleOpen}>+ Add Course</Button>
-                    ) : null }
+                    ) : <Button className={classes.addCourseBtn} onClick={this.handleOpen}>+ Sign Up For Course</Button> }
                 </div>
                 <Modal
+                    className={classes.modal}
                     disableBackdropClick
                     open={this.state.modalOpen}
                     onClose={this.handleClose}
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                 >
-                    <div className={classes.paper}>
-                        <AddCourse closeModal={this.handleClose}/>
-                    </div>
+                    
+                        {this.state.isInstructor ? (
+                            <div className={classes.paper}>
+                                <AddCourse closeModal={this.handleClose}/>
+                            </div>
+                        ) : 
+                            <div className={classes.signUpTable}>
+                                <CourseSignUp />    
+                            </div>}
+                        
+                    
                 </Modal>
                 {this.state.courses ? (
                     <div>
