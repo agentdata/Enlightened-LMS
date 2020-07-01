@@ -3,16 +3,15 @@ package com.CoolioCoders.LMS.controllers;
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
 import com.CoolioCoders.LMS.models.Balance;
 import com.CoolioCoders.LMS.models.Course;
-import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.services.BalanceService;
 import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,19 +42,20 @@ public class BalanceController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Map<Object, Object>> addBalance(Principal principalUser, @RequestBody Balance balance) {
-        Map<Object, Object> model = new HashMap<>();
+        public ResponseEntity<Map<Object, Object>> addBalance(Principal principalUser, @RequestBody Balance balance) {
+            Map<Object, Object> model = new HashMap<>();
 
-        try{
-            balanceService.saveBalance(balance);
+            try{
+                balance.setUser(userService.findUserByEmail(principalUser.getName()));
+                balanceService.saveBalance(balance);
 
-            model.put("message", "Sucessfully added new balance");
-        }
-        catch(Exception e) {
-            model.put("message", e.getMessage());
-        }
+                model.put("message", "Sucessfully added new balance");
+            }
+            catch(Exception e) {
+                model.put("message", e.getMessage());
+            }
 
-        return ok(model);
+            return ok(model);
     }
 
     @PostMapping("/update")

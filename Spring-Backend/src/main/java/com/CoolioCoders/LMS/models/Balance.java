@@ -20,12 +20,14 @@ public class Balance {
     private String semester;
     private int totalCredits;
 
+    public User getUser(){return user;}
     public float getBalance(){return balance;}
     public boolean isPaid(){return paid;}
     public int getYear(){return year;}
     public String getSemester(){return semester;}
     public int getTotalCredits(){return getTotalCredits();}
 
+    public void setUser(User user){this.user = user;}
     public void setBalance(float balance){this.balance = balance;}
     public void setIsPaid(boolean paid){this.paid = paid;}
     public void setYear(int year){this.year = year;}
