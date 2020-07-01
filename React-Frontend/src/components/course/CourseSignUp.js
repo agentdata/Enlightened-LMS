@@ -22,17 +22,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Button from '@material-ui/core/Button'
 
-function createData(department, number, name, instructor, credits, days, time, id) {
-  return { department, number, name, instructor, credits, days, time, id };
+function createData(department, number, name, instructor, credits, days, time, semester, year, id) {
+  return { department, number, name, instructor, credits, days, time, semester, year, id };
 }
 
 // TODO: GET ALL COURSES FROM DB AND ADD THEM TO rows IN THIS FORM
 // note: id is the object id, used for storing which courses are selected
 // and pushing to backend
 const rows = [
-  createData('CS', 2750, 'Software Engineering 1', 'Linda DuHadway', 4, 'MWF', '9:30-11:20', '12345'),
-  createData('CS', 3100, 'Operating Systems', 'Mark Huson', 4, 'Online', '7:30-9:20', '12346'),
-  createData('HIST', 1700, 'American History', 'Gene Sessions', 3, 'TW', '9:30-10:20', '123457')
+  createData('CS', 2750, 'Software Engineering 1', 'Linda DuHadway', 4, 'MWF', '9:30-11:20', 'Fall', 2020, '12345'),
+  createData('CS', 3100, 'Operating Systems', 'Mark Huson', 4, 'Online', '7:30-9:20', 'Fall', 2020, '12346'),
+  createData('HIST', 1700, 'American History', 'Gene Sessions', 3, 'TW', '9:30-10:20', 'Fall', 2020, '123457')
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -68,7 +68,9 @@ const headCells = [
   { id: 'instructor', numeric: false, disablePadding: false, label: "Instructor"},
   { id: 'credits', numeric: true, disablePadding: false, label: 'Credits' },
   { id: 'days', numeric: false, disablePadding: false, label: 'Days' },
-  { id: 'time', numeric: false, disablePadding: false, label: 'Time'}
+  { id: 'time', numeric: false, disablePadding: false, label: 'Time'},
+  { id: 'semester', numeric: false, disablePadding: false, label: 'Semester'},
+  { id: 'year', numeric: true, disablePadding: false, label: 'Year'}
 ];
 
 function EnhancedTableHead(props) {
@@ -168,8 +170,6 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       )}
 
-        {// TODO: change to add courses button
-        }
       {numSelected > 0 ? (
         <Button onClick={addCoursesPressed}
             className={classes.addCoursesButton}>
@@ -314,6 +314,8 @@ export default function EnhancedTable() {
                       <TableCell align="left">{row.credits}</TableCell>
                       <TableCell align="left">{row.days}</TableCell>
                       <TableCell align="left">{row.time}</TableCell>
+                      <TableCell align="left">{row.semester}</TableCell>
+                      <TableCell align="left">{row.year}</TableCell>
                     </TableRow>
                   );
                 })}
