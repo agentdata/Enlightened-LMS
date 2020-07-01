@@ -20,7 +20,6 @@ import java.util.Map;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/api/auth")
 public class AuthenticationController {
     @Autowired

@@ -3,16 +3,15 @@ package com.CoolioCoders.LMS.controllers;
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
 import com.CoolioCoders.LMS.models.Balance;
 import com.CoolioCoders.LMS.models.Course;
-import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.services.BalanceService;
 import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +19,7 @@ import java.util.Map;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@CrossOrigin
-@RequestMapping(value="/api/balance")
+@RequestMapping("/api/balance")
 public class BalanceController {
 
     // ASSUME ONE CREDIT IS $300.00
@@ -42,8 +40,25 @@ public class BalanceController {
         return balanceService.getBalance(userService.findUserByEmail(principalUser.getName()));
     }
 
-    @PostMapping("/newbalance")
-    public ResponseEntity<Map<Object, Object>> calculateBalance(Principal principalUser, @RequestBody Balance balance) {
+    @PostMapping("/new")
+        public ResponseEntity<Map<Object, Object>> addBalance(Principal principalUser, @RequestBody Balance balance) {
+            Map<Object, Object> model = new HashMap<>();
+
+            try{
+                balance.setUser(userService.findUserByEmail(principalUser.getName()));
+                balanceService.saveBalance(balance);
+
+                model.put("message", "Sucessfully added new balance");
+            }
+            catch(Exception e) {
+                model.put("message", e.getMessage());
+            }
+
+            return ok(model);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Map<Object, Object>> updateBalance(Principal principalUser, @RequestBody Balance balance) {
         Map<Object, Object> model = new HashMap<>();
         int totalCredits = 0;
         float totalCost;
