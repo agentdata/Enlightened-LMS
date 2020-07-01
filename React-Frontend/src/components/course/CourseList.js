@@ -62,12 +62,6 @@ class CourseList extends Component {
             isInstructor: false,
             courses: [
                 // {
-                //     title: 'Dummy Course',
-                //     description: 'A dummy course description',
-                //     url: '/dummycourse',
-                //     image: ''
-                // },
-                // {
                 //     title: 'Another Course',
                 //     description: 'Another course description',
                 //     url: '/dummycourse2',
@@ -85,7 +79,8 @@ class CourseList extends Component {
                 //     url: '/dummycourse4',
                 //     image: ''
                 // }
-            ]
+            ],
+            allCourses: []
         };
     }
 
@@ -127,7 +122,30 @@ class CourseList extends Component {
         this.getInstructorCourses();
     }
 
-    handleOpen = () => {
+    handleStudentOpen = () => {
+
+
+        // TODO: call api and get list of courses, format them to fit this structure,
+        // then after setting the state for allCourses call setState for modalOpen
+        this.setState({allCourses: [{
+            department: 'CS',
+            number: 3100,
+            name: 'Operating Systems',
+            instructor: 'Linda DuHadway',
+            credits: 4,
+            days: 'MWF',
+            time: '9:30-11:20',
+            semester: 'Fall',
+            year: 2020,
+            id: 12345
+        }]}, () => {
+            this.setState({
+                modalOpen: true
+            })
+        })
+    }
+
+    handleInstructorOpen = () => {
         this.setState({
             modalOpen: true
         })
@@ -146,8 +164,8 @@ class CourseList extends Component {
             <div className={classes.main}>
                 <div className={classes.buttonDiv}>
                     {this.state.isInstructor ? (
-                        <Button className={classes.addCourseBtn} onClick={this.handleOpen}>+ Add Course</Button>
-                    ) : <Button className={classes.addCourseBtn} onClick={this.handleOpen}>+ Sign Up For Course</Button> }
+                        <Button className={classes.addCourseBtn} onClick={this.handleInstructorOpen}>+ Add Course</Button>
+                    ) : <Button className={classes.addCourseBtn} onClick={this.handleStudentOpen}>+ Sign Up For Course</Button> }
                 </div>
                 <Modal
                     className={classes.modal}
@@ -164,7 +182,7 @@ class CourseList extends Component {
                             </div>
                         ) : 
                             <div className={classes.signUpTable}>
-                                <CourseSignUp />    
+                                <CourseSignUp closeModal={this.handleClose} allCourses={this.state.allCourses}/>    
                             </div>}
                         
                     
