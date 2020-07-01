@@ -29,11 +29,7 @@ function createData(department, number, name, instructor, credits, days, time, s
 // TODO: GET ALL COURSES FROM DB AND ADD THEM TO rows IN THIS FORM
 // note: id is the object id, used for storing which courses are selected
 // and pushing to backend
-const rows = [
-  createData('CS', 2750, 'Software Engineering 1', 'Linda DuHadway', 4, 'MWF', '9:30-11:20', 'Fall', 2020, '12345'),
-  createData('CS', 3100, 'Operating Systems', 'Mark Huson', 4, 'Online', '7:30-9:20', 'Fall', 2020, '12346'),
-  createData('HIST', 1700, 'American History', 'Gene Sessions', 3, 'TW', '9:30-10:20', 'Fall', 2020, '123457')
-];
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -212,15 +208,27 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  tableFoot: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between"
+  }
 }));
 
-export default function EnhancedTable() {
+export default function EnhancedTable(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('department');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const rows = [
+    createData('CS', 2750, 'Software Engineering 1', 'Linda DuHadway', 4, 'MWF', '9:30-11:20', 'Fall', 2020, '12345'),
+    createData('CS', 3100, 'Operating Systems', 'Mark Huson', 4, 'Online', '7:30-9:20', 'Fall', 2020, '12346'),
+    createData('HIST', 1700, 'American History', 'Gene Sessions', 3, 'TW', '9:30-10:20', 'Fall', 2020, '123457')
+  
+  ];
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -327,6 +335,8 @@ export default function EnhancedTable() {
             </TableBody>
           </Table>
         </TableContainer>
+        <div className={classes.tableFoot}>
+            <Button onClick={props.closeModal}>Cancel</Button>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -336,6 +346,7 @@ export default function EnhancedTable() {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
+        </div>
       </Paper>
     </div>
   );

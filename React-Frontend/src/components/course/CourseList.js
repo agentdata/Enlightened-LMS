@@ -164,7 +164,7 @@ class CourseList extends Component {
                             </div>
                         ) : 
                             <div className={classes.signUpTable}>
-                                <CourseSignUp />    
+                                <CourseSignUp closeModal={this.handleClose}/>    
                             </div>}
                         
                     
