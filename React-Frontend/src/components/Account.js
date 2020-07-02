@@ -27,12 +27,16 @@ class Account extends React.Component {
             },
             payment: {
                 fullName: '',
-                cardField1: '',
-                cardField2: '',
-                cardField3: '',
-                cardField4: '',
-                cardNo: [],
+                cardNo: '',
+                expiryDate: '',
+                cvv: '',
+                amount: ''
             },
+            cardError: '',
+            nameError: '',
+            expiryError: '',
+            cvvError: '',
+            amountError: '',
             error: null,
             showPaymentForm: false
         };
@@ -42,9 +46,15 @@ class Account extends React.Component {
         
         this.payButtonPressed = this.payButtonPressed.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleCardInput1Change = this.handleCardInput1Change.bind(this);
+        this.handleCardChange = this.handleCardChange.bind(this);
         this.handleCvvChange = this.handleCvvChange.bind(this);
         this.handleAmountChange = this.handleAmountChange.bind(this);
+        this.validateName = this.validateName.bind(this);
+        this.validateCardNo = this.validateCardNo.bind(this);
+        this.validateExpiry = this.validateExpiry.bind(this);
+        this.validateCvv = this.validateCvv.bind(this);
+        this.validateAmount = this.validateAmount.bind(this);
+        this.setPayment = this.setPayment.bind(this);
     }
 
     getUserAccountInfo() {
@@ -81,29 +91,125 @@ class Account extends React.Component {
 
     setUserAccountInfo() {
         // set fields, update on backend thru API call
+
     }
 
     payButtonPressed = () => {
-        // display payment fields, allow user to make payment
+        // toggle display payment fields, allow user to make payment
         this.setState(prevState => ({
-            showPaymentForm: !prevState.showPaymentForm
+            showPaymentForm: !prevState.showPaymentForm,
+            payment: {
+                fullName: '',
+                cardNo: '',
+                expiryDate: '',
+                cvv: '',
+                amount: ''
+            },
+            nameError: '',
+            cardError: '',
+            expiryError: '',
+            cvvError: '',
+            amountError: '',
         }))
     }
 
-    handleNameChange = () => {
-
+    setPayment = () => {
+        
     }
 
-    handleCardInput1Change = () => {
-
+    handleNameChange = ({ target }) => {
+        this.setState({
+            payment: { ...this.state.payment, fullName: target.value }
+        })
     }
 
-    handleCvvChange = () => {
-
+    handleCardChange = ({ target }) => {
+        this.setState({
+            payment: { ...this.state.payment, cardNo: target.value }
+        })
     }
 
-    handleAmountChange = () => {
+    handleExpiryChange = ({ target }) => {
+        this.setState({
+            payment: { ...this.state.payment, expiryDate: target.value }
+        })
+    }
 
+    handleCvvChange = ({ target }) => {
+        this.setState({
+            payment: { ...this.state.payment, cvv: target.value }
+        })
+    }
+
+    handleAmountChange = ({ target }) => {
+        this.setState({
+            payment: { ...this.state.payment, amount: target.value }
+        })
+    }
+
+    validateName = () => {
+        if (this.state.payment.fullName === "") {
+            this.setState({nameError: "Required"})
+        } else {
+            this.setState({nameError: ""})
+        }
+    }
+
+    validateCardNo = () => {
+        if (this.state.payment.cardNo === "") {
+            this.setState({cardError: "Required"})
+        } else if (!/\d{16}/.test(this.state.payment.cardNo)) {
+            this.setState({cardError: "16 digit string only"})
+        } else {
+            this.setState({cardError: ""})
+        }
+    }
+
+    validateExpiry = () => {
+        if (this.state.payment.expiryDate === "") {
+            this.setState({expiryError: "Required"})
+        } else {
+            this.setState({expiryError: ""})
+        }
+        // date regex
+    }
+
+    validateCvv = () => {
+        if (this.state.payment.cvv === "") {
+            this.setState({cvvError: "Required"})
+        } else if (!/\d{3}/.test(this.state.payment.cvv)) {
+            this.setState({cvvError: "3 digit string only"})
+        } else {
+            this.setState({cvvError: ""})
+        }
+    }
+
+    validateAmount = () => {
+        if (this.state.payment.amount === "") {
+            this.setState({amountError: "Required"})
+        } else if (!/\d{6}/.test(this.state.payment.amount)) {
+            this.setState({amountError: "maximum of 6 figure amount"})
+        } else {
+            this.setState({amountError: ""})
+        }
+    }
+
+    checkErrors = () => {
+
+        this.validateName()
+        this.validateCardNo()
+        this.validateExpiry()
+        this.validateCvv()
+        this.validateAmount()
+
+        // no errors
+        if (this.state.payment.nameError === "" &&
+        this.state.payment.cardError === "" &&
+        this.state.payment.expiryError === "" &&
+        this.state.payment.cvvError === "" &&
+        this.state.payment.amountError === "") {
+            this.setPayment(this.state.payment); 
+        }       
     }
 
     render() {
@@ -128,34 +234,59 @@ class Account extends React.Component {
                                     <ListItem>
                                         <Card>
                                             <CardContent>
-                                                <TextField 
+                                                <TextField
+                                                error={this.state.nameError}
                                                 label="Full Name"
                                                 id="fullName"
+                                                helperText={ this.state.nameError === '' ? "Full name on credit card" : this.state.nameError }
                                                 required
                                                 onChange={this.handleNameChange}
+                                                onBlur={this.validateName}
                                                 >
                                                 </TextField>
                                                 <TextField
+                                                error={this.state.cardError}
                                                 label="Card Number"
-                                                id="cardField1"
+                                                id="cardNo"
+                                                helperText={ this.state.cardError }
                                                 required
-                                                onChange={this.handleCardInput1Change}
+                                                inputProps = {{ maxLength: 16 }}
+                                                onChange={this.handleCardChange}
+                                                onBlur={this.validateCardNo}
                                                 >
                                                 </TextField>
                                                 <TextField
+                                                error={this.state.expiryError}
+                                                label="Expiry Date"
+                                                id="expiryDate"
+                                                helperText={ this.state.expiryError === '' ? "Date of expiration" : this.state.expiryError }
+                                                required
+                                                inputProps = {{ maxLength: 16 }}
+                                                onChange={this.handleExpiryChange}
+                                                onBlur={this.validateExpiry}
+                                                >
+                                                </TextField>
+                                                <TextField
+                                                error={this.state.cvvError}
                                                 label="CVV"
                                                 id="cvv"
+                                                helperText={ this.state.cvvError === '' ? "3 digit security code" : this.state.cvvError }
                                                 required
                                                 onChange={this.handleCvvChange}
+                                                onBlur={this.validateCvv}
                                                 >
                                                 </TextField>
                                                 <TextField
+                                                error={this.state.amountError}
                                                 label="Amount"
                                                 id="amount"
+                                                helperText={ this.state.amountError === '' ? "US dollar amount" : this.state.amountError }
                                                 required
                                                 onChange={this.handleAmountChange}
+                                                onBlur={this.validateAmount}
                                                 >
                                                 </TextField>
+                                                <Button className={classes.payBtn} onClick={this.checkErrors}>Submit payment</Button>
                                             </CardContent>
                                         </Card> 
                                     </ListItem>
