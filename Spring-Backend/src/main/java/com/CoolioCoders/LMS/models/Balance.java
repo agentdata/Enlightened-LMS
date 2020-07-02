@@ -25,7 +25,7 @@ public class Balance {
     public boolean isPaid(){return paid;}
     public int getYear(){return year;}
     public String getSemester(){return semester;}
-    public int getTotalCredits(){return getTotalCredits();}
+    public int getTotalCredits(){return totalCredits;}
 
     public void setUser(User user){this.user = user;}
     public void setBalance(float balance){this.balance = balance;}
