@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core/styles"
 import { Typography, Button, List, ListItem, 
         TextField, MenuItem } from '@material-ui/core';
+import http from '../../api/http';
 
 const styles = theme => ({
     verticalFlex: {
@@ -404,21 +405,12 @@ class AddCourse extends Component {
 
     // add course to list (instructor)
     addInstructorCourse(newCourse) {
-        console.log("---------\nnew course\n"+JSON.stringify(newCourse)+"\n---------");
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        headers.append('Content-Type', 'application/json');
-        const init = {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(newCourse)
-        };
-
-        fetch('https://cooliocoders.ddns.net/api/course/new', init)
-        .then( response => {
-            if(response.status == 200){
-                console.log("course added to backend successfully")
+        http.createNewCourse(JSON.stringify(newCourse))
+        .then( async (response) => {
+            const body = await response.json()
+            if(response.status == 200 && body["message"] === "Successfully added New Course"){
                 this.props.closeModal();
+                //TODO make api call to get courses to reflect new course, or add it to the state to re-render since we know it successfully was added to DB.
             }
             else{
                 console.log("server error adding course");

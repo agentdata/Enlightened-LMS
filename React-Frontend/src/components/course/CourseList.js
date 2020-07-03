@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal';
 import AddCourse from './AddCourse';
 import CourseSignUp from './CourseSignUp'
+import http from '../../api/http'
 
 const styles = theme => ({
     course: {
@@ -55,56 +56,75 @@ class CourseList extends Component {
         super(props)
 
         this.handleClose = this.handleClose.bind(this)
-
+        const isInstructorBool = sessionStorage.getItem("isInstructor")
         this.state = {
             error: null,
             modalOpen: false,
-            isInstructor: false,
             courses: [
-                // {
-                //     title: 'Another Course',
-                //     description: 'Another course description',
-                //     url: '/dummycourse2',
-                //     image: ''
-                // },
-                // {
-                //     title: 'One More Course',
-                //     description: 'Another course description',
-                //     url: '/dummycourse3',
-                //     image: ''
-                // },
-                // {
-                //     title: 'Final Course',
-                //     description: 'The last dummy course on here',
-                //     url: '/dummycourse4',
-                //     image: ''
-                // }
+                {
+                    title: 'Dummy Course',
+                    description: 'Another course description',
+                    url: '/dummycourse2',
+                    image: ''
+                },
             ],
+            isInstructor: isInstructorBool,
             allCourses: []
-        };
+        }        
+
+        //TODO figure out the best place to put this so it processes correctly, 
+        //if login takes a moment to return this might execute first and execute student when it should execute instructor 
+        this.state.isInstructor === "true"? this.getInstructorCourses(): this.getStudentCourses()   
     }
 
-     // get courses for instructor
-     getInstructorCourses() {
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        const init = {
-            method: 'GET',
-            headers
-        };
+    // get all courses from db
+    getAllCourses() {
+        http.getAllCourses()
+        .then( async(response) => {
+            const body = await response.json();
+            if(response.status === 200 && body["message"] === "success"){
+                var simpleCourses=[] 
+                for (var i in body["courses"]) {
 
-        fetch('https://cooliocoders.ddns.net/api/course/user', init)
-        .then( async (response) => {
-            response = await response.json();
-            console.log("----\nCourses in DB\n----\n"+JSON.stringify(response)+"----");
+                    simpleCourses[i] = {
+                        title: body["courses"][i]["courseName"],
+                        description: body["courses"][i]["description"],
+                        url: '/dummycourse4',
+                        image: ''
+                    }
+                }
+                this.setState({ courses: simpleCourses });
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error retrieving instructor courses: ", e);
 
-            //TODO, add courses info from response to course cards and display.
-            return this.setState({
-                courses: response["courses"]
-            })
+            this.setState({
+                error: "There was an error retrieving instructor courses."
+            });
+        });
+    }
 
-        }).catch((e) => {
+    // get courses for instructor
+    getInstructorCourses() {
+        http.getInstructorCourses()
+        .then( async(response) => {
+            var body = await response.json();
+            if(response.status === 200 && body["message"] === "success"){
+                var simpleCourses=[] 
+                for (var i in body["courses"]) {
+
+                    simpleCourses[i] = {
+                        title: body["courses"][i]["courseName"],
+                        description: body["courses"][i]["description"],
+                        url: '/dummycourse4',
+                        image: ''
+                    }
+                }
+                this.setState({ courses: simpleCourses });
+            }
+        })
+        .catch((e) => {
             console.warn("There was an error retrieving instructor courses: ", e);
 
             this.setState({
@@ -114,34 +134,74 @@ class CourseList extends Component {
     }
 
     // get courses for student
-    getStudentCourses = async() => {
+    getStudentCourses() {
+        http.getStudentCourses()
+        .then( async(response) => {
+            var body = await response.json();
+            if(response.status === 200 && body["message"] === "success"){
+                var simpleCourses=[] 
+                for (var i in body["courses"]) {
+                    simpleCourses[i] = {
+                        title: body["courses"][i]["courseName"],
+                        description: body["courses"][i]["description"],
+                        url: '/dummycourse4',
+                        image: ''
+                    }
+                }
+                this.setState({ courses: simpleCourses });
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error retrieving instructor courses: ", e);
 
-    }
-
-    componentDidMount() {
-        this.getInstructorCourses();
+            this.setState({
+                error: "There was an error retrieving instructor courses."
+            });
+        });
     }
 
     handleStudentOpen = () => {
-
-
-        // TODO: call api and get list of courses, format them to fit this structure,
-        // then after setting the state for allCourses call setState for modalOpen
-        this.setState({allCourses: [{
-            department: 'CS',
-            number: 3100,
-            name: 'Operating Systems',
-            instructor: 'Linda DuHadway',
-            credits: 4,
-            days: 'MWF',
-            time: '9:30-11:20',
-            semester: 'Fall',
-            year: 2020,
-            id: 12345
-        }]}, () => {
+        const headers = new Headers();
+        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
+        const init = {
+            method: 'GET',
+            headers
+        };
+    
+        fetch('https://cooliocoders.ddns.net/api/course/all', init)     
+        .then( async(response) => {
+            var body = await response.json();
+            if(response.status === 200){
+                var simpleCourses=[] 
+                for (var i in body["courses"]) {
+                    simpleCourses[i] ={
+                      department: body["courses"][i]["department"],
+                      number: body["courses"][i]["courseNumber"],
+                      name: body["courses"][i]["courseName"],
+                      instructor: body["courses"][i]["courseName"],
+                      credits: body["courses"][i]["credits"],
+                      days: 'TW', //body["courses"][i]["meetingDays"] //TODO
+                      time: body["courses"][i]["startTime"]+"-"+body["courses"][i]["endTime"],
+                      semester: body["courses"][i]["semester"],
+                      year: body["courses"][i]["year"],
+                      id: body["courses"][i]["_id"]
+                    }                   
+                }
+                this.setState({
+                    allCourses: simpleCourses}, () =>
+                    {
+                    this.setState({
+                        modalOpen: true
+                    })
+                })
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error retrieving instructor courses: ", e);
+      
             this.setState({
-                modalOpen: true
-            })
+                error: "There was an error retrieving instructor courses."
+            });
         })
     }
 
@@ -163,9 +223,9 @@ class CourseList extends Component {
         return (
             <div className={classes.main}>
                 <div className={classes.buttonDiv}>
-                    {this.state.isInstructor ? (
+                    {this.state.isInstructor === "true" ?
                         <Button className={classes.addCourseBtn} onClick={this.handleInstructorOpen}>+ Add Course</Button>
-                    ) : <Button className={classes.addCourseBtn} onClick={this.handleStudentOpen}>+ Sign Up For Course</Button> }
+                        : <Button className={classes.addCourseBtn} onClick={this.handleStudentOpen}>+ Sign Up For Course</Button> }
                 </div>
                 <Modal
                     className={classes.modal}
@@ -176,14 +236,14 @@ class CourseList extends Component {
                     aria-describedby="simple-modal-description"
                 >
                     
-                        {this.state.isInstructor ? (
-                            <div className={classes.paper}>
-                                <AddCourse closeModal={this.handleClose}/>
-                            </div>
-                        ) : 
-                            <div className={classes.signUpTable}>
-                                <CourseSignUp closeModal={this.handleClose} allCourses={this.state.allCourses}/>    
-                            </div>}
+                {this.state.isInstructor === "true" ? 
+                    <div className = {classes.paper}>
+                        <AddCourse closeModal = {this.handleClose}/>
+                    </div>
+                    : 
+                    <div className = {classes.signUpTable}>
+                        <CourseSignUp closeModal = {this.handleClose} allCourses = {this.state.allCourses}/>    
+                    </div>}
                         
                     
                 </Modal>

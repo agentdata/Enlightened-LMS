@@ -21,15 +21,11 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Button from '@material-ui/core/Button'
+import http from '../../api/http';
 
 function createData(department, number, name, instructor, credits, days, time, semester, year, id) {
   return { department, number, name, instructor, credits, days, time, semester, year, id };
 }
-
-// TODO: GET ALL COURSES FROM DB AND ADD THEM TO rows IN THIS FORM
-// note: id is the object id, used for storing which courses are selected
-// and pushing to backend
-
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -140,13 +136,31 @@ const EnhancedTableToolbar = (props) => {
   const { selected } = props;
 
   const addCoursesPressed = () => {
-    // TODO: add courses to student courselist by object id
-    // stored in array in state.selected
-
+    var idString = []
     selected.forEach(id =>  {
+      console.log(id)
+      // idString.push(id)
+    })
 
-        // use id to add courses to students course list
-        console.log(id)
+    //body should be in this format "{"courses": ["5ef2930ead275e7e3d9613d2", "5ef29cbdad275e7e3d9613d4", "5ef2a648ad275e7e3d9613d5"]}"
+    var body = {
+      "courses": [idString]
+    }
+
+    console.log(JSON.stringify(body))
+    http.enrollForCourse(JSON.stringify(body))    
+    .then( async(response) => {
+        var body = await response.json();
+        if(response.status == 200 && response.text["message"] === "Student registration successful"){
+          props.closeModal()
+        }
+    })
+    .catch((e) => {
+        console.warn("There was an error enrolling for the selected course(s): ", e);
+  
+        this.setState({
+            error: "There was an error enrolling for the selected course(s)."
+        });
     })
   }
 
@@ -223,22 +237,10 @@ export default function EnhancedTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-//   var rows = () => {
-//         createData('CS', 2750, 'Software Engineering 1', 'Linda DuHadway', 4, 'MWF', '9:30-11:20', 'Fall', 2020, '12345'),
-//         createData('CS', 3100, 'Operating Systems', 'Mark Huson', 4, 'Online', '7:30-9:20', 'Fall', 2020, '12346'),
-//         createData('HIST', 1700, 'American History', 'Gene Sessions', 3, 'TW', '9:30-10:20', 'Fall', 2020, '123457')
-//     }
-
-    var rows = []
-    for (var i = 0; i < props.allCourses.length; i++) {
-        rows.push(createData(props.allCourses[i].department, props.allCourses[i].number, props.allCourses[i].name, props.allCourses[i].instructor, props.allCourses[i].credits, props.allCourses[i].days, props.allCourses[i].time, props.allCourses[i].semester, props.allCourses[i].year, props.allCourses[i].id ))
-    }
-
-    // const rows = [
-    //     createData('CS', 2750, 'Software Engineering 1', 'Linda DuHadway', 4, 'MWF', '9:30-11:20', 'Fall', 2020, '12345'),
-    //     createData('CS', 3100, 'Operating Systems', 'Mark Huson', 4, 'Online', '7:30-9:20', 'Fall', 2020, '12346'),
-    //     createData('HIST', 1700, 'American History', 'Gene Sessions', 3, 'TW', '9:30-10:20', 'Fall', 2020, '123457')
-    // ]
+  var rows = []
+  for (var i = 0; i < props.allCourses.length; i++) {
+      rows.push(createData(props.allCourses[i].department, props.allCourses[i].number, props.allCourses[i].name, props.allCourses[i].instructor, props.allCourses[i].credits, props.allCourses[i].days, props.allCourses[i].time, props.allCourses[i].semester, props.allCourses[i].year, props.allCourses[i].id ))
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

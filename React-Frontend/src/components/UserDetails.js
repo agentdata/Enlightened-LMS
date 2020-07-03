@@ -104,28 +104,12 @@ class UserDetails extends React.Component {
     }
 
     handleSave = () =>{
-        this.setState({
-            editing: !this.state.editing
-        }, () => {
-            this.toggleEditView();
-        })
+        this.setState({ editing: !this.state.editing })
         this.props.updateCallback(this.state.updatedUserDetails)
     }
 
-    componentDidUpdate() {
-
-    }
-
     editButtonPressed = () => {
-        this.setState({
-            editing: !this.state.editing
-        }, () => {
-            this.toggleEditView();
-        })
-    }
-
-    toggleEditView() {
-        console.log(this.state.editing)
+        this.setState({ editing: !this.state.editing })
     }
 
     render() {

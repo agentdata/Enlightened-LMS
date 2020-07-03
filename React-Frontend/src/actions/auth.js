@@ -1,3 +1,5 @@
+import http from '../api/http';
+
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCEED = "LOGIN_SUCCEED";
 export const LOGIN_FAIL = "LOGIN_FAIL";
@@ -20,10 +22,9 @@ const requestLogin = () => {
     };
 }
 
-const successfulLogin = user => {
+const successfulLogin = () => {
     return {
-        type: LOGIN_SUCCEED,
-        user
+        type: LOGIN_SUCCEED
     };
 };
 
@@ -80,52 +81,39 @@ const registerError = () => {
 export const loginUser = (email, password) => dispatch => {
     dispatch(requestLogin());
 
-    var statusCode;
-    var user = {email: email, password: password};
-
-    //build http request
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin','*');
-    headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
     const body = JSON.stringify({
         "email": email,
         "password": password
     });
 
-    const init = {
-    method: 'POST',
-    headers,
-    body
-    };
-
-    //send HTTP request
-    fetch('https://cooliocoders.ddns.net/api/auth/login', init).then((response) => {
-        statusCode = response.status;
-        return response.json(); // or .text() or .blob() ...
-    }).then((text) => {
-        // text is the response body
-        if (statusCode === 200) {
-            // TODO: update view, get info from backend
-            // console.log("login success, token is: " + text["token"]);
-            sessionStorage.setItem('token', text["token"])
-            
+    http.loginUser(body)
+    .then(async (response) => {
+        const body = await response.json();
+        if (response.status === 200) {
+            sessionStorage.setItem('token', body["token"])
+            sessionStorage.setItem("isInstructor", (body["userType"][0]["role"]) === "INSTRUCTOR" ? true : false)
+            dispatch(successfulLogin());
         } else {
             // TODO: show error
             console.log("not logged in");
-            dispatch(loginError());
-        }
+           dispatch(loginError());
+        }    
     }).catch((e) => {
         // error in e.message
+        dispatch(loginError());
+        console.log("error:"+e.message)
     });
-    dispatch(successfulLogin(user));
+    dispatch(successfulLogin());
 }
 
 export const logoutUser = () => dispatch => {
     dispatch(requestLogout());
 
-    sessionStorage.removeItem("token");
-    var loggedOut = true;
+    var loggedOut = false
+    sessionStorage.clear()
+    if(sessionStorage.getItem("token") === null){
+        loggedOut = true
+    }
 
     // if user is logged out
     if (loggedOut) {
@@ -139,15 +127,8 @@ export const logoutUser = () => dispatch => {
 }
 
 export const registerUser = (firstName, lastName, birthDate, email, password, instructorCheckmarkBox) => dispatch => {
-    dispatch(requestRegister());
+    dispatch(requestRegister())
 
-    var statusCode;
-    
-    //build HTTP request
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin','*');
-    headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
     const body = JSON.stringify({
         "firstName": firstName,
         "lastName": lastName,
@@ -155,28 +136,13 @@ export const registerUser = (firstName, lastName, birthDate, email, password, in
         "email": email,
         "password": password,
         "roles": [{"role": instructorCheckmarkBox ? "INSTRUCTOR":"STUDENT"}]
-    });
-    const init = {
-        method: 'POST',
-        headers,
-        body
-    };
+    })
 
-    //send HTTP Request
-    fetch('https://cooliocoders.ddns.net/api/auth/register', init).then((response) => {
-        statusCode = response.status;
-        return response.json(); // or .text() or .blob() ...
-    }).then((text) => {
-        // text is the response body, check for successful registration
-        
-        //if status code === 200 then user successfully registered
-        if(statusCode === 200 && text["message"] === "User registered successfully"){
-            // TODO: update view, get info from backend
-            // TODO: determine email verification requirements, possibly
-            dispatch(successfulRegister());
-
-            // call loginUser directly after registration
-            
+    http.createNewUser(body)
+    .then( async(response) => {
+        var body = await response.json();
+        if(body.status === 200 && body.data["message"] === "User registered successfully"){
+            dispatch(successfulRegister());            
         } else {
             // TODO: show error
             console.log("user not registered");
@@ -184,5 +150,8 @@ export const registerUser = (firstName, lastName, birthDate, email, password, in
         }
     }).catch((e) => {
         // error in e.message
+        dispatch(registerError());
+        console.log("error:"+e.message)
+        
     });
 }

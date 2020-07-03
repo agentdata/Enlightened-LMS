@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import UserDetails from './UserDetails'
+import http from '../api/http'
 
         // UserDetails Component - renders/displays user info
 
@@ -30,21 +31,10 @@ class Profile extends React.Component {
         let reader = new FileReader();
         reader.readAsDataURL(newAvatar);
         reader.onloadend = () => {
-            
-            const headers = new Headers();
-            headers.append('Authorization', 'Bearer ' + sessionStorage.getItem("token"));
-            headers.append('Content-Type', 'application/json');
-
-            const init = {
-                method: 'PUT',
-                headers,
-                body: JSON.stringify({"avatar": reader.result} )
-            };
-
-        fetch('https://cooliocoders.ddns.net/api/user/profile/avatar', init)
+            http.updateUserAvatar(JSON.stringify({"avatar": reader.result}))
             .then(async (response) => {
-                const text = await response.json();
-                if(response.status === 200){
+                const body = await response.json();
+                if(response.status === 200 && body["message"] === "Avatar saved successfully"){
                     this.setState((prevState) => ({
                         userDetails: {
                             ...prevState.userDetails,
@@ -98,17 +88,7 @@ class Profile extends React.Component {
 
         if(true)   //This only runs if the email and urls are valid
         {
-            var statusCode;
-            const headers = new Headers();
-            headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-            headers.append('Content-Type', 'application/json');
-            const init = {
-                method: 'PUT',
-                headers,
-                body: JSON.stringify(updatedFields)
-            };
-
-            fetch('https://cooliocoders.ddns.net/api/user/profile', init)
+            http.updateUserProfileDetails(JSON.stringify(updatedFields))
                 .then(async response => {
                     const text = await response.json();
                     if(response.status === 200){
@@ -151,14 +131,7 @@ class Profile extends React.Component {
     }
 
     getUserDetails(){
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        const init = {
-            method: 'GET',
-            headers
-        };
-    
-        fetch('https://cooliocoders.ddns.net/api/user/profile', init)
+        http.getUserProfileDetails()
         .then( async (response) => {
             const text = await response.json();
             if(response.status === 200){
