@@ -158,7 +158,7 @@ class Account extends React.Component {
     validateCardNo = () => {
         if (this.state.payment.cardNo === "") {
             this.setState({cardError: "Required"})
-        } else if (!/\d{16}/.test(this.state.payment.cardNo)) {
+        } else if (!/\b\d{16}\b$/.test(this.state.payment.cardNo)) {
             this.setState({cardError: "16 digit string only"})
         } else {
             this.setState({cardError: ""})
@@ -168,16 +168,17 @@ class Account extends React.Component {
     validateExpiry = () => {
         if (this.state.payment.expiryDate === "") {
             this.setState({expiryError: "Required"})
+        } else if (!/([0][1-9]|[1][0-2])(\/|-)\d{2}$/.test(this.state.payment.expiryDate)) {
+            this.setState({expiryError: "Proper MM/YY only"})
         } else {
             this.setState({expiryError: ""})
         }
-        // date regex
     }
 
     validateCvv = () => {
         if (this.state.payment.cvv === "") {
             this.setState({cvvError: "Required"})
-        } else if (!/\d{3}/.test(this.state.payment.cvv)) {
+        } else if (!/\b\d{3}\b$/.test(this.state.payment.cvv)) {
             this.setState({cvvError: "3 digit string only"})
         } else {
             this.setState({cvvError: ""})
@@ -187,8 +188,8 @@ class Account extends React.Component {
     validateAmount = () => {
         if (this.state.payment.amount === "") {
             this.setState({amountError: "Required"})
-        } else if (!/\d{6}/.test(this.state.payment.amount)) {
-            this.setState({amountError: "maximum of 6 figure amount"})
+        } else if (!/\b\d{1,6}\b$/.test(this.state.payment.amount)) {
+            this.setState({amountError: "digit string only (max. 6 figures)"})
         } else {
             this.setState({amountError: ""})
         }
@@ -210,6 +211,10 @@ class Account extends React.Component {
         this.state.payment.amountError === "") {
             this.setPayment(this.state.payment); 
         }       
+    }
+
+    componentDidMount() {
+        this.getUserAccountInfo();
     }
 
     render() {
@@ -270,7 +275,7 @@ class Account extends React.Component {
                                                 error={this.state.cvvError}
                                                 label="CVV"
                                                 id="cvv"
-                                                helperText={ this.state.cvvError === '' ? "3 digit security code" : this.state.cvvError }
+                                                helperText={ this.state.cvvError === '' ? "3-digit security code" : this.state.cvvError }
                                                 required
                                                 onChange={this.handleCvvChange}
                                                 onBlur={this.validateCvv}
