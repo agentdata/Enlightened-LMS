@@ -1,9 +1,6 @@
 package com.CoolioCoders.LMS.controllers;
 
-import com.CoolioCoders.LMS.models.Assignment;
-import com.CoolioCoders.LMS.models.Course;
-import com.CoolioCoders.LMS.models.SubmissionType;
-import com.CoolioCoders.LMS.models.User;
+import com.CoolioCoders.LMS.models.*;
 import com.CoolioCoders.LMS.services.AssignmentService;
 import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
@@ -15,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -105,6 +104,35 @@ public class AssignmentController {
         }
         return ok(model);
 
+    }
+
+    @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
+    @GetMapping("/simplified/{courseId}")
+    public ResponseEntity<Map<Object, Object>> getSimplifiedAssignments(Principal principalUser, @PathVariable String courseId){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+            List<Assignment> assignmentList = assignmentService.findByCourseId(courseId);
+            List<SimplifiedAssignment> simplifiedAssignmentList = new ArrayList<>();
+
+            for(int i = 0; i < assignmentList.size(); i++) {
+                Assignment currentAssignment = assignmentList.get(i);
+                String title = currentAssignment.getTitle();
+                LocalDateTime dueDate = currentAssignment.getDueDate();
+                boolean dismissed = currentAssignment.getDismissed();
+
+                simplifiedAssignmentList.add(new SimplifiedAssignment(title, dueDate, dismissed));
+            }
+
+
+            model.put("courses", simplifiedAssignmentList);
+            model.put("message", "success");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
     }
 
 }

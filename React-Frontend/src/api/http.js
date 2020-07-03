@@ -71,5 +71,5 @@ export default {
     },
     loginUser (body){
         return fetch(API_BASE_URL+"/api/auth/login", makeInit("POST", false, body))
-    }
+    },
 }
