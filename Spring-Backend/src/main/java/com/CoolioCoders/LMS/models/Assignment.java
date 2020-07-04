@@ -16,7 +16,6 @@ public class Assignment {
     private LocalDateTime dueDate;
     private int maxPoints;
     private String courseId;
-    private boolean dismissed = false;
 
     public Assignment(){}
 
@@ -75,8 +74,4 @@ public class Assignment {
     public void setCourseId(String courseId) {
         this.courseId = courseId;
     }
-
-    public boolean getDismissed(){return dismissed;}
-
-    public void setDismissed(boolean dismissed){this.dismissed = dismissed;}
 }
