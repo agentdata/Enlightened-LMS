@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import UserDetails from './UserDetails'
+import http from '../api/http'
 
         // UserDetails Component - renders/displays user info
 
@@ -18,58 +19,29 @@ class Profile extends React.Component {
         this.state = {
             error: null
         };
-
-        this.getUserDetails = this.getUserDetails.bind(this);
-        this.setUserDetails = this.setUserDetails.bind(this);
     }
 
     // initializeAvatarChange -- called by UserDetails->FileUploader child component
-    initializeAvatarChange = (avatar, displayAvatar) => {
-        
-        this.setState((prevState) => ({
-            userDetails: {
-                ...prevState.userDetails,
-                avatar: displayAvatar
-            }
-        }));
-
+    initializeAvatarChange = (avatar) => {
         this.setUserAvatar(avatar);
     }
 
     // update user avatar (independent of rest of user profile)
-    setUserAvatar(avatar) {
-        console.log(avatar);
-
+    setUserAvatar(newAvatar) {
         let reader = new FileReader();
-        reader.readAsDataURL(avatar);
+        reader.readAsDataURL(newAvatar);
         reader.onloadend = () => {
-
-            console.log(JSON.stringify(reader.result));
-
-            var statusCode;
-            const headers = new Headers();
-            headers.append('Authorization', 'Bearer ' + sessionStorage.getItem("token"));
-            headers.append('Content-Type', 'application/json');
-            headers.append('Access-Control-Allow-Origin', '*');
-            headers.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-
-            const init = {
-                method: 'PUT',
-                headers,
-                body: JSON.stringify({"avatar": reader.result} )
-            };
-
-        fetch('https://cooliocoders.ddns.net/api/user/profile/avatar', init)
-            .then(async response => {
-                const text = await response.json();
-                statusCode = response.status;
-
+            http.updateUserAvatar(JSON.stringify({"avatar": reader.result}))
+            .then(async (response) => {
+                const body = await response.json();
+                if(response.status === 200 && body["message"] === "Avatar saved successfully"){
                     this.setState((prevState) => ({
                         userDetails: {
                             ...prevState.userDetails,
-                            avatar: text["avatar"]
+                            avatar: reader.result
                         }
                     }))
+                }
                 }).catch((e) => {
                 console.warn('There was an error saving user avatar: ', e)
 
@@ -82,18 +54,11 @@ class Profile extends React.Component {
 
     // initializeUserChanges -- called by UserDetails child component
     initializeUserChanges = (updatedFields) => {
-
-        this.setState({
-            userDetails: updatedFields,
-        })
-
-        this.setUserDetails(updatedFields)
+        this.updateUserDetails(updatedFields)
     }
 
     // implement post api call to update user profile - child component uses callback
-    setUserDetails(updatedFields) {
-        // set the state to reflect changes based on user input
-
+    updateUserDetails(updatedFields) {
         //Validate URL and email fields
         let valid = true;
         let email = updatedFields.email;
@@ -123,41 +88,33 @@ class Profile extends React.Component {
 
         if(true)   //This only runs if the email and urls are valid
         {
-            var statusCode;
-            const headers = new Headers();
-            headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-            headers.append('Content-Type', 'application/json');
-            headers.append('Access-Control-Allow-Origin','*');
-            headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
-            const init = {
-                method: 'PUT',
-                headers,
-                body: JSON.stringify(updatedFields)
-            };
-
-            fetch('https://cooliocoders.ddns.net/api/user/profile', init)
+            http.updateUserProfileDetails(JSON.stringify(updatedFields))
                 .then(async response => {
                     const text = await response.json();
-                    statusCode = response.status;
+                    if(response.status === 200){
+                        
+                        // set the state to reflect changes based on updatedFields, leave bavatar and enumber the same
+                        this.setState({userDetails:
+                            {
+                                email: this.state.userDetails.email,
+                                firstName: this.state.userDetails.firstName,
+                                lastName: this.state.userDetails.lastName,
+                                phone: (updatedFields["phone"]!==null) ? text["phone"]: "",
+                                birthDate: (updatedFields["birthDate"]!==null) ? text["birthDate"]: "",
+                                state: (updatedFields["state"]!==null) ? text["state"]: "",
+                                city: (updatedFields["city"]!==null) ? text["city"]: "",
+                                zip: (updatedFields["zip"]!==null) ? text["zip"]: "",
+                                avatar: this.state.userDetails.avatar,
+                                eNumber: this.state.userDetails.eNumber,
+                                address1: (updatedFields["address1"]!==null) ? text["address1"]: "",
+                                bio: (updatedFields["bio"]!==null) ? text["bio"]: "",
+                                link1: (updatedFields["link1"]!==null) ? text["link1"]: "",
+                                link3: (updatedFields["link2"]!==null) ? text["link2"]: "",
+                                link2: (updatedFields["link3"]!==null) ? text["link3"]: "",
+                            }
+                        })
+                    }
 
-                    // this.setState({userDetails:
-                    //         {
-                    //             email: text["email"],
-                    //             firstName: text["firstName"],
-                    //             lastName: text["lastName"],
-                    //             phone: text["phone"],
-                    //             birthDate: text["birthDate"],
-                    //             state: text["state"],
-                    //             city: text["city"],
-                    //             zip: text["zip"],
-                    //             address1: text["address1"],
-                    //             bio: text["bio"],
-                    //             avatar: text["avatar"],
-                    //             link1: text["link1"],
-                    //             link3: text["link3"],
-                    //             link2: text["link2"]
-                    //         }
-                    // })
                 }).catch((e) => {
                 console.warn('There was an error saving user details: ', e)
 
@@ -174,40 +131,30 @@ class Profile extends React.Component {
     }
 
     getUserDetails(){
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        headers.append('Access-Control-Allow-Origin','*');
-        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
-        const init = {
-            method: 'GET',
-            headers
-        };
-    
-        fetch('https://cooliocoders.ddns.net/api/user/profile', init)
+        http.getUserProfileDetails()
         .then( async (response) => {
-            statusCode = response.status;
             const text = await response.json();
-
-            return this.setState({
-                userDetails: {
-                    email: text["email"],
-                    eNumber: text["id"],
-                    firstName: text["firstName"],
-                    lastName: text["lastName"],
-                    phone: text["phone"],
-                    birthDate: text["birthDate"],
-                    state: text["state"],
-                    city: text["city"],
-                    zip: text["zip"],
-                    address1: text["address1"],
-                    bio: text["bio"],
-                    avatar: text["avatar"],
-                    link1: text["link1"],
-                    link3: text["link3"],
-                    link2: text["link2"]
-                }
-            })
+            if(response.status === 200){
+                this.setState({userDetails:
+                    {
+                        email: (text["email"]!==null) ? text["email"]: "",
+                        firstName: (text["firstName"]!==null) ? text["firstName"]: "",
+                        lastName: (text["lastName"]!==null) ? text["lastName"]: "",
+                        phone: (text["phone"]!==null) ? text["phone"]: "",
+                        birthDate: (text["birthDate"]!==null) ? text["birthDate"]: "",
+                        state: (text["state"]!==null) ? text["state"]: "",
+                        city: (text["city"]!==null) ? text["city"]: "",
+                        zip: (text["zip"]!==null) ? text["zip"]: "",
+                        avatar: (text["avatar"]!==null) ? text["avatar"]: "",
+                        eNumber: (text["id"]),
+                        address1: (text["address1"]!==null) ? text["address1"]: "",
+                        bio: (text["bio"]!==null) ? text["bio"]: "",
+                        link1: (text["link1"]!==null) ? text["link1"]: "",
+                        link3: (text["link2"]!==null) ? text["link2"]: "",
+                        link2: (text["link3"]!==null) ? text["link3"]: "",
+                    }
+                })
+            }
         })
         .catch((e) => {
             console.warn('There was an error retrieving user details: ', e)
@@ -218,13 +165,8 @@ class Profile extends React.Component {
         }); 
     }
 
-    // check that the user is logged in before component is loaded into DOM
     componentDidMount() {
-        // this.setState(state => ({
-        //     isLoggedIn: true // call method from user/authentication controller/service
-        // }));
         this.getUserDetails();
-        console.log("current state.userDetails : "+JSON.stringify(this.state.userDetails));
     }
 
     render() {

@@ -36,8 +36,19 @@ public class BalanceController {
     JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/amount")
-    public Balance getEnrolledStudents(Principal principalUser){
-        return balanceService.getBalance(userService.findUserByEmail(principalUser.getName()));
+    public ResponseEntity<Map<Object, Object>> getBalance(Principal principalUser){
+        Map<Object, Object> model = new HashMap<>();
+
+        try{
+            List<Balance> balance = balanceService.getBalance(userService.findUserByEmail(principalUser.getName()));
+            model.put("balance", balance);
+            model.put("message", "Successfully retrieved balance");
+        }
+        catch(Exception e){
+            model.put("message", e.getMessage());
+        }
+
+        return ok(model);
     }
 
     @PostMapping("/new")

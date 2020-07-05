@@ -6,6 +6,8 @@ import com.CoolioCoders.LMS.repositories.BalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BalanceService {
 
@@ -15,5 +17,5 @@ public class BalanceService {
     public void saveBalance(Balance balance) {
         balanceRepository.save(balance);
     }
-    public Balance getBalance(User user){return balanceRepository.findByUser(user);}
+    public List<Balance> getBalance(User user){return balanceRepository.findByUser(user);}
 }
