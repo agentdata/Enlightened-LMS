@@ -239,7 +239,7 @@ export default function EnhancedTable(props) {
 
   var rows = []
   for (var i = 0; i < props.allCourses.length; i++) {
-      rows.push(createData(props.allCourses[i].department, props.allCourses[i].number, props.allCourses[i].name, props.allCourses[i].instructor, props.allCourses[i].credits, props.allCourses[i].days, props.allCourses[i].time, props.allCourses[i].semester, props.allCourses[i].year, props.allCourses[i].id ))
+    rows.push(createData(props.allCourses[i].department, props.allCourses[i].number, props.allCourses[i].name, props.allCourses[i].instructor, props.allCourses[i].credits, props.allCourses[i].days, props.allCourses[i].time, props.allCourses[i].semester, props.allCourses[i].year, props.allCourses[i].id ))
   }
 
   const handleRequestSort = (event, property) => {
