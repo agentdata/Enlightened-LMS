@@ -11,9 +11,6 @@ import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({
     main: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
         width: "100%"
     },
     left: {
