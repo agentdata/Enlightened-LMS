@@ -33,6 +33,7 @@ public class User {
     @DBRef
     private Set<Role> roles;
     private Set<String> courseIds;
+    private Set<Notification> notifications;
 
     public User(){}
 
@@ -45,7 +46,7 @@ public class User {
 
     public User(String firstName, String lastName, LocalDate birthDate, String email, String password, String bio,
                 String link1, String link2, String link3, String avatar, String phone, String address1, String address2,
-                String city, String state, String zip, Set<Role> roles) {
+                String city, String state, String zip, Set<Role> roles, Set<Notification> notifications) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -63,6 +64,7 @@ public class User {
         this.state = state;
         this.zip = zip;
         this.roles = roles;
+        this.notifications = notifications;
     }
 
     public String getId() {
@@ -208,6 +210,10 @@ public class User {
 
     public void setRoles(Set<Role> roles) { this.roles = roles; }
 
+    public void setCourseIds(Set<String> courseIds) {
+        this.courseIds = courseIds;
+    }
+
     public Set<String> getCourseIds() {
         if(courseIds == null){
             return new HashSet<>();
@@ -215,8 +221,31 @@ public class User {
         return courseIds;
     }
 
-    public void setCourseIds(Set<String> courseIds) {
-        this.courseIds = courseIds;
+    public void setNotifications(Set<Notification> notifications){this.notifications = notifications;}
+
+    public Set<Notification> getNotifications(){
+        if(notifications == null){
+            return new HashSet<>();
+        }
+        return notifications;
+    }
+
+
+
+
+
+    public void addNotification(Notification notification){
+        if(notifications == null)
+            notifications = new HashSet<>();
+        this.notifications.add(notification);
+    }
+
+    public void removeNotification(Notification notification){
+        this.notifications.remove(notification);
+    }
+
+    public void clearNotifications(){
+        this.notifications.removeAll(notifications);
     }
 
     @Override

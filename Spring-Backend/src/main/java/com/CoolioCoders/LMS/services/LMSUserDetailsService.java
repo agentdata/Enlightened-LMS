@@ -1,6 +1,7 @@
 package com.CoolioCoders.LMS.services;
 
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
+import com.CoolioCoders.LMS.models.Notification;
 import com.CoolioCoders.LMS.models.Role;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.models.UserProfile;
@@ -112,6 +113,44 @@ public class LMSUserDetailsService implements UserDetailsService{
 
         Map<Object, Object> model = new HashMap<>();
         model.put("message", "Avatar saved successfully");
+        return model;
+    }
+
+    public Map<Object, Object> addNotification(String email, JSONObject body)
+    {
+        User currentUser = findUserByEmail(email);
+        Notification notification = new Notification(body.get("title").toString(), body.get("description").toString());
+        currentUser.addNotification(notification);
+
+        userRepository.save(currentUser);
+
+        Map<Object, Object> model = new HashMap<>();
+        model.put("message", "Notification added successfully");
+        return model;
+    }
+
+    public Map<Object, Object> removeNotification(String email, JSONObject body)
+    {
+        User currentUser = findUserByEmail(email);
+        Notification notification = new Notification(body.get("title").toString(), body.get("description").toString());
+        currentUser.removeNotification(notification);
+
+        userRepository.save(currentUser);
+
+        Map<Object, Object> model = new HashMap<>();
+        model.put("message", "Notification removed successfully");
+        return model;
+    }
+
+    public Map<Object, Object> clearNotification(String email)
+    {
+        User currentUser = findUserByEmail(email);
+        currentUser.clearNotifications();
+
+        userRepository.save(currentUser);
+
+        Map<Object, Object> model = new HashMap<>();
+        model.put("message", "Notifications cleared successfully");
         return model;
     }
 

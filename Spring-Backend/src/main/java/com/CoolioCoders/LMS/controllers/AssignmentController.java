@@ -119,9 +119,8 @@ public class AssignmentController {
                 Assignment currentAssignment = assignmentList.get(i);
                 String title = currentAssignment.getTitle();
                 LocalDateTime dueDate = currentAssignment.getDueDate();
-                boolean dismissed = currentAssignment.getDismissed();
 
-                simplifiedAssignmentList.add(new SimplifiedAssignment(title, dueDate, dismissed));
+                simplifiedAssignmentList.add(new SimplifiedAssignment(title, dueDate));
             }
 
 

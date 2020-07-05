@@ -62,4 +62,19 @@ public class UserController {
     public ResponseEntity<Map<Object, Object>> setUserAvatar(Principal principalUser, @RequestBody JSONObject body){
         return ok(userService.saveAvatar(principalUser.getName(), body));
     }
+
+    @PutMapping(value = "/notification/new")
+    public ResponseEntity<Map<Object, Object>> addUserNotification(Principal principalUser, @RequestBody JSONObject body){
+        return ok(userService.addNotification(principalUser.getName(), body));
+    }
+
+    @PutMapping(value = "/notification/remove")
+    public ResponseEntity<Map<Object, Object>> removeUserNotification(Principal principalUser, @RequestBody JSONObject body){
+        return ok(userService.removeNotification(principalUser.getName(), body));
+    }
+
+    @PutMapping(value = "/notification/clear")
+    public ResponseEntity<Map<Object, Object>> clearUserNotification(Principal principalUser, @RequestBody JSONObject body){
+        return ok(userService.clearNotification(principalUser.getName()));
+    }
 }
