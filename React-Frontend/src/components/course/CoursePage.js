@@ -24,11 +24,17 @@ const styles = theme => ({
 })
 
 class CoursePage extends Component {
-    state = {
-        courseName: "Dummy Course",
-        courseCredits: "",
-        courseDescription: "",
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            courseName: "Dummy Course",
+            courseCredits: "",
+            courseDescription: "",
+        }
+
     }
+    
 
     render() {
         const { classes } = this.props
@@ -41,7 +47,7 @@ class CoursePage extends Component {
                         </div>
                         <Switch>
                             <Route path="/course-page" component={CourseHome} />
-                            <Route path="/course-assignments" exact component={CourseAssignments} />
+                            <Route path="/course-assignments" exact component={CourseAssignments}/>
                             <Route path="/course-grades" exact component={CourseGrades} />
                             <Route path="/course-announcements" exact component={CourseAnnouncements} />
                             <Route path="/course-discussions" exact component={CourseDiscussions} />

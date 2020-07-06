@@ -13,6 +13,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider'
+import Button from '@material-ui/core/Button'
+import Modal from '@material-ui/core/Modal'
+import AddAssignment from './AddAssignment'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,10 +34,25 @@ const useStyles = makeStyles((theme) => ({
   listItemRight: {
       textAlign: "right",
       paddingRight: "10px"
-  }
+  },
+  addAssignmentBtn: {
+      backgroundColor: "white",
+      marginBottom: "10px",
+      color: "#f44336"
+  },
+  paper: {
+    position: 'relative',
+    maxWidth: 800,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    margin: "auto",
+    top: "100px"
+  },
 }));
 
-export default function CourseAssignments() {
+export default function CourseAssignments(props) {
 
   const [pastAssignments, setPastAssignments] = React.useState([
     {
@@ -64,6 +82,10 @@ export default function CourseAssignments() {
   const classes = useStyles();
   const [assignmentOpen, setAssignmentOpen] = React.useState(true);
   const [pastAssignmentOpen, setPastAssignmentOpen] = React.useState(true);
+//   const isInstructor = sessionStorage.getItem("isInstructor")
+  const [modalOpen, setModalOpen] = React.useState(false)
+  const isInstructor = true
+
 
   const handleAssignmentClick = () => {
     setAssignmentOpen(!assignmentOpen);
@@ -71,10 +93,37 @@ export default function CourseAssignments() {
 
   const handlePastAssignmentClick = () => {
     setPastAssignmentOpen(!pastAssignmentOpen);
+    console.log(isInstructor)
   };
+
+  const handleAddAssignment = () => {
+      setModalOpen(true)
+  }
+
+  const handleClose = () => {
+    setModalOpen(false)
+}
 
   return (
     <div className={classes.assignmentsDiv}>
+        {isInstructor === true ?
+            <div>
+                <Button className={classes.addAssignmentBtn} onClick={handleAddAssignment}>+ Add New Assignment</Button>
+                <Modal
+                        className={classes.modal}
+                        disableBackdropClick
+                        open={modalOpen}
+                        onClose={handleClose}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                    >
+                    
+                <div className = {classes.paper}>
+                    <AddAssignment closeModal = {handleClose}/>
+                </div>
+                </Modal>
+            </div>
+            : null}
         <List
         component="nav"
         className={classes.root}
