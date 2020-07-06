@@ -2,6 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import { Container, Card, CardContent, Typography, 
     List, ListItem, Button, TextField } from '@material-ui/core';
+import http from '../api/http';
 
 const styles = theme => ({
     payBtn: {
@@ -42,7 +43,7 @@ class Account extends React.Component {
         };
 
         this.getUserAccountInfo = this.getUserAccountInfo.bind(this);
-        this.setUserAccountInfo = this.setUserAccountInfo.bind(this);
+        // this.setUserAccountInfo = this.setUserAccountInfo.bind(this);
         
         this.payButtonPressed = this.payButtonPressed.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -54,7 +55,7 @@ class Account extends React.Component {
         this.validateExpiry = this.validateExpiry.bind(this);
         this.validateCvv = this.validateCvv.bind(this);
         this.validateAmount = this.validateAmount.bind(this);
-        this.setPayment = this.setPayment.bind(this);
+        this.newPayment = this.newPayment.bind(this);
     }
 
     getUserAccountInfo() {
@@ -89,11 +90,6 @@ class Account extends React.Component {
         });
     }
 
-    setUserAccountInfo() {
-        // set fields, update on backend thru API call
-
-    }
-
     payButtonPressed = () => {
         // toggle display payment fields, allow user to make payment
         this.setState(prevState => ({
@@ -113,8 +109,33 @@ class Account extends React.Component {
         }))
     }
 
-    setPayment = () => {
+    newPayment(payment) {
+
+        // TODO: subtract payment from balance, update account on backend
+
+
+        // TODO: send payment to backend / third party service
         
+        // http.createNewPayment(JSON.stringify(payment))
+        // .then( async (response) => {
+        //     const body = await response.json()
+        //     if(response.status == 200 && body["message"] === "Successfully added new payment"){
+
+        //     }
+        //     else{
+        //         console.log("server error adding payment");
+        //     }
+        // })
+        // .catch((e) => {
+        //     console.warn("There was an error adding the payment: ", e);
+
+        //     this.setState({
+        //         error: "There was an error adding the payment."
+        //     })
+        // })
+
+        // Update on front end
+        this.getUserAccountInfo()
     }
 
     handleNameChange = ({ target }) => {
@@ -188,8 +209,10 @@ class Account extends React.Component {
     validateAmount = () => {
         if (this.state.payment.amount === "") {
             this.setState({amountError: "Required"})
-        } else if (!/\b\d{1,6}\b$/.test(this.state.payment.amount)) {
-            this.setState({amountError: "digit string only (max. 6 figures)"})
+        } else if (!/^[0-9]+\.?[0-9]?[0-9]?$/.test(this.state.payment.amount)) {
+            this.setState({amountError: "digit string only, max 2 decimal places"})
+        } else if (this.state.payment.amount > this.state.account.currentBalance) {
+            this.setState({amountError: "Exceeds account balance"})
         } else {
             this.setState({amountError: ""})
         }
@@ -209,7 +232,7 @@ class Account extends React.Component {
         this.state.payment.expiryError === "" &&
         this.state.payment.cvvError === "" &&
         this.state.payment.amountError === "") {
-            this.setPayment(this.state.payment); 
+            this.newPayment(this.state.payment); 
         }       
     }
 
