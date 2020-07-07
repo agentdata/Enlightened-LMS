@@ -161,14 +161,8 @@ class CourseList extends Component {
     }
 
     handleStudentOpen = () => {
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        const init = {
-            method: 'GET',
-            headers
-        };
-    
-        fetch('https://cooliocoders.ddns.net/api/course/all', init)     
+        //grab all courses and load into state to be rendered
+        http.getAllCourses()     
         .then( async(response) => {
             var body = await response.json();
             if(response.status === 200){
@@ -184,7 +178,7 @@ class CourseList extends Component {
                       time: body["courses"][i]["startTime"]+"-"+body["courses"][i]["endTime"],
                       semester: body["courses"][i]["semester"],
                       year: body["courses"][i]["year"],
-                      id: body["courses"][i]["_id"]
+                      id: body["courses"][i]["id"]
                     }                   
                 }
                 this.setState({

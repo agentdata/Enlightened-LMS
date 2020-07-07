@@ -2,6 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import { Container, Card, CardContent, Typography, 
     List, ListItem, Button, TextField } from '@material-ui/core';
+import http from '../api/http'
 
 const styles = theme => ({
     payBtn: {
@@ -58,27 +59,17 @@ class Account extends React.Component {
     }
 
     getUserAccountInfo() {
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        headers.append('Access-Control-Allow-Origin','*');
-        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
-        const init = {
-            method: 'GET',
-            headers
-        };
-
-        fetch('https://cooliocoders.ddns.net/api/balance/amount', init)
+        http.getCurrentAccountBalance()
         .then( async(res) => {
-            statusCode = res.status;
-            const data = await res.json();
-
-            return this.setState({
-                account: {
-                    currentBalance: data["balance"],
-                    totalCreditHours: data["totalCredits"]
-                }
-            })
+            const body = await res.json();
+            if(res.status === 200 && body["message"] === "Successfully retrieved balance"){
+                return this.setState({
+                    account: {
+                        currentBalance: body["balance"] ==="" ? "0" : body["balance"],
+                        totalCreditHours: body["totalCredits"]
+                    }
+                })
+            }
         })
         .catch((e) => {
             console.warn("There was an error fetching account details: ", e)
@@ -232,8 +223,8 @@ class Account extends React.Component {
                         { account ? (
                             <List>
                                 <ListItem>
-                                    <Typography variant="h5">Current balance: {currentBalance}</Typography>
-                        <Button className={classes.payBtn} onClick={this.payButtonPressed}>{this.state.showPaymentForm ? "Cancel" : "Pay balance"}</Button>
+                                    <Typography variant="h5">Current balance: {this.state.currentBalance}</Typography>
+                                    <Button className={classes.payBtn} onClick={this.payButtonPressed}>{this.state.showPaymentForm ? "Cancel" : "Pay balance"}</Button>
                                 </ListItem>
                                 {this.state.showPaymentForm && 
                                     <ListItem>

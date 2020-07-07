@@ -54,6 +54,9 @@ export default {
     getAllCourses(){
         return fetch(API_BASE_URL+'/api/course/all', makeInit("GET", true, null))
     },
+    getCurrentAccountBalance(){
+        return fetch(API_BASE_URL+'/api/balance/amount', makeInit("GET", true, null))
+    },
     updateUserAvatar(body){
         return fetch(API_BASE_URL+'/api/user/profile/avatar', makeInit("PUT", true, body))
     },
