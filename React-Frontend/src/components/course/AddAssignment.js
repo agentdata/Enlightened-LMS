@@ -273,6 +273,7 @@ class AddAssignment extends Component {
                 id="longDescription"
                 label="Full Assignment Description"
                 multiline
+                rows={8}
                 style={{ margin: 8 }}
                 helperText={this.state.longDescriptionError === '' ? "" : this.state.longDescriptionError}
                 margin="normal"
@@ -329,7 +330,7 @@ class AddAssignment extends Component {
                 <List>
                     <ListItem className={classes.buttons}>
                         <Button className={classes.modalButton} onClick={this.props.closeModal}>Cancel</Button>
-                        <Button className={classes.modalButton} onClick={this.checkErrors}>Add Course</Button>
+                        <Button className={classes.modalButton} onClick={this.checkErrors}>Add Assignment</Button>
                     </ListItem>
                 </List>
             </div>
