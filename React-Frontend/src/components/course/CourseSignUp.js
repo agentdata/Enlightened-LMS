@@ -138,21 +138,17 @@ const EnhancedTableToolbar = (props) => {
   const addCoursesPressed = () => {
     var idString = []
     selected.forEach(id =>  {
-      console.log(id)
-      // idString.push(id)
+      idString.push(id)
     })
+    
+    var body = { "courses": idString}
 
-    //body should be in this format "{"courses": ["5ef2930ead275e7e3d9613d2", "5ef29cbdad275e7e3d9613d4", "5ef2a648ad275e7e3d9613d5"]}"
-    var body = {
-      "courses": [idString]
-    }
-
-    console.log(JSON.stringify(body))
     http.enrollForCourse(JSON.stringify(body))    
     .then( async(response) => {
         var body = await response.json();
-        if(response.status == 200 && response.text["message"] === "Student registration successful"){
-          props.closeModal()
+        if(response.status == 200 && body["message"] === "Student registration successful"){
+          //props.closeModal()
+          console.log("successfully added")
         }
     })
     .catch((e) => {

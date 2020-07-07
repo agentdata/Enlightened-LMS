@@ -116,6 +116,14 @@ public class LMSUserDetailsService implements UserDetailsService{
         return model;
     }
 
+    public Set<Notification> getNotifications(String email)
+    {
+        User currentUser = findUserByEmail(email);
+        Set<Notification> notifications = currentUser.getNotifications();
+
+        return notifications;
+    }
+
     public Map<Object, Object> addNotification(String email, JSONObject body)
     {
         User currentUser = findUserByEmail(email);
