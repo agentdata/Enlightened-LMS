@@ -1,6 +1,7 @@
 package com.CoolioCoders.LMS.controllers;
 
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
+import com.CoolioCoders.LMS.models.Notification;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
 import net.minidev.json.JSONObject;
@@ -61,6 +62,11 @@ public class UserController {
     @PutMapping(value = "/profile/avatar")
     public ResponseEntity<Map<Object, Object>> setUserAvatar(Principal principalUser, @RequestBody JSONObject body){
         return ok(userService.saveAvatar(principalUser.getName(), body));
+    }
+
+    @GetMapping("/notifications")
+    public Set<Notification> getUserNotifications(Principal principalUser){
+        return userService.getNotifications(principalUser.getName());
     }
 
     @PutMapping(value = "/notification/new")
