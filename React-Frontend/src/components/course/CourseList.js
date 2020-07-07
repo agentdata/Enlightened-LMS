@@ -74,7 +74,7 @@ class CourseList extends Component {
 
         //TODO figure out the best place to put this so it processes correctly, 
         //if login takes a moment to return this might execute first and execute student when it should execute instructor 
-        this.state.isInstructor === "true"? this.getInstructorCourses(): this.getStudentCourses()   
+        this.state.isInstructor === "true" ? this.getInstructorCourses(): this.getStudentCourses()   
     }
 
     // get all courses from db

@@ -66,6 +66,9 @@ export default {
     createNewCourse(body){
         return fetch(API_BASE_URL+'/api/course/new', makeInit("POST", true, body))
     },
+    createNewAssignment(body){
+        return fetch(API_BASE_URL+'/api/assignment/new', makeInit("POST", true, body))
+    },
     createNewUser (body) {
         return fetch(API_BASE_URL+"/api/auth/register", makeInit("POST", false, body) )
     },

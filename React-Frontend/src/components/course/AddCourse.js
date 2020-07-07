@@ -310,7 +310,7 @@ class AddCourse extends Component {
     }
 
     validateDays = () => {
-        if (this.state.newCourse.platform != "online" &&
+        if (this.state.newCourse.platform !== "online" &&
         this.state.newCourse.days.mon === false &&
         this.state.newCourse.days.tues === false &&
         this.state.newCourse.days.wed === false &&
@@ -326,7 +326,7 @@ class AddCourse extends Component {
     }
 
     validateStartTime = () => {
-        if (this.state.newCourse.startTime === "" && this.state.newCourse.platform != "online") {
+        if (this.state.newCourse.startTime === "" && this.state.newCourse.platform !== "online") {
             this.setState({startTimeError: "Required"})
         } else {
             this.setState({startTimeError: ""})
@@ -334,7 +334,7 @@ class AddCourse extends Component {
     }
 
     validateEndTime = () => {
-        if (this.state.newCourse.endTime === "" && this.state.newCourse.platform != "online") {
+        if (this.state.newCourse.endTime === "" && this.state.newCourse.platform !== "online") {
             this.setState({endTimeError: "Required"})
         } else {
             this.setState({endTimeError: ""})
@@ -342,7 +342,7 @@ class AddCourse extends Component {
     }
 
     validateBuilding = () => {
-        if (this.state.newCourse.building === "" && this.state.newCourse.platform != "online") {
+        if (this.state.newCourse.building === "" && this.state.newCourse.platform !== "online") {
             this.setState({buildingError: "Required"})
         } else {
             this.setState({buildingError: ""})
@@ -350,9 +350,9 @@ class AddCourse extends Component {
     }
 
     validateRoom = () => {
-        if (this.state.newCourse.roomNumber === "" && this.state.newCourse.platform != "online") {
+        if (this.state.newCourse.roomNumber === "" && this.state.newCourse.platform !== "online") {
             this.setState({roomError: "Required"})
-        } else if (!/^\d+$/.test(this.state.newCourse.roomNumber) && this.state.newCourse.platform != "online") {
+        } else if (!/^\d+$/.test(this.state.newCourse.roomNumber) && this.state.newCourse.platform !== "online") {
             this.setState({roomError: "Numbers only"})
         } else {
             this.setState({roomError: ""})
@@ -408,7 +408,7 @@ class AddCourse extends Component {
         http.createNewCourse(JSON.stringify(newCourse))
         .then( async (response) => {
             const body = await response.json()
-            if(response.status == 200 && body["message"] === "Successfully added New Course"){
+            if(response.status === 200 && body["message"] === "Successfully added New Course"){
                 this.props.closeModal();
                 //TODO make api call to get courses to reflect new course, or add it to the state to re-render since we know it successfully was added to DB.
             }
