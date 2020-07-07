@@ -81,16 +81,14 @@ class AddAssignment extends Component {
         this.state = {
             newAssignment:
                 {
-                    name: '', // assignment name
-                    shortDescription: '', // brief description
-                    longDescription: '', // longer description
+                    name: '', // assignment name/title
+                    description: '', // long description
                     submissionType: '', // textbox/file upload
                     dueDate: '', // date/time
                     pointsPossible: '' // total points possible
                 },
             nameError: '',
-            shortDescriptionError: '',
-            longDescriptionError: '',
+            descriptionError: '',
             submissionTypeError: '',
             dueDateError: '',
             pointsPossibleError: ''
@@ -110,20 +108,16 @@ class AddAssignment extends Component {
         this.setState({ newAssignment: { ...this.state.newAssignment, name: target.value} })
     }
 
-    handleShortDescriptionChange = ({ target }) => {
-        this.setState({ newAssignment: { ...this.state.newAssignment, shortDescription: target.value} })
-    }
-
-    handleLongDescriptionChange = ({ target }) => {
-        this.setState({ newAssignment: { ...this.state.newAssignment, longDescription: target.value} })
+    handleDescriptionChange = ({ target }) => {
+        this.setState({ newAssignment: { ...this.state.newAssignment, description: target.value} })
     }
 
     handleSubmissionTypeText = () => {
-        this.setState({ newAssignment: { ...this.state.newAssignment, submissionType: "Text Submission"} })
+        this.setState({ newAssignment: { ...this.state.newAssignment, submissionType: "TEXTBOX"} })
     }
 
     handleSubmissionTypeUpload = () => {
-        this.setState({ newAssignment: { ...this.state.newAssignment, submissionType: "File Upload"} })
+        this.setState({ newAssignment: { ...this.state.newAssignment, submissionType: "FILEUPLOAD"} })
     }
 
     handleDueDateChange = ({ target }) => {
@@ -142,19 +136,11 @@ class AddAssignment extends Component {
         }
     }
 
-    validateShortDescription = () => {
-        if (this.state.newAssignment.shortDescription === "") {
-            this.setState({shortDescriptionError: "Required"})
+    validateDescription = () => {
+        if (this.state.newAssignment.description === "") {
+            this.setState({descriptionError: "Required"})
         } else {
-            this.setState({shortDescriptionError: ""})
-        }
-    }
-
-    validateLongDescription = () => {
-        if (this.state.newAssignment.longDescription === "") {
-            this.setState({longDescriptionError: "Required"})
-        } else {
-            this.setState({longDescriptionError: ""})
+            this.setState({descriptionError: ""})
         }
     }
 
@@ -196,31 +182,40 @@ class AddAssignment extends Component {
     checkErrors = () => {
 
         this.validateName()
-        this.validateShortDescription()
-        this.validateLongDescription()
+        this.validateDescription()
         this.validateSubmissionType()
         this.validateDueDate()
         this.validatePointsPossible()
 
         // no errors
-        if (this.state.newAssignment.nameError === "" &&
-        this.state.newAssignment.shortDescriptionError === "" &&
-        this.state.newAssignment.longDescriptionError === "" &&
-        this.state.newAssignment.submissionTypeError === "" &&
-        this.state.newAssignment.dueDateError === "" &&
-        this.state.newAssignment.pointsPossibleError === "") {
-            this.addNewAssignment(this.state.newAssignment);      
-        }       
+        if (this.state.nameError === "" &&
+        this.state.descriptionError === "" &&
+        this.state.submissionTypeError === "" &&
+        this.state.dueDateError === "" &&
+        this.state.pointsPossibleError === "") {
+            this.addNewAssignment(this.state.newAssignment);    
+        }   
     }
 
     // add course to list (instructor)
     addNewAssignment(newAssignment) {
-        http.createNewAssignment(JSON.stringify(newAssignment))
+        const assignmentBody =
+        {
+            "title": newAssignment.name,
+            "description": newAssignment.description,
+            "submissionType": newAssignment.submissionType,
+            "dueDate": newAssignment.dueDate,
+            "maxPoints": newAssignment.pointsPossible,
+            "courseId": "5efab3f635f9126181edb9ee"  //hardcoding course in until we pass the courseId to this component
+        }
+
+        http.createNewAssignment(JSON.stringify(assignmentBody))
         .then( async (response) => {
             const body = await response.json()
-            if(response.status == 200 && body["message"] === "Successfully added New Course"){
+            if(response.status == 200 && body["message"] === "Successfully added new assignment"){
                 this.props.closeModal();
                 //TODO make api call to get courses to reflect new course, or add it to the state to re-render since we know it successfully was added to DB.
+
             }
             else{
                 console.log("server error adding course");
@@ -257,41 +252,28 @@ class AddAssignment extends Component {
                 error={this.state.nameError === '' ? false : true}
                 />
                 <TextField
-                id="shortDescription"
-                label="Brief Description"
-                style={{ margin: 8 }}
-                helperText={this.state.shortDescriptionError === '' ? "" : this.state.shortDescriptionError}
-                margin="normal"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                onChange={this.handleShortDescriptionChange}
-                onBlur={this.validateShortDescription}
-                error={this.state.shortDescriptionError === '' ? false : true}
-                />
-                <TextField
-                id="longDescription"
-                label="Full Assignment Description"
+                id="description"
+                label="Assignment Description"
                 multiline
                 style={{ margin: 8 }}
-                helperText={this.state.longDescriptionError === '' ? "" : this.state.longDescriptionError}
+                helperText={this.state.descriptionError === '' ? "" : this.state.descriptionError}
                 margin="normal"
                 InputLabelProps={{
                     shrink: true,
                 }}
-                onChange={this.handleLongDescriptionChange}
-                onBlur={this.validateLongDescription}
-                error={this.state.longDescriptionError === '' ? false : true}
+                onChange={this.handleDescriptionChange}
+                onBlur={this.validateDescription}
+                error={this.state.descriptionError === '' ? false : true}
                 />
                 <Typography variant="body1" className={classes.dayTitle}>Submission Type</Typography>
                 <div className={classes.daysFlex}>
                     <Button onClick={this.handleSubmissionTypeText}
                     value="Text Submission"
-                    className={this.state.newAssignment.submissionType === 'Text Submission' ? classes.submissionSelected : classes.submissionButton}>
+                    className={this.state.newAssignment.submissionType === 'TEXTBOX' ? classes.submissionSelected : classes.submissionButton}>
                         Text Submission
                     </Button>
                     <Button onClick={this.handleSubmissionTypeUpload}
-                    className={this.state.newAssignment.submissionType === 'File Upload' ? classes.submissionSelected : classes.submissionButton}>
+                    className={this.state.newAssignment.submissionType === 'FILEUPLOAD' ? classes.submissionSelected : classes.submissionButton}>
                         File Upload
                     </Button>
                 </div>
