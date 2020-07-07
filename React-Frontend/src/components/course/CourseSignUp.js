@@ -148,7 +148,6 @@ const EnhancedTableToolbar = (props) => {
         var body = await response.json();
         if(response.status == 200 && body["message"] === "Student registration successful"){
           //props.closeModal()
-          console.log("successfully added")
         }
     })
     .catch((e) => {
