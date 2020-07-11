@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Document(collection = "assignments")
 public class Assignment {
@@ -16,6 +17,7 @@ public class Assignment {
     private LocalDateTime dueDate;
     private int maxPoints;
     private String courseId;
+    private List<AssignmentSubmission> submissions;
 
     public Assignment(){}
 
@@ -73,5 +75,13 @@ public class Assignment {
 
     public void setCourseId(String courseId) {
         this.courseId = courseId;
+    }
+
+    public List<AssignmentSubmission> getSubmissions() {
+        return submissions;
+    }
+
+    public void setSubmissions(List<AssignmentSubmission> submissions) {
+        this.submissions = submissions;
     }
 }
