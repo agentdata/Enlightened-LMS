@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 public class SimplifiedAssignment {
 
-    @Id
     private String title;
     private LocalDateTime dueDate;
 

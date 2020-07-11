@@ -183,4 +183,17 @@ public class Course {
     public void setStudentIds(Set<String> studentIds) {
         this.studentIds = studentIds;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course)o;
+        return getId().equals(course.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

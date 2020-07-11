@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 @Document(collection = "roles")
 public class Role {
     @Id
@@ -24,5 +26,19 @@ public class Role {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role1 = (Role)o;
+        return getId().equals(role1.getId()) &&
+               getRole().equals(role1.getRole());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getRole());
     }
 }
