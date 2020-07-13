@@ -150,10 +150,32 @@ public class AssignmentController {
 
     @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
     @GetMapping("/simplified/{courseId}")
-    public ResponseEntity<Map<Object, Object>> getSimplifiedAssignments(Principal principalUser, @PathVariable String courseId){
+    public ResponseEntity<Map<Object, Object>> getSimplifiedCourseAssignments(Principal principalUser, @PathVariable String courseId){
         Map<Object, Object> model = new HashMap<>();
         try {
             model.put("assignments", assignmentService.getSimplifiedAssignmentList(assignmentService.findByCourseId(courseId)));
+            model.put("message", "success");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
+
+    @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
+    @GetMapping("/simplified")
+    public ResponseEntity<Map<Object, Object>> getSimplifiedAssignments(Principal principalUser){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+            List<Assignment> assignments = new ArrayList<>();
+
+            for (String courseId : user.getCourseIds()) {
+                assignments.addAll(assignmentService.findByCourseId(courseId));
+            }
+
+            model.put("assignments", assignmentService.getSimplifiedAssignmentList(assignments));
             model.put("message", "success");
         }
         catch (Exception e){

@@ -41,13 +41,19 @@ public class AssignmentService {
         assignment.setSubmissions(submissions);
         save(assignment);
     }
+
     public List<SimplifiedAssignment> getSimplifiedAssignmentList(List<Assignment> assignments) {
         List<SimplifiedAssignment> simplifiedAssignmentList = new ArrayList<>();
         for (Assignment assignment : assignments) {
+            String id = assignment.getId();
             String title = assignment.getTitle();
             LocalDateTime dueDate = assignment.getDueDate();
-            simplifiedAssignmentList.add(new SimplifiedAssignment(title, dueDate));
+            String assignmentCourseId = assignment.getCourseId();
+
+            simplifiedAssignmentList.add(new SimplifiedAssignment(id, title, dueDate, assignmentCourseId));
         }
+
         return simplifiedAssignmentList;
     }
+
 }
