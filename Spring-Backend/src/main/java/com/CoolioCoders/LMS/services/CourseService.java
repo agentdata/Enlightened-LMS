@@ -4,6 +4,7 @@ import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
 import com.CoolioCoders.LMS.models.Course;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.repositories.CourseRepository;
+import com.CoolioCoders.LMS.repositories.RoleRepository;
 import com.CoolioCoders.LMS.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ public class CourseService {
     private UserRepository userRepository;
     @Autowired
     private LMSUserDetailsService userService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public List<Course> findAll(){
         return courseRepository.findAll();
@@ -80,6 +83,36 @@ public class CourseService {
         studentsCourseIds.add(course.getId());
         student.setCourseIds(studentsCourseIds);
         userRepository.save(student);
+    }
+
+    public boolean isInstructorsCourse(Course course, User instructor) throws Exception {
+        if(!instructor.getRoles().contains(roleRepository.findByRole("INSTRUCTOR"))){
+            throw new Exception("CourseService:isInstructorsCourse(), User must be an instructor");
+        }
+
+        boolean courseHasInstructor = course.getInstructor().equals(instructor);
+        boolean instructorHasCourse = instructor.getCourseIds().contains(course.getId());
+
+        if(courseHasInstructor != instructorHasCourse){
+            throw new Exception("There is a discrepancy between the instructor and course records");
+        }
+
+        return courseHasInstructor;
+    }
+
+    public boolean isStudentEnrolledInCourse(User student, Course course) throws Exception {
+        if(!student.getRoles().contains(roleRepository.findByRole("STUDENT"))){
+            throw new Exception("CourseService:isStudentEnrolledInCourse(), User must be a student");
+        }
+
+        boolean courseHasStudent = course.getStudentIds().contains(student.getId());
+        boolean studentHasCourse = student.getCourseIds().contains(course.getId());
+
+        if(courseHasStudent != studentHasCourse) {
+            throw new Exception("There is a discrepancy between the student and course enrollment records");
+        }
+
+        return courseHasStudent;
     }
 
     public Map<Object, Object> courseToJSONResponse(Course course){

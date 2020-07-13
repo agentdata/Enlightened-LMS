@@ -409,7 +409,7 @@ class AddCourse extends Component {
         .then( async (response) => {
             const body = await response.json()
             if(response.status === 200 && body["message"] === "Successfully added New Course"){
-                this.props.closeModal();
+                //this.props.closeModal(); //TODO get this modal to close when code get's here
                 //TODO make api call to get courses to reflect new course, or add it to the state to re-render since we know it successfully was added to DB.
             }
             else{

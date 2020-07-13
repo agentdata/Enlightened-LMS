@@ -77,6 +77,48 @@ public class AssignmentController {
     }
 
 
+    /*
+        API Call format example
+
+        {
+            "courseId":         "replaceMeWithCourseId",
+            "assignmentId":     "replaceMeWithAssignmentId",
+            "submissionType":   "textbox or fileUpload",
+            "submission":       "This is the text submitted by the student" or
+                                "URL String of the submitted file"
+        }
+
+     */
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @PostMapping("/submit")
+    public ResponseEntity<Map<Object, Object>> assignmentSubmit(Principal principalUser, @RequestBody JSONObject body){
+        Map<Object, Object> model = new HashMap<>();
+        try{
+            User student = userService.findUserByEmail(principalUser.getName());
+            Course course = courseService.findById(body.getAsString("courseId"));
+
+            if(courseService.isStudentEnrolledInCourse(student, course)){
+                Assignment assignment = assignmentService.findByAssignmentId(body.getAsString("assignmentId"));
+                AssignmentSubmission submission = new AssignmentSubmission();
+                submission.setStudentId(student.getId());
+                submission.setSubmittedTimestamp(LocalDateTime.now());
+                submission.setSubmissionContent(body.getAsString("submission"));
+                assignmentService.saveSubmission(assignment, submission);
+
+                model.put("message", "Assignment Successfully Submitted");
+            }
+            else {
+                model.put("message", "Error: Student must be enrolled in this course");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            model.put("message", "Error: " + e.getMessage());
+        }
+        return ok(model);
+    }
+
+
     @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
     @GetMapping("/{courseId}")
     public ResponseEntity<Map<Object, Object>> userCourseAssignments(Principal principalUser, @PathVariable String courseId){

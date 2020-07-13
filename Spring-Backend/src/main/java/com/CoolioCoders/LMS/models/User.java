@@ -253,15 +253,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User)o;
-        return getId().equals(user.getId()) &&
-               Objects.equals(getFirstName(), user.getFirstName()) &&
-               Objects.equals(getLastName(), user.getLastName()) &&
-               Objects.equals(getBirthDate(), user.getBirthDate()) &&
-               getEmail().equals(user.getEmail());
+        return getId().equals(user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getBirthDate(), getEmail());
+        return Objects.hash(getId());
     }
 }
