@@ -59,27 +59,17 @@ class Account extends React.Component {
     }
 
     getUserAccountInfo() {
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        headers.append('Access-Control-Allow-Origin','*');
-        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
-        const init = {
-            method: 'GET',
-            headers
-        };
-
-        fetch('https://cooliocoders.ddns.net/api/balance/amount', init)
+        http.getCurrentAccountBalance()
         .then( async(res) => {
-            statusCode = res.status;
             const data = await res.json();
-
-            return this.setState({
-                account: {
-                    currentBalance: data["balance"],
-                    totalCreditHours: data["totalCredits"]
-                }
-            })
+            if(res.status === 200 && data["message"] === "Successfully retrieved balance"){
+                return this.setState({
+                    account: {
+                        currentBalance: data["balance"],
+                        totalCreditHours: data["totalCredits"]
+                    }
+                })
+            }
         })
         .catch((e) => {
             console.warn("There was an error fetching account details: ", e)

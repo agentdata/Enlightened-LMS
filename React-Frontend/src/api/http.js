@@ -54,6 +54,9 @@ export default {
     getAllCourses(){
         return fetch(API_BASE_URL+'/api/course/all', makeInit("GET", true, null))
     },
+    getCourseDetails(courseId){
+        return fetch(API_BASE_URL+'/api/course/'+courseId, makeInit("GET", true, null))
+    },
     getCurrentAccountBalance(){
         return fetch(API_BASE_URL+'/api/balance/amount', makeInit("GET", true, null))
     },
@@ -81,4 +84,7 @@ export default {
     loginUser (body){
         return fetch(API_BASE_URL+"/api/auth/login", makeInit("POST", false, body))
     },
+    validateToken(){
+        return fetch(API_BASE_URL+'/api/user/validate', makeInit("GET", true, null))
+    }
 }
