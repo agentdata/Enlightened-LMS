@@ -1,21 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import AddAssignment from './AddAssignment'
+import CourseAssignment from './CourseAssignment'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,42 +54,62 @@ export default function CourseAssignments(props) {
   const [pastAssignments, setPastAssignments] = React.useState([
     {
         title: "Assignment 1",
-        points: 100,
-        dueDate: "6/30/2020 11:59 PM"
+        description: "This is the first assignment",
+        maxPoints: 100,
+        dueDate: "6/30/2020 11:59 PM",
+        assignmentID: '1',
+        submissionType: "TEXTBOX"
     },
     {
         title: "Assignment 2",
-        points: 150,
-        dueDate: "7/1/2020 11:59 PM"
+        description: "This is assignment 2",
+        maxPoints: 150,
+        dueDate: "7/1/2020 11:59 PM",
+        assignmentID: '2',
+        submissionType: "TEXTBOX"
     }
 ])
 
   const [upcomingAssignments, setUpcomingAssignments] = React.useState([
     {
         title: "Assignment 3",
-        points: 100,
-        dueDate: "7/7/2020 11:59 PM"
+        description: "This is the third assignment",
+        maxPoints: 100,
+        dueDate: "7/7/2020 11:59 PM",
+        assignmentID: '3',
+        submissionType: "TEXTBOX"
     },
     {
         title: "Assignment 4",
-        points: 150,
-        dueDate: "7/8/2020 11:59 PM"
+        description: "Assignment 4 yo",
+        maxPoints: 150,
+        dueDate: "7/8/2020 11:59 PM",
+        assignmentID: '4',
+        submissionType: "FILE_UPLOAD"
     }
   ])
   const classes = useStyles();
-  const [assignmentOpen, setAssignmentOpen] = React.useState(true);
-  const [pastAssignmentOpen, setPastAssignmentOpen] = React.useState(true);
+  const [assignmentListOpen, setassignmentListOpen] = React.useState(true);
+  const [pastAssignmentListOpen, setpastAssignmentListOpen] = React.useState(true);
 //   const isInstructor = sessionStorage.getItem("isInstructor")
   const [modalOpen, setModalOpen] = React.useState(false)
+
+  const [assignmentModalOpen, setAssignmentModalOpen] = React.useState(false);
+  const [assignmentClicked, setAssignmentClicked] = React.useState({assignmentID: -1});
+  useEffect(() => {
+    if (assignmentClicked.assignmentID !== -1) {
+      setAssignmentModalOpen(true);
+    }
+ }, [assignmentClicked]);
   const isInstructor = true
 
 
-  const handleAssignmentClick = () => {
-    setAssignmentOpen(!assignmentOpen);
+  const handleAssignmentHeadClick = () => {
+    setassignmentListOpen(!assignmentListOpen);
   };
 
-  const handlePastAssignmentClick = () => {
-    setPastAssignmentOpen(!pastAssignmentOpen);
+  const handlePastAssignmentHeadClick = () => {
+    setpastAssignmentListOpen(!pastAssignmentListOpen);
     console.log(isInstructor)
   };
 
@@ -102,25 +119,54 @@ export default function CourseAssignments(props) {
 
   const handleClose = () => {
     setModalOpen(false)
-}
+  }
+
+  const handleAssignmentClick = (key) => {
+    // do api call first, then
+    console.log(key)
+    setAssignmentClicked(upcomingAssignments.filter(obj => obj.assignmentID === key))
+
+  }
+
+  const handlePastAssignmentClick = (key) => {
+    setAssignmentClicked(pastAssignments.filter(obj => obj.assignmentID === key))
+  }
+
+  const handleAssignmentClose = () => {
+    setAssignmentModalOpen(false)
+    setAssignmentClicked({assignmentID: -1})
+  }
 
   return (
     <div className={classes.assignmentsDiv}>
+
+      <Modal
+        className={classes.modal}
+        disableBackdropClick
+        open={assignmentModalOpen}
+        onClose={handleAssignmentClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        >
+          <div className={classes.paper}>
+            <CourseAssignment closeModal = {handleAssignmentClose} assignmentClicked = {assignmentClicked}/>
+          </div>
+        </Modal>
         {isInstructor === true ?
             <div>
                 <Button className={classes.addAssignmentBtn} onClick={handleAddAssignment}>+ Add New Assignment</Button>
                 <Modal
-                        className={classes.modal}
-                        disableBackdropClick
-                        open={modalOpen}
-                        onClose={handleClose}
-                        aria-labelledby="simple-modal-title"
-                        aria-describedby="simple-modal-description"
+                  className={classes.modal}
+                  disableBackdropClick
+                  open={modalOpen}
+                  onClose={handleClose}
+                  aria-labelledby="simple-modal-title"
+                  aria-describedby="simple-modal-description"
                     >
                     
-                <div className = {classes.paper}>
-                    <AddAssignment closeModal = {handleClose}/>
-                </div>
+                  <div className = {classes.paper}>
+                      <AddAssignment closeModal = {handleClose}/>
+                  </div>
                 </Modal>
             </div>
             : null}
@@ -128,23 +174,23 @@ export default function CourseAssignments(props) {
         component="nav"
         className={classes.root}
         >
-        <ListItem button onClick={handleAssignmentClick}>
+        <ListItem button onClick={handleAssignmentHeadClick} key="assignmentHead">
             <ListItemIcon>
             <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Upcoming Assignments" />
-            {assignmentOpen ? <ExpandLess /> : <ExpandMore />}
+            {assignmentListOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={assignmentOpen} timeout="auto" unmountOnExit>
+        <Collapse in={assignmentListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
 
             {upcomingAssignments.map(currentAssignment => (
                 <div>
-                    <ListItem button className={classes.nested}>
-                        <ListItemText primary={currentAssignment.title} 
-                        secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.points + " pts"}  />
-                    </ListItem>
-                    <Divider />
+                  <ListItem button className={classes.nested} key={currentAssignment.assignmentID} onClick={() => handleAssignmentClick(currentAssignment.assignmentID)}>
+                      <ListItemText primary={currentAssignment.title} 
+                      secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
+                  </ListItem>
+                  <Divider />
                 </div>
                 
             ))}
@@ -156,20 +202,20 @@ export default function CourseAssignments(props) {
       component="nav"
       className={classes.root}
         >
-        <ListItem button onClick={handlePastAssignmentClick}>
+        <ListItem button onClick={handlePastAssignmentHeadClick} key="pastAssignmentHead">
             <ListItemIcon>
             <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Past Assignments" />
-            {pastAssignmentOpen ? <ExpandLess /> : <ExpandMore />}
+            {pastAssignmentListOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={pastAssignmentOpen} timeout="auto" unmountOnExit>
+        <Collapse in={pastAssignmentListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
             {pastAssignments.map(currentAssignment => (
                 <div>
-                    <ListItem button className={classes.nested}>
+                    <ListItem button className={classes.nested} key={currentAssignment.assignmentID} onClick={() => handlePastAssignmentClick(currentAssignment.assignmentID)}>
                         <ListItemText primary={currentAssignment.title} 
-                        secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.points + " pts"}  />
+                        secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
                     </ListItem>
                     <Divider />
                 </div>

@@ -10,21 +10,19 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 
 function App(props) {
-  // props
-  const { isAuthenticated, isVerifying } = props;
 
   return (
     // returns protected route if user authenticated, otherwise login page
     <div className="App">
       <Switch>
+      <Route path="/login" component={Login} />
         <ProtectedRoute
-          exact
           path="/"
           component={Home}
-          isAuthenticated={isAuthenticated}
-          isVerifying={isVerifying}
+          isAuthenticated={props.isAuthenticated}
+          isLoggingIn={props.isLoggingIn}
         />
-        <Route path="/login" component={Login} />
+        
       </Switch>
     </div>
     // for testing Home Page without needing to sign in, comment above and uncomment <Home />
@@ -35,7 +33,7 @@ function App(props) {
 function mapStateToProps(state) {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    isVerifying: state.auth.isVerifying
+    isLoggingIn: state.auth.isLoggingIn
   };
 }
 export default connect(mapStateToProps)(App);

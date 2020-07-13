@@ -2,9 +2,8 @@ package com.CoolioCoders.LMS.controllers;
 
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
-import com.CoolioCoders.LMS.models.Course;
-import com.CoolioCoders.LMS.models.MeetingDays;
-import com.CoolioCoders.LMS.models.User;
+import com.CoolioCoders.LMS.models.*;
+import com.CoolioCoders.LMS.services.AssignmentService;
 import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
 import net.minidev.json.JSONObject;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -26,8 +26,11 @@ public class CourseController {
 
     @Autowired
     private LMSUserDetailsService userService;
+
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private AssignmentService assignmentService;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -87,7 +90,22 @@ public class CourseController {
         return ok(model);
     }
 
-    @GetMapping("/{courseId}")
+    @GetMapping("/details/{courseId}")
+    public ResponseEntity<Map<Object, Object>> getCourseDetails(@PathVariable String courseId){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            Course course = courseService.findById(courseId);
+            model.put("message", "success");
+            model.put("course", courseService.courseToJSONResponse(course));
+            model.put("assignments", assignmentService.getSimplifiedAssignmentList(assignmentService.findByCourseId(courseId)));
+        }catch(Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
+
+    @GetMapping("/enrolledstudents/{courseId}")
     public ResponseEntity<Map<Object, Object>> getEnrolledStudents(Principal principalUser, @PathVariable String courseId){
         Map<Object, Object> model = new HashMap<>();
         try {

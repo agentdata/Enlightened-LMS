@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core/styles"
 import { Typography, Button, List, ListItem, 
-        TextField, MenuItem } from '@material-ui/core';
+        TextField } from '@material-ui/core';
 import http from '../../api/http';
 
 const styles = theme => ({
@@ -212,7 +212,7 @@ class AddAssignment extends Component {
         http.createNewAssignment(JSON.stringify(assignmentBody))
         .then( async (response) => {
             const body = await response.json()
-            if(response.status == 200 && body["message"] === "Successfully added new assignment"){
+            if(response.status === 200 && body["message"] === "Successfully added new assignment"){
                 this.props.closeModal();
                 //TODO make api call to get courses to reflect new course, or add it to the state to re-render since we know it successfully was added to DB.
 

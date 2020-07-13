@@ -7,12 +7,26 @@ import java.time.LocalDateTime;
 
 public class SimplifiedAssignment {
 
+    private String id;
     private String title;
     private LocalDateTime dueDate;
+    private String courseId;
 
-    public SimplifiedAssignment(String title, LocalDateTime dueDate){
+    public SimplifiedAssignment() {}
+
+    public SimplifiedAssignment(String id, String title, LocalDateTime dueDate, String courseId) {
+        this.id = id;
         this.title = title;
         this.dueDate = dueDate;
+        this.courseId = courseId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -29,5 +43,13 @@ public class SimplifiedAssignment {
 
     public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
     }
 }

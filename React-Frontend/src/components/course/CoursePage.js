@@ -8,7 +8,6 @@ import CourseAnnouncements from './CourseAnnouncements'
 import CourseDiscussions from './CourseDiscussions'
 import { withStyles } from '@material-ui/core/styles'
 
-
 const styles = theme => ({
     main: {
         width: "100%"

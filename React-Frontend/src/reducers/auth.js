@@ -11,11 +11,9 @@ export default (
     state = {
         isLoggingIn: false,
         isLoggingOut: false,
-        isVerifying: false,
         loginError: false,
         logoutError: false,
         isAuthenticated: false,
-        user: {}
     },
     action
 ) => {
@@ -31,7 +29,6 @@ export default (
                 ...state,
                 isLoggingIn: false,
                 isAuthenticated: true,
-                user: action.user
             };
         case LOGIN_FAIL:
             return {
@@ -51,7 +48,6 @@ export default (
                 ...state,
                 isLoggingOut: false,
                 isAuthenticated: false,
-                user: {}
             };
         case LOGOUT_FAIL:
             return {

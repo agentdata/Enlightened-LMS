@@ -58,7 +58,6 @@ class Home extends Component {
   render() {
     const { classes } = this.props;
     return (
-        
       <Router>
         <div>
           <Navbar className={classes.nav} dispatch={this.handleLogout}/>
@@ -76,12 +75,11 @@ class Home extends Component {
         </div>
       </Router>
     );
-    
   }
 }
 function mapStateToProps(state) {
   return {
-    isLogginIn: state.auth.isLoggingIn,
+    isLoggingIn: state.auth.isLoggingIn,
     isLoggingOut: state.auth.isLoggingOut,
     logoutError: state.auth.logoutError
   };
