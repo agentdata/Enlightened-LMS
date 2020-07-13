@@ -146,8 +146,10 @@ const EnhancedTableToolbar = (props) => {
     http.enrollForCourse(JSON.stringify(body))    
     .then( async(response) => {
         var body = await response.json();
+        // console.log(response.status)
+        // console.log(body["message"])
         if(response.status == 200 && body["message"] === "Student registration successful"){
-          //props.closeModal()
+          props.closeModal()
         }
     })
     .catch((e) => {
@@ -288,7 +290,7 @@ export default function EnhancedTable(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} selected = {selected}/>
+        <EnhancedTableToolbar numSelected={selected.length} selected = {selected} closeModal={props.closeModal}/>
         <TableContainer>
           <Table
             className={classes.table}
