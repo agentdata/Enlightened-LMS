@@ -62,7 +62,7 @@ class HomeToDo extends React.Component {
     .then( async (response) => {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "success") {
-        console.log(body)
+        console.log("All assignments response: ", body)
         var assignments = [];
         for (let a in body["assignments"]) {
           this.setState({
@@ -71,6 +71,11 @@ class HomeToDo extends React.Component {
         }
       }
     })
+  }
+
+  componentDidMount() {
+    this.getAllAssignments();
+    console.log(this.state.assignments)
   }
 
   render() {

@@ -60,7 +60,7 @@ class CourseToDo extends React.Component {
     .then( async (response) => {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "success") {
-        console.log(body)
+        console.log("Course specific Assignments response:", body)
         var assignments = [];
         for (let a in body["assignments"]) {
           this.setState({
@@ -73,7 +73,6 @@ class CourseToDo extends React.Component {
 
   componentDidMount() {
     this.getCourseAssignments();
-    console.log(this.state.assignments);
   }
 
   render() {
