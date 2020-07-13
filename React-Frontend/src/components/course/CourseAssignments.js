@@ -1,22 +1,17 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import AddAssignment from './AddAssignment'
-import Link from '@material-ui/core/Link'
 import CourseAssignment from './CourseAssignment'
 
 const useStyles = makeStyles((theme) => ({
@@ -81,14 +76,16 @@ export default function CourseAssignments(props) {
         description: "This is the third assignment",
         maxPoints: 100,
         dueDate: "7/7/2020 11:59 PM",
-        assignmentID: '3'
+        assignmentID: '3',
+        submissionType: "TEXTBOX"
     },
     {
         title: "Assignment 4",
         description: "Assignment 4 yo",
         maxPoints: 150,
         dueDate: "7/8/2020 11:59 PM",
-        assignmentID: '4'
+        assignmentID: '4',
+        submissionType: "FILE_UPLOAD"
     }
   ])
   const classes = useStyles();
@@ -137,6 +134,7 @@ export default function CourseAssignments(props) {
 
   const handleAssignmentClose = () => {
     setAssignmentModalOpen(false)
+    setAssignmentClicked({assignmentID: -1})
   }
 
   return (
@@ -225,9 +223,6 @@ export default function CourseAssignments(props) {
             </List>
         </Collapse>
         </List>
-        <Button component={Link} to="test-url">
-          Test Button
-        </Button>
     </div>
 
     

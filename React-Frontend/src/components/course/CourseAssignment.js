@@ -14,8 +14,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
-import Modal from '@material-ui/core/Modal'
-import AddAssignment from './AddAssignment'
+import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,19 +26,6 @@ const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
-  assignmentsDiv: {
-      width: '100%',
-      margin: '20px'
-  },
-  listItemRight: {
-      textAlign: "right",
-      paddingRight: "10px"
-  },
-  addAssignmentBtn: {
-      backgroundColor: "white",
-      marginBottom: "10px",
-      color: "#f44336"
-  },
   paper: {
     position: 'relative',
     maxWidth: 800,
@@ -50,10 +36,21 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     top: "100px"
   },
+  contentDiv: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "Space-between",
+    padding: "20px"
+  },
+  submitDiv: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    padding: "20px"
+  }
 }));
 
 export default function CourseAssignment(props) {
-
 
   const classes = useStyles();
 //   const isInstructor = sessionStorage.getItem("isInstructor")
@@ -63,9 +60,38 @@ export default function CourseAssignment(props) {
   return (
     
     <div>
-      <Button>
-        {assignmentClicked.assignmentID} Test
+      <Button onClick={props.closeModal}>
+        Cancel
       </Button>
+      <div className={classes.contentDiv}>
+        <Typography variant="h3">
+          {assignmentClicked.title}
+        </Typography>
+      </div>
+      <Divider />
+      <div className={classes.contentDiv}>
+        <Typography>
+          Points Possible: {assignmentClicked.maxPoints}
+        </Typography>
+        <Typography>
+          Due: {assignmentClicked.dueDate}
+        </Typography>
+        <Typography>
+          {assignmentClicked.submissionType === "TEXTBOX" ? 'Submission Type: Text Input' : 'Submission Type: File Upload'}
+        </Typography>
+      </div>
+      <Divider />
+      <div className={classes.contentDiv}>
+        <Typography>
+          {assignmentClicked.description}
+        </Typography>
+      </div>
+      <Divider />
+      <div className={classes.submitDiv}>
+        <Button>
+          Submit Assignment
+        </Button>
+      </div>
     </div>
     
   );
