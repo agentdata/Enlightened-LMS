@@ -60,7 +60,10 @@ export default {
     getCurrentAccountBalance(){
         return fetch(API_BASE_URL+'/api/balance/amount', makeInit("GET", true, null))
     },
-    getUpcomingAssignments(){
+    getAllAssignments(){
+        return fetch(API_BASE_URL+'/api/assignment/simplified/', makeInit("GET", true, null))
+    },
+    getCourseAssignments() {
         return fetch(API_BASE_URL+'/api/assignment/simplified/{courseId}', makeInit("GET", true, null))
     },
     updateUserAvatar(body){

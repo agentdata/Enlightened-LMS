@@ -44,7 +44,7 @@ const styles = theme => ({
   },
 });
 
-class HomeToDo extends React.Component {
+class CourseToDo extends React.Component {
 
   constructor(props) {
     super(props);
@@ -55,8 +55,8 @@ class HomeToDo extends React.Component {
       };
   }
 
-  getUpcomingAssignments() {
-    http.getUpcomingAssignments()
+  getCourseAssignments() {
+    http.getCourseAssignments()
     .then( async (response) => {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "success") {
@@ -72,7 +72,7 @@ class HomeToDo extends React.Component {
   }
 
   componentDidMount() {
-    this.getUpcomingAssignments();
+    this.getCourseAssignments();
     console.log(this.state.assignments);
   }
 
@@ -119,4 +119,4 @@ class HomeToDo extends React.Component {
     }
 }
 
-export default withStyles(styles)(HomeToDo);
+export default withStyles(styles)(CourseToDo);
