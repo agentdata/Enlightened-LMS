@@ -99,6 +99,14 @@ public class LMSUserDetailsService implements UserDetailsService{
         userRepository.deleteById(id);
     }
 
+    public int getCreditHours(User user){
+        int credits = 0;
+        for(String courseId: user.getCourseIds()){
+            credits += courseService.findById(courseId).getCredits();
+        }
+        return credits;
+    }
+
     public UserProfile findUserProfileByEmail(String email){
         User user = userRepository.findByEmail(email);
         return new UserProfile(user);
