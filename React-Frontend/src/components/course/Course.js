@@ -35,7 +35,6 @@ const Course = (props) => {
     return (
         <div className={classes.courseContainer}>
             { props.course ? (
-                <Link to="course-page" style={{textDecoration: 'none'}} className={classes.cardRoot}>
                     <Card className={classes.courseCard}>
                         <Container className={classes.cardColor} 
                         /* style={{backgroundColor: props.course.cardColor}}
@@ -56,7 +55,6 @@ const Course = (props) => {
                             </Typography>
                         </CardContent>
                     </Card>
-                </Link>
             ): null }
         </div>
     );

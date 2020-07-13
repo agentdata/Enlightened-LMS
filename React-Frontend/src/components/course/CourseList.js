@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal';
 import AddCourse from './AddCourse';
 import CourseSignUp from './CourseSignUp'
+import { Link } from 'react-router-dom'
 import http from '../../api/http'
 
 const styles = theme => ({
@@ -246,7 +247,10 @@ class CourseList extends Component {
                         <Grid container spacing={2} style ={{padding: 24}}>
                             {this.state.courses.map(currentCourse => (
                                 <Grid item xs={6} s={4} lg={3} xl={3} key={currentCourse.title} className={classes.course}>
-                                    <Course course={currentCourse} />
+                                    <Link to={"course-page"} style={{textDecoration: 'none'}} className={classes.cardRoot}>
+                                        <Course course={currentCourse} />
+                                    </Link>
+                                   
                                 </Grid>
                             ))}
                         </Grid>
