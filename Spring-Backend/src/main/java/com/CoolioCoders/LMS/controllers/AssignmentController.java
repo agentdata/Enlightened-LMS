@@ -153,20 +153,7 @@ public class AssignmentController {
     public ResponseEntity<Map<Object, Object>> getSimplifiedAssignments(Principal principalUser, @PathVariable String courseId){
         Map<Object, Object> model = new HashMap<>();
         try {
-            User user = userService.findUserByEmail(principalUser.getName());
-            List<Assignment> assignmentList = assignmentService.findByCourseId(courseId);
-            List<SimplifiedAssignment> simplifiedAssignmentList = new ArrayList<>();
-
-            for(int i = 0; i < assignmentList.size(); i++) {
-                Assignment currentAssignment = assignmentList.get(i);
-                String title = currentAssignment.getTitle();
-                LocalDateTime dueDate = currentAssignment.getDueDate();
-
-                simplifiedAssignmentList.add(new SimplifiedAssignment(title, dueDate));
-            }
-
-
-            model.put("courses", simplifiedAssignmentList);
+            model.put("assignments", assignmentService.getSimplifiedAssignmentList(assignmentService.findByCourseId(courseId)));
             model.put("message", "success");
         }
         catch (Exception e){

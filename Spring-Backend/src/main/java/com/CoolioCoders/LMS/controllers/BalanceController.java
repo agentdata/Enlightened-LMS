@@ -3,6 +3,7 @@ package com.CoolioCoders.LMS.controllers;
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
 import com.CoolioCoders.LMS.models.Balance;
 import com.CoolioCoders.LMS.models.Course;
+import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.services.BalanceService;
 import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
@@ -38,10 +39,12 @@ public class BalanceController {
     @GetMapping("/amount")
     public ResponseEntity<Map<Object, Object>> getBalance(Principal principalUser){
         Map<Object, Object> model = new HashMap<>();
-
+        //trigger recalculate and confirm balance to send back.
         try{
-            List<Balance> balance = balanceService.getBalance(userService.findUserByEmail(principalUser.getName()));
+            User user = userService.findUserByEmail(principalUser.getName());
+            List<Balance> balance = balanceService.getBalance(user);
             model.put("balance", balance);
+            model.put("totalCredits", userService.getCreditHours(user));
             model.put("message", "Successfully retrieved balance");
         }
         catch(Exception e){

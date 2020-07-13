@@ -49,6 +49,13 @@ public class UserController {
         userService.deleteById(id);
     }
 
+    @GetMapping("/validate")
+    public ResponseEntity<Map<Object, Object>> validateToken(){
+        Map<Object, Object> model = new HashMap<>();
+        model.put("message","Token is valid.");
+        return ok(model);
+    }
+
     @PutMapping("/profile")
     public User update(Principal principalUser, @RequestBody User updatedUser) {
         return userService.update(principalUser.getName(), updatedUser);
