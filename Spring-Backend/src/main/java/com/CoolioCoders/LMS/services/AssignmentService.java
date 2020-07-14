@@ -3,6 +3,7 @@ package com.CoolioCoders.LMS.services;
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
 import com.CoolioCoders.LMS.models.Assignment;
 import com.CoolioCoders.LMS.models.AssignmentSubmission;
+import com.CoolioCoders.LMS.models.Course;
 import com.CoolioCoders.LMS.models.SimplifiedAssignment;
 import com.CoolioCoders.LMS.repositories.AssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AssignmentService {
@@ -55,5 +58,19 @@ public class AssignmentService {
 
         return simplifiedAssignmentList;
     }
+    public Map<Object, Object> getAssignmentDetailsAsJson(Assignment assignment){
+        Map<Object, Object> body = new LinkedHashMap<>();
+
+        body.put("id", assignment.getId());
+        body.put("title", assignment.getTitle());
+        body.put("description", assignment.getDescription());
+        body.put("submissionType", assignment.getSubmissionType());
+        body.put("dueDate", assignment.getDueDate());
+        body.put("maxPoints", assignment.getMaxPoints());
+        body.put("courseId", assignment.getCourseId());
+
+        return body;
+    }
+
 
 }

@@ -167,9 +167,33 @@ public class AssignmentController {
         return ok(model);
     }
 
+    @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
+    @GetMapping("/{assignmentId}")
+    public ResponseEntity<Map<Object, Object>> getAssignmentDetailsById(@PathVariable String assignmentId){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            Assignment assignment = assignmentService.findByAssignmentId(assignmentId);
+
+            // user making request must either be a student enrolled in course or the course instructor
+            if(assignment != null){
+                model.put("assignment", assignmentService.getAssignmentDetailsAsJson(assignment));
+
+                //if no error then return success message and OK status
+                model.put("message", "Success");
+            }
+            else {
+                model.put("message", "Error: assignment may not exist");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
 
     @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
-    @GetMapping("/{courseId}")
+    @GetMapping("/bycourse/{courseId}")
     public ResponseEntity<Map<Object, Object>> userCourseAssignments(Principal principalUser, @PathVariable String courseId){
         Map<Object, Object> model = new HashMap<>();
         try {
