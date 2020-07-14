@@ -69,6 +69,9 @@ class CourseToDo extends React.Component {
         }
       }
     })
+    .catch((e) => {
+      console.warn("There was an error getting course assignments: ", e);
+    })
   }
 
   componentDidMount() {

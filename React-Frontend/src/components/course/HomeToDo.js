@@ -53,7 +53,8 @@ class HomeToDo extends React.Component {
 
     this.state = {
       isLoggedIn: false,
-      assignments: []
+      assignments: [],
+      // error: null
     };
   }
 
@@ -70,6 +71,9 @@ class HomeToDo extends React.Component {
           })
         }
       }
+    })
+    .catch((e) => {
+      console.warn("There was an error getting all assignments: ", e);
     })
   }
 

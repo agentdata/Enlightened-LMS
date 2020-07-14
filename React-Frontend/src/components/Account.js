@@ -23,8 +23,14 @@ class Account extends React.Component {
 
         this.state = {
             account: {
-                currentBalance: '',
                 totalCreditHours: 0,
+                balanceDetails: [{
+                    user: {},
+                    balance: 0,
+                    paid: false,
+                    year: 0,
+                    semester: null
+                }]
             },
             payment: {
                 fullName: '',
@@ -63,9 +69,10 @@ class Account extends React.Component {
         .then( async(res) => {
             const data = await res.json();
             if(res.status === 200 && data["message"] === "Successfully retrieved balance"){
+                console.log(data)
                 return this.setState({
                     account: {
-                        currentBalance: data["balance"],
+                        balanceDetails: data["balance"],
                         totalCreditHours: data["totalCredits"]
                     }
                 })
@@ -232,8 +239,7 @@ class Account extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { account } = this.state;
-        const { currentBalance, totalCreditHours } = this.state.account;
+        const { totalCreditHours } = this.state.account;
 
         return (
             <Container >
@@ -242,10 +248,10 @@ class Account extends React.Component {
                         <Typography variant="h3">
                             Account Details
                         </Typography>
-                        { account ? (
+                        { this.state ? (
                             <List>
                                 <ListItem>
-                                    <Typography variant="h5">Current balance: {currentBalance}</Typography>
+                                    <Typography variant="h5">Current balance: { this.state.account.balanceDetails.balance }</Typography>
                         <Button className={classes.payBtn} onClick={this.payButtonPressed}>{this.state.showPaymentForm ? "Cancel" : "Pay balance"}</Button>
                                 </ListItem>
                                 {this.state.showPaymentForm && 
