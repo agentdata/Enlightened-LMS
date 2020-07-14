@@ -69,7 +69,7 @@ class Home extends Component {
               <Route path="/messages" exact component={Messages} />
               <Route path="/profile" exact component={Profile} />
               <Route path="/account" exact component={Account} />
-              <Route path="/course-page" exact component={CoursePage} />
+              <Route path="/course/:id" component={CoursePage} />
             </Switch>
           </div>
         </div>

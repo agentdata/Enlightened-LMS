@@ -10,7 +10,6 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 
 function App(props) {
-
   return (
     // returns protected route if user authenticated, otherwise login page
     <div className="App">
@@ -22,12 +21,11 @@ function App(props) {
           isAuthenticated={props.isAuthenticated}
           isLoggingIn={props.isLoggingIn}
         />
-        
       </Switch>
     </div>
     // for testing Home Page without needing to sign in, comment above and uncomment <Home />
     // <Home />
-  );
+  )
 }
 // maps state to App props
 function mapStateToProps(state) {

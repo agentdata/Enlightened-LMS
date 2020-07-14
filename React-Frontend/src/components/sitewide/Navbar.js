@@ -140,7 +140,7 @@ const Navbar = (props) => {
         onClose={handleMenuClose}
       >
 
-        <MenuItem onClick={handleMenuClose} to="profile" component={Link}>Profile</MenuItem>
+        <MenuItem onClick={handleMenuClose} to="/profile" component={Link}>Profile</MenuItem>
 
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
@@ -219,14 +219,14 @@ const Navbar = (props) => {
                         </Badge>
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Calendar" arrow component={Link} to="calendar">
+                  <Tooltip title="Calendar" arrow component={Link} to="/calendar">
                     <IconButton color="inherit">
                         <Badge color="secondary">
                           <DateRangeIcon/>
                         </Badge>
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Messages" arrow component={Link} to="messages">
+                  <Tooltip title="Messages" arrow component={Link} to="/messages">
                     <IconButton color="inherit">
                       <Badge color="secondary">
                         <MailIcon />

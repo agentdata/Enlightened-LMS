@@ -65,7 +65,7 @@ class CourseList extends Component {
                 {
                     title: 'Dummy Course',
                     description: 'Another course description',
-                    url: '/dummycourse2',
+                    id: '',
                     image: ''
                 },
             ],
@@ -90,7 +90,7 @@ class CourseList extends Component {
                     simpleCourses[i] = {
                         title: body["courses"][i]["courseName"],
                         description: body["courses"][i]["description"],
-                        url: '/dummycourse4',
+                        id: body["courses"][i]["id"],
                         image: ''
                     }
                 }
@@ -118,7 +118,7 @@ class CourseList extends Component {
                     simpleCourses[i] = {
                         title: body["courses"][i]["courseName"],
                         description: body["courses"][i]["description"],
-                        url: '/dummycourse4',
+                        id: body["courses"][i]["id"],
                         image: ''
                     }
                 }
@@ -145,7 +145,7 @@ class CourseList extends Component {
                     simpleCourses[i] = {
                         title: body["courses"][i]["courseName"],
                         description: body["courses"][i]["description"],
-                        url: '/dummycourse4',
+                        id: body["courses"][i]["id"],
                         image: ''
                     }
                 }
@@ -247,7 +247,7 @@ class CourseList extends Component {
                         <Grid container spacing={2} style ={{padding: 24}}>
                             {this.state.courses.map(currentCourse => (
                                 <Grid item xs={6} s={4} lg={3} xl={3} key={currentCourse.title} className={classes.course}>
-                                    <Link to={"course-page"} style={{textDecoration: 'none'}} className={classes.cardRoot}>
+                                    <Link to={"/course/"+currentCourse.id} style={{textDecoration: 'none'}} className={classes.cardRoot}>
                                         <Course course={currentCourse} />
                                     </Link>
                                    
