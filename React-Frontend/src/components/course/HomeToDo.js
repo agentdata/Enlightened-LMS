@@ -64,7 +64,7 @@ class HomeToDo extends React.Component {
       if (response.status === 200 && body["message"] === "success") {
         console.log("All assignments response: ", body)
         var assignments = [];
-        for (let a in body["assignments"]) {
+        for (let a of body["assignments"]) {
           this.setState({
             assignments: [...this.state.assignments, a]
           })
@@ -75,7 +75,6 @@ class HomeToDo extends React.Component {
 
   componentDidMount() {
     this.getAllAssignments();
-    console.log(this.state.assignments)
   }
 
   render() {
@@ -105,7 +104,7 @@ class HomeToDo extends React.Component {
                           {currentAssignment.course}
                         </Typography>
                         <br />
-                        {"Due: " + currentAssignment.due}
+                        {"Due: " + currentAssignment.dueDate}
                     </React.Fragment>
                   }
                   />
