@@ -64,7 +64,6 @@ class HomeToDo extends React.Component {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "success") {
         console.log("All assignments response: ", body)
-        var assignments = [];
         for (let a of body["assignments"]) {
           this.setState({
             assignments: [...this.state.assignments, a]
@@ -85,7 +84,7 @@ class HomeToDo extends React.Component {
     const { classes } = this.props;
 
     return (
-      <List className={classes.root}>
+      <List className={ classes.root }>
   
         <ListItem alignItems="flex-start">
             <ListItemText primary="Upcoming Assignments" />
@@ -94,10 +93,10 @@ class HomeToDo extends React.Component {
   
         { this.state.assignments ? ( 
          this.state.assignments.map(currentAssignment => (
-            <ListItem alignItems="flex-start" key={currentAssignment.title + " " + currentAssignment.course}>
-              <Link href={currentAssignment.link}>
+            <ListItem alignItems="flex-start" key={ currentAssignment.title + " " + currentAssignment.course }>
+              <Link href={ currentAssignment.link }>
                 <ListItemText
-                  primary={currentAssignment.title}
+                  primary={ currentAssignment.title }
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -105,10 +104,10 @@ class HomeToDo extends React.Component {
                         variant="body2"
                         className={classes.inline}
                         color="textPrimary">
-                          {currentAssignment.course}
+                          { currentAssignment.course }
                         </Typography>
                         <br />
-                        {"Due: " + currentAssignment.dueDate}
+                        { "Due: " + currentAssignment.dueDate }
                     </React.Fragment>
                   }
                   />

@@ -56,13 +56,12 @@ class CourseToDo extends React.Component {
   }
 
   getCourseAssignments() {
-    http.getCourseAssignments()
+    http.getCourseAssignments(this.props.match.params.id)
     .then( async (response) => {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "success") {
         console.log("Course specific Assignments response:", body)
-        var assignments = [];
-        for (let a in body["assignments"]) {
+        for (let a of body["assignments"]) {
           this.setState({
             assignments: [...this.state.assignments, a]
           })
@@ -82,30 +81,30 @@ class CourseToDo extends React.Component {
     const { classes } = this.props;
 
     return (
-      <List className={classes.root}>
+      <List className={ classes.root }>
   
         <ListItem alignItems="flex-start">
             <ListItemText primary="Upcoming Assignments" />
         </ListItem>
         <Divider component="li" />
   
-        {this.state.assignments ? ( 
+        { this.state.assignments ? ( 
           this.state.assignments.map(currentAssignment => (
-            <ListItem alignItems="flex-start" key={currentAssignment.title + " " + currentAssignment.due}>
-              <Link href={currentAssignment.link}>
+            <ListItem alignItems="flex-start" key={ currentAssignment.title + " " + currentAssignment.dueDate }>
+              <Link href={ currentAssignment.link }>
                 <ListItemText
-                  primary={currentAssignment.title}
+                  primary={ currentAssignment.title }
                   secondary={
                     <React.Fragment>
                       <Typography
                         component="span"
                         variant="body2"
-                        className={classes.inline}
+                        className={ classes.inline }
                         color="textPrimary">
-                          {currentAssignment.course}
+                          { currentAssignment.course }
                         </Typography>
                         <br />
-                        {"Due: " + currentAssignment.due}
+                        { "Due: " + currentAssignment.dueDate }
                     </React.Fragment>
                   }
                   />

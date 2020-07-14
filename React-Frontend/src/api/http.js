@@ -63,8 +63,8 @@ export default {
     getAllAssignments(){
         return fetch(API_BASE_URL+'/api/assignment/simplified/', makeInit("GET", true, null))
     },
-    getCourseAssignments() {
-        return fetch(API_BASE_URL+'/api/assignment/simplified/{courseId}', makeInit("GET", true, null))
+    getCourseAssignments(courseId) {
+        return fetch(API_BASE_URL+`/api/assignment/simplified/${courseId}`, makeInit("GET", true, null))
     },
     updateUserAvatar(body){
         return fetch(API_BASE_URL+'/api/user/profile/avatar', makeInit("PUT", true, body))
