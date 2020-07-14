@@ -7,6 +7,7 @@ public class AssignmentSubmission { //Embed within the assignment object
     String studentId;
     LocalDateTime submittedTimestamp;
     String submissionContent;
+    FileUpload submittedFile;
     boolean isGraded;
     double pointsAwarded;
 
@@ -34,6 +35,14 @@ public class AssignmentSubmission { //Embed within the assignment object
 
     public void setSubmissionContent(String submissionContent) {
         this.submissionContent = submissionContent;
+    }
+
+    public FileUpload getSubmittedFile() {
+        return submittedFile;
+    }
+
+    public void setSubmittedFile(FileUpload submittedFile) {
+        this.submittedFile = submittedFile;
     }
 
     public boolean isGraded() {

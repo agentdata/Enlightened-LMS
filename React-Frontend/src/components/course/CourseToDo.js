@@ -44,7 +44,7 @@ const styles = theme => ({
   },
 });
 
-class HomeToDo extends React.Component {
+class CourseToDo extends React.Component {
 
   constructor(props) {
     super(props);
@@ -55,12 +55,12 @@ class HomeToDo extends React.Component {
       };
   }
 
-  getUpcomingAssignments() {
-    http.getUpcomingAssignments()
+  getCourseAssignments() {
+    http.getCourseAssignments()
     .then( async (response) => {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "success") {
-        console.log(body)
+        console.log("Course specific Assignments response:", body)
         var assignments = [];
         for (let a in body["assignments"]) {
           this.setState({
@@ -69,11 +69,13 @@ class HomeToDo extends React.Component {
         }
       }
     })
+    .catch((e) => {
+      console.warn("There was an error getting course assignments: ", e);
+    })
   }
 
   componentDidMount() {
-    this.getUpcomingAssignments();
-    console.log(this.state.assignments);
+    this.getCourseAssignments();
   }
 
   render() {
@@ -119,4 +121,4 @@ class HomeToDo extends React.Component {
     }
 }
 
-export default withStyles(styles)(HomeToDo);
+export default withStyles(styles)(CourseToDo);

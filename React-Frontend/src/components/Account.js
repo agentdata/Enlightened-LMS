@@ -23,8 +23,14 @@ class Account extends React.Component {
 
         this.state = {
             account: {
-                currentBalance: '',
                 totalCreditHours: 0,
+                balanceDetails: [{
+                    user: {},
+                    balance: 0,
+                    paid: false,
+                    year: 0,
+                    semester: null
+                }]
             },
             payment: {
                 fullName: '',
@@ -59,27 +65,18 @@ class Account extends React.Component {
     }
 
     getUserAccountInfo() {
-        var statusCode;
-        const headers = new Headers();
-        headers.append('Authorization', 'Bearer '+sessionStorage.getItem("token"));
-        headers.append('Access-Control-Allow-Origin','*');
-        headers.append('Access-Control-Allow-Methods','GET, PUT, POST, DELETE, OPTIONS');
-        const init = {
-            method: 'GET',
-            headers
-        };
-
-        fetch('https://cooliocoders.ddns.net/api/balance/amount', init)
+        http.getCurrentAccountBalance()
         .then( async(res) => {
-            statusCode = res.status;
             const data = await res.json();
-
-            return this.setState({
-                account: {
-                    currentBalance: data["balance"],
-                    totalCreditHours: data["totalCredits"]
-                }
-            })
+            if(res.status === 200 && data["message"] === "Successfully retrieved balance"){
+                console.log(data)
+                return this.setState({
+                    account: {
+                        balanceDetails: data["balance"],
+                        totalCreditHours: data["totalCredits"]
+                    }
+                })
+            }
         })
         .catch((e) => {
             console.warn("There was an error fetching account details: ", e)
@@ -242,8 +239,7 @@ class Account extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { account } = this.state;
-        const { currentBalance, totalCreditHours } = this.state.account;
+        const { totalCreditHours } = this.state.account;
 
         return (
             <Container >
@@ -252,10 +248,10 @@ class Account extends React.Component {
                         <Typography variant="h3">
                             Account Details
                         </Typography>
-                        { account ? (
+                        { this.state ? (
                             <List>
                                 <ListItem>
-                                    <Typography variant="h5">Current balance: {currentBalance}</Typography>
+                                    <Typography variant="h5">Current balance: { this.state.account.balanceDetails.balance }</Typography>
                         <Button className={classes.payBtn} onClick={this.payButtonPressed}>{this.state.showPaymentForm ? "Cancel" : "Pay balance"}</Button>
                                 </ListItem>
                                 {this.state.showPaymentForm && 

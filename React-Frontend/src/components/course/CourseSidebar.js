@@ -55,19 +55,19 @@ const styles = theme => ({
             <Toolbar />
             <div className={classes.drawerContainer}>
                 <List>
-                    <ListItem button key="Home" component={Link} to="course-page">
+                    <ListItem button key="Home" component={Link} to={`/course/${this.props.match.params.id}`}>
                         <ListItemIcon>
                             <HomeIcon />
                         </ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItem>
-                    <ListItem button key="Assignments" component={Link} to="course-assignments">
+                    <ListItem button key="Assignments" component={Link} to={`/course/${this.props.match.params.id}/course-assignments`}>
                         <ListItemIcon>
                             <AssignmentIcon />
                         </ListItemIcon>
                         <ListItemText primary="Assignments" />
                     </ListItem>
-                    <ListItem button key="Grades" component={Link} to="course-grades">
+                    <ListItem button key="Grades" component={Link} to={`/course/${this.props.match.params.id}/course-grades`}>
                         <ListItemIcon>
                             <CheckBoxIcon />
                         </ListItemIcon>
@@ -76,13 +76,13 @@ const styles = theme => ({
                 </List>
                 <Divider />
                 <List>
-                    <ListItem button key="Announcements" component={Link} to="course-announcements">
+                    <ListItem button key="Announcements" component={Link} to={`/course/${this.props.match.params.id}/course-announcements`}>
                         <ListItemIcon>
                             <AnnouncementIcon />
                         </ListItemIcon>
                         <ListItemText primary="Announcements" />
                     </ListItem>
-                    <ListItem button key="Discussions" component={Link} to="course-discussions">
+                    <ListItem button key="Discussions" component={Link} to={`/course/${this.props.match.params.id}/course-discussions`}>
                         <ListItemIcon>
                             <ChatIcon />
                         </ListItemIcon>
@@ -92,7 +92,7 @@ const styles = theme => ({
                 <Divider />
                 <List>
                     <ListItem>
-                        <CourseToDo />
+                        <CourseToDo match={this.props.match}/>
                     </ListItem>
                 </List>
             </div>

@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import AddAssignment from './AddAssignment'
 import CourseAssignment from './CourseAssignment'
+import http from '../../api/http';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,8 +50,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CourseAssignments(props) {
+// export function getCourseAssignments(){
+//   http.getCourseAssignments(props.match.id)
+//     .then( async(response) => {
+//       var body = await response.json();
+//       if(response.status === 200 && body["message"] === "success"){
+//           var simpleCourses=[] 
+//           for (var assignment in body["assignments"]) {
+//             // if(dates.compare(assignment["dueDate"],new Date().toLocaleString())){
+//                  let x ={ 
+//                     title: assignment["title"],
+//                     description: assignment["description"],
+//                     maxPoints: assignment["maxPoints"],
+//                     dueDate: assignment["dueDate"],
+//                     assignmentID: assignment["id"],
+//                     submissionType: assignment["submissionType"]}
+//             // }
+//           }
+//       }
+//   })
+//   .catch((e) => {
+//       console.warn("There was an error retrieving instructor courses: ", e);
 
+//       this.setState({
+//           error: "There was an error retrieving instructor courses."
+//       });
+//   });
+// }
+
+export default function CourseAssignments(props) {
   const [pastAssignments, setPastAssignments] = React.useState([
     {
         title: "Assignment 1",
@@ -91,7 +119,6 @@ export default function CourseAssignments(props) {
   const classes = useStyles();
   const [assignmentListOpen, setassignmentListOpen] = React.useState(true);
   const [pastAssignmentListOpen, setpastAssignmentListOpen] = React.useState(true);
-//   const isInstructor = sessionStorage.getItem("isInstructor")
   const [modalOpen, setModalOpen] = React.useState(false)
 
   const [assignmentModalOpen, setAssignmentModalOpen] = React.useState(false);
@@ -101,8 +128,6 @@ export default function CourseAssignments(props) {
       setAssignmentModalOpen(true);
     }
  }, [assignmentClicked]);
-  const isInstructor = true
-
 
   const handleAssignmentHeadClick = () => {
     setassignmentListOpen(!assignmentListOpen);
@@ -110,7 +135,6 @@ export default function CourseAssignments(props) {
 
   const handlePastAssignmentHeadClick = () => {
     setpastAssignmentListOpen(!pastAssignmentListOpen);
-    console.log(isInstructor)
   };
 
   const handleAddAssignment = () => {
@@ -152,7 +176,7 @@ export default function CourseAssignments(props) {
             <CourseAssignment closeModal = {handleAssignmentClose} assignmentClicked = {assignmentClicked}/>
           </div>
         </Modal>
-        {isInstructor === true ?
+        {sessionStorage.getItem("isInstructor") === "true" ?
             <div>
                 <Button className={classes.addAssignmentBtn} onClick={handleAddAssignment}>+ Add New Assignment</Button>
                 <Modal

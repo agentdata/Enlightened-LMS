@@ -99,9 +99,9 @@ class Login extends Component {
             this.setState({ passwordStatus: "empty" });
         }
         if (this.state.emailStatus === "validated" && this.state.passwordStatus === "validated") {
-            const { dispatch } = this.props;
+            
             const { email, password, } = this.state;
-            dispatch(loginUser(email, password));
+            this.props.dispatch(loginUser(email, password));
             this.props.history.push('/');
         } 
     };

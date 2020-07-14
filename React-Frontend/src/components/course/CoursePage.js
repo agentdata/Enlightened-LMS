@@ -29,11 +29,9 @@ class CoursePage extends Component {
         this.state = {
             courseName: "Dummy Course",
             courseCredits: "",
-            courseDescription: "",
+            courseDescription: "",   
         }
-
     }
-    
 
     render() {
         const { classes } = this.props
@@ -42,17 +40,16 @@ class CoursePage extends Component {
                 <div className={classes.main}>
                     <div className={classes.left}>
                         <div className={classes.side}>
-                        <CourseSidebar />
+                        <CourseSidebar match={this.props.match}/>
                         </div>
                         <Switch>
-                            <Route path="/course-page" component={CourseHome} />
-                            <Route path="/course-assignments" exact component={CourseAssignments}/>
-                            <Route path="/course-grades" exact component={CourseGrades} />
-                            <Route path="/course-announcements" exact component={CourseAnnouncements} />
-                            <Route path="/course-discussions" exact component={CourseDiscussions} />
+                            <Route path={`/course/${this.props.match.params.id}/course-assignments`} exact component={CourseAssignments} match={this.props.match}/>
+                            <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGrades} />
+                            <Route path={`/course/${this.props.match.params.id}/course-announcements`} exact component={CourseAnnouncements} />
+                            <Route path={`/course/${this.props.match.params.id}/course-discussions`} exact component={CourseDiscussions} />
+                            <Route path="/" component={CourseHome} match={this.props.match} />
                         </Switch>
                     </div>
-                    {/* <Route path="/course-page" component={CourseToDo} /> */}
                 </div>
             </Router>
         )

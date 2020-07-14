@@ -1,5 +1,5 @@
 export const API_BASE_URL =  'https://api.stripe.com';
-export const API_KEY = 'pk_test_51H4HWYCI6wJm5zzTHFNrK4VpjX1W3YGJn79GiwAjW8aibKekAMwraEXJsmtPmOrrDZCKf2fmzaDmKQz2OOgfQcoL00EkxWGwHQ';
+export const API_KEY = 'pk_test_51H4HWYCI6wJm5zzTHFNrK4VpjX1W3YGJn79GiwAjW8aibKekAMwraEXJsmtPmOrrDZCKf2fmzaDmKQz2OOgfQcoL00EkxWGwHQ';   //Replace with team test key
 
 // builds init for fetch call, pass in null if there is no body.
 // example; makeInit("GET", true, null), makeInit("POST", false, body)
@@ -42,10 +42,21 @@ export function makeInit(requestType, requiresAuthorization, body){
 }
 
 export default {
+    // Requires amount, and currency.
+    // amount = 10000 <- this is actually $100.00
+    // currency = usd
     createNewPaymentIntent (body) {
         return fetch(API_BASE_URL+"/v1/payment_intents", makeInit("POST", true, body) )
     },
+    // Requires type, card[number], card[exp_month], card[exp_year], and card[cvc].
+    // type = card, card[number] = 4242424242424242, card[exp_month] = 7, card[exp_year] = 2021, card[cvc] = 314
     createNewPaymentMethod (body) {
         return fetch(API_BASE_URL+"/v1/payment_methods", makeInit("POST", true, body) )
+    },
+    // Requires payment_method
+    // payment_method = pm_card_visa
+    confirmPayment (body) {
+        var paymentIntentId; // TODO get this value from either body or another parameter
+        return fetch(API_BASE_URL+"/v1/payment_intents/" + paymentIntentId + "/confirm", makeInit("POST", true, body) )
     }
 }

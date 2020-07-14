@@ -156,7 +156,7 @@ class UserDetails extends React.Component {
                                 </ListItem>
                                 <Divider />
                                 <ListItem>
-                                    <Link to="account">
+                                    <Link to="/account">
                                         <Button className={classes.editButton}>
                                             Account Details
                                         </Button>

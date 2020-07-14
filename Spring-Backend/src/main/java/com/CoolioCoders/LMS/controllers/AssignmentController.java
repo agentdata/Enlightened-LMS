@@ -3,13 +3,17 @@ package com.CoolioCoders.LMS.controllers;
 import com.CoolioCoders.LMS.models.*;
 import com.CoolioCoders.LMS.services.AssignmentService;
 import com.CoolioCoders.LMS.services.CourseService;
+import com.CoolioCoders.LMS.services.FileStoreService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.io.File;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,6 +33,8 @@ public class AssignmentController {
     LMSUserDetailsService userService;
     @Autowired
     CourseService courseService;
+    @Autowired
+    FileStoreService fileStoreService;
 
     /*
     API Call format example
@@ -118,9 +124,76 @@ public class AssignmentController {
         return ok(model);
     }
 
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @PostMapping("/submit/uploadFile")
+    public ResponseEntity<Map<Object, Object>> assignmentFileSubmit(Principal principalUser, @RequestBody JSONObject body){
+
+        Map<Object, Object> model = new HashMap<>();
+        try{
+
+            User student = userService.findUserByEmail(principalUser.getName());
+            Course course = courseService.findById(body.getAsString("courseId"));
+
+            if(courseService.isStudentEnrolledInCourse(student, course)){
+                Assignment assignment = assignmentService.findByAssignmentId(body.getAsString("assignmentId"));
+
+                MultipartFile file = (MultipartFile) body.get("file");
+                String fileName = fileStoreService.storeFile(file, student);
+
+                FileUpload fileUpload = new FileUpload();
+                fileUpload.setFileName(fileName);
+                fileUpload.setFileSize(file.getSize());
+                fileUpload.setFileType(file.getContentType());
+                fileUpload.setFileDownloadUrl(fileStoreService.getFileAsResource(student.getId() + "/" + fileName));
+
+                AssignmentSubmission submission = new AssignmentSubmission();
+                submission.setStudentId(student.getId());
+                submission.setSubmittedTimestamp(LocalDateTime.now());
+                submission.setSubmittedFile(fileUpload);
+
+                assignmentService.saveSubmission(assignment, submission);
+
+                model.put("fileUpload", fileUpload);
+                model.put("message", "Assignment Successfully Uploaded");
+            }
+            else {
+                model.put("message", "Error: Student must be enrolled in this course");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            model.put("message", "Error: " + e.getMessage());
+        }
+        return ok(model);
+    }
 
     @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
-    @GetMapping("/{courseId}")
+    @GetMapping("/{assignmentId}")
+    public ResponseEntity<Map<Object, Object>> getAssignmentDetailsById(@PathVariable String assignmentId){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            Assignment assignment = assignmentService.findByAssignmentId(assignmentId);
+
+            // user making request must either be a student enrolled in course or the course instructor
+            if(assignment != null){
+                model.put("assignment", assignmentService.getAssignmentDetailsAsJson(assignment));
+
+                //if no error then return success message and OK status
+                model.put("message", "Success");
+            }
+            else {
+                model.put("message", "Error: assignment may not exist");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
+
+    @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
+    @GetMapping("/bycourse/{courseId}")
     public ResponseEntity<Map<Object, Object>> userCourseAssignments(Principal principalUser, @PathVariable String courseId){
         Map<Object, Object> model = new HashMap<>();
         try {
@@ -150,10 +223,32 @@ public class AssignmentController {
 
     @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
     @GetMapping("/simplified/{courseId}")
-    public ResponseEntity<Map<Object, Object>> getSimplifiedAssignments(Principal principalUser, @PathVariable String courseId){
+    public ResponseEntity<Map<Object, Object>> getSimplifiedCourseAssignments(Principal principalUser, @PathVariable String courseId){
         Map<Object, Object> model = new HashMap<>();
         try {
             model.put("assignments", assignmentService.getSimplifiedAssignmentList(assignmentService.findByCourseId(courseId)));
+            model.put("message", "success");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
+
+    @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
+    @GetMapping("/simplified")
+    public ResponseEntity<Map<Object, Object>> getSimplifiedAssignments(Principal principalUser){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+            List<Assignment> assignments = new ArrayList<>();
+
+            for (String courseId : user.getCourseIds()) {
+                assignments.addAll(assignmentService.findByCourseId(courseId));
+            }
+
+            model.put("assignments", assignmentService.getSimplifiedAssignmentList(assignments));
             model.put("message", "success");
         }
         catch (Exception e){
