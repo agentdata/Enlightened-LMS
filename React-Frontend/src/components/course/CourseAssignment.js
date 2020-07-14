@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
@@ -15,6 +15,7 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import TextareaAutosize from '@material-ui/core/TextareaAutosize'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +48,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "flex-end",
     padding: "20px"
+  },
+  textInput: {
+    width: "100%",
+    height: "150px",
+    minHeight: "150px"
+  },
+  bottomDivider: {
+    marginBottom: "20px"
   }
 }));
 
@@ -56,6 +65,26 @@ export default function CourseAssignment(props) {
 //   const isInstructor = sessionStorage.getItem("isInstructor")
   const isInstructor = true
   const assignmentClicked = props.assignmentClicked[0]
+
+  const [submitOpen, setSubmitOpen] = useState(false);
+  const [textInput, setTextInput] = useState("");
+
+  const submitButtonPressed = () => {
+    setSubmitOpen(true)
+  }
+
+  const handleAssignmentSubmission = () => {
+    if (assignmentClicked.submissionType === 'TEXTBOX') {
+      // do something with textInput
+    } else {
+
+    }
+  }
+
+  const handleTextChange = (target) => { 
+    setTextInput(target.currentTarget.value)
+  }
+
 
   return (
     
@@ -87,11 +116,43 @@ export default function CourseAssignment(props) {
         </Typography>
       </div>
       <Divider />
+      {submitOpen ? null : 
       <div className={classes.submitDiv}>
-        <Button>
+        <Button onClick={submitButtonPressed}>
           Submit Assignment
         </Button>
       </div>
+      }
+      <Divider className={classes.bottomDivider}/>
+      {submitOpen ? 
+      <div className={classes.submissionDiv}>
+        {assignmentClicked.submissionType === "TEXTBOX" ?
+          <div className={classes.textInput}>
+            <TextareaAutosize className={classes.textInput}
+              onChange={handleTextChange}>
+              
+            </TextareaAutosize>
+          </div>
+           :
+          <div>
+            <Button
+              variant="contained"
+              component="label"
+            >
+              Upload File
+              <input
+                type="file"
+                style={{ display: "none" }}
+              />
+            </Button>
+          </div>  
+        }
+          <div className={classes.submitDiv}>
+            <Button onClick={handleAssignmentSubmission}>
+              Submit
+            </Button>
+          </div>
+      </div> : null }
     </div>
     
   );
