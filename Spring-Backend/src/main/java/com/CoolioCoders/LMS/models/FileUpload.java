@@ -1,10 +1,8 @@
 package com.CoolioCoders.LMS.models;
 
-import org.springframework.core.io.Resource;
-
 public class FileUpload {
     private String fileName;
-    private Resource fileDownloadUrl;
+    private String fileDownloadUrl;
     private String fileType;
     private long fileSize;
 
@@ -18,11 +16,11 @@ public class FileUpload {
         this.fileName = fileName;
     }
 
-    public Resource getFileDownloadUrl() {
+    public String getFileDownloadUrl() {
         return fileDownloadUrl;
     }
 
-    public void setFileDownloadUrl(Resource fileDownloadUrl) {
+    public void setFileDownloadUrl(String fileDownloadUrl) {
         this.fileDownloadUrl = fileDownloadUrl;
     }
 

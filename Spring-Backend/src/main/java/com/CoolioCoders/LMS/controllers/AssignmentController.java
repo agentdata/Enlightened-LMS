@@ -7,13 +7,16 @@ import com.CoolioCoders.LMS.services.FileStoreService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.File;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -124,6 +127,11 @@ public class AssignmentController {
         return ok(model);
     }
 
+    /*
+        Content-Type should be "multipart/form-data"
+        Use "file" for the field name
+
+     */
     @PreAuthorize("hasAuthority('STUDENT')")
     @PostMapping("/submit/{assignmentId}/uploadFile")
     public ResponseEntity<Map<Object, Object>> assignmentFileSubmit(Principal principalUser,
@@ -137,20 +145,31 @@ public class AssignmentController {
             Course course = courseService.findById(assignment.getCourseId());
 
             if(courseService.isStudentEnrolledInCourse(student, course)){
+                //store the file in directory i.e. /{courseId}/{userId}/filename.txt
+                String fileName = fileStoreService.storeFile(file, student, assignment);
 
-                String fileName = fileStoreService.storeFile(file, student);
+                String filePath = "/api/assignment/downloadFile/" + assignment.getCourseId() + "/" + student.getId() + "/";
 
+                //build download API call string
+                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path(filePath)
+                        .path(fileName)
+                        .toUriString();
+
+                //Create fileUpload
                 FileUpload fileUpload = new FileUpload();
                 fileUpload.setFileName(fileName);
                 fileUpload.setFileSize(file.getSize());
                 fileUpload.setFileType(file.getContentType());
-                fileUpload.setFileDownloadUrl(fileStoreService.getFileAsResource(student.getId() + "/" + fileName));
+                fileUpload.setFileDownloadUrl(fileDownloadUri);
 
+                //Create assignment submission and add the fileUpload
                 AssignmentSubmission submission = new AssignmentSubmission();
                 submission.setStudentId(student.getId());
                 submission.setSubmittedTimestamp(LocalDateTime.now());
                 submission.setSubmittedFile(fileUpload);
 
+                //save the submission
                 assignmentService.saveSubmission(assignment, submission);
 
                 model.put("fileUpload", fileUpload);
@@ -164,7 +183,39 @@ public class AssignmentController {
             e.printStackTrace();
             model.put("message", "Error: " + e.getMessage());
         }
+
         return ok(model);
+    }
+
+    /*
+        Use the fileUpload fileDownloadUrl to make the call to this endpoint
+     */
+    @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
+    @GetMapping("/downloadFile/{courseId}/{studentId}/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(Principal principalUser,
+            @PathVariable String courseId, @PathVariable String studentId,
+            @PathVariable String fileName, HttpServletRequest request){
+
+        try {
+            Resource resource = fileStoreService.getFileAsResource(courseId, studentId, fileName);
+
+            String contentType = null;
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            if(contentType == null){
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        // TODO: create a more graceful response
+        return null;
     }
 
     @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
