@@ -125,19 +125,19 @@ public class AssignmentController {
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
-    @PostMapping("/submit/uploadFile")
-    public ResponseEntity<Map<Object, Object>> assignmentFileSubmit(Principal principalUser, @RequestBody JSONObject body){
+    @PostMapping("/submit/{assignmentId}/uploadFile")
+    public ResponseEntity<Map<Object, Object>> assignmentFileSubmit(Principal principalUser,
+                @RequestParam("file") MultipartFile file, @PathVariable String assignmentId){
 
         Map<Object, Object> model = new HashMap<>();
         try{
 
             User student = userService.findUserByEmail(principalUser.getName());
-            Course course = courseService.findById(body.getAsString("courseId"));
+            Assignment assignment = assignmentService.findByAssignmentId(assignmentId);
+            Course course = courseService.findById(assignment.getCourseId());
 
             if(courseService.isStudentEnrolledInCourse(student, course)){
-                Assignment assignment = assignmentService.findByAssignmentId(body.getAsString("assignmentId"));
 
-                MultipartFile file = (MultipartFile) body.get("file");
                 String fileName = fileStoreService.storeFile(file, student);
 
                 FileUpload fileUpload = new FileUpload();

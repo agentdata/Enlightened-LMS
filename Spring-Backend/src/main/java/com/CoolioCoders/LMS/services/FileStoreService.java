@@ -1,15 +1,17 @@
 package com.CoolioCoders.LMS.services;
 
+import com.CoolioCoders.LMS.configuration.FileStoreProperties;
 import com.CoolioCoders.LMS.models.FileUpload;
 import com.CoolioCoders.LMS.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
-import java.net.MalformedURLException;
+import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +20,14 @@ import java.nio.file.StandardCopyOption;
 @Service
 public class FileStoreService {
 
-    private Path fileStoreLocation; //TODO: figure out fileserver
+    private final Path fileStoreLocation;
+
+    @Autowired
+    public FileStoreService(FileStoreProperties fileStoreProperties) throws IOException {
+        fileStoreLocation = Paths.get(fileStoreProperties.getUploadDirectory()).toAbsolutePath().normalize();
+        System.out.println("fileStoreLocation: " + fileStoreLocation );
+        Files.createDirectories(this.fileStoreLocation);
+    }
 
     public String storeFile(MultipartFile file, User user) throws Exception {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
