@@ -55,13 +55,16 @@ export default {
         return fetch(API_BASE_URL+'/api/course/all', makeInit("GET", true, null))
     },
     getCourseDetails(courseId){
-        return fetch(API_BASE_URL+'/api/course/'+courseId, makeInit("GET", true, null))
+        return fetch(API_BASE_URL+'/api/course/details/'+courseId, makeInit("GET", true, null))
     },
     getCurrentAccountBalance(){
         return fetch(API_BASE_URL+'/api/balance/amount', makeInit("GET", true, null))
     },
     getAllAssignments(){
         return fetch(API_BASE_URL+'/api/assignment/simplified/', makeInit("GET", true, null))
+    },
+    getCourseAssignmentsWithDetails(courseId) {
+        return fetch(API_BASE_URL+`/api/assignment/bycourse/${courseId}`, makeInit("GET", true, null))
     },
     getCourseAssignments(courseId) {
         return fetch(API_BASE_URL+`/api/assignment/simplified/${courseId}`, makeInit("GET", true, null))

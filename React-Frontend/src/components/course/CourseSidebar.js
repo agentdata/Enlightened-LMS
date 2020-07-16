@@ -40,7 +40,6 @@ const styles = theme => ({
   });
   
   class CourseSidebar extends Component {
-
     render() {
         const { classes } = this.props;
         return (

@@ -31,6 +31,7 @@ class CoursePage extends Component {
             courseCredits: "",
             courseDescription: "",   
         }
+        sessionStorage.setItem("courseId",this.props.match.params.id)
     }
 
     render() {
@@ -43,7 +44,7 @@ class CoursePage extends Component {
                         <CourseSidebar match={this.props.match}/>
                         </div>
                         <Switch>
-                            <Route path={`/course/${this.props.match.params.id}/course-assignments`} exact component={CourseAssignments} match={this.props.match}/>
+                            <Route path={`/course/${this.props.match.params.id}/course-assignments`} exact component={CourseAssignments}/>
                             <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGrades} />
                             <Route path={`/course/${this.props.match.params.id}/course-announcements`} exact component={CourseAnnouncements} />
                             <Route path={`/course/${this.props.match.params.id}/course-discussions`} exact component={CourseDiscussions} />

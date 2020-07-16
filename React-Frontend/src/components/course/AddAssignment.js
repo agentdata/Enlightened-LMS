@@ -206,7 +206,7 @@ class AddAssignment extends Component {
             "submissionType": newAssignment.submissionType,
             "dueDate": newAssignment.dueDate,
             "maxPoints": newAssignment.pointsPossible,
-            "courseId": "5efab3f635f9126181edb9ee"  //hardcoding course in until we pass the courseId to this component
+            "courseId": sessionStorage.getItem("courseId")  //hardcoding course in until we pass the courseId to this component
         }
 
         http.createNewAssignment(JSON.stringify(assignmentBody))

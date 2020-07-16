@@ -50,72 +50,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// export function getCourseAssignments(){
-//   http.getCourseAssignments(props.match.id)
-//     .then( async(response) => {
-//       var body = await response.json();
-//       if(response.status === 200 && body["message"] === "success"){
-//           var simpleCourses=[] 
-//           for (var assignment in body["assignments"]) {
-//             // if(dates.compare(assignment["dueDate"],new Date().toLocaleString())){
-//                  let x ={ 
-//                     title: assignment["title"],
-//                     description: assignment["description"],
-//                     maxPoints: assignment["maxPoints"],
-//                     dueDate: assignment["dueDate"],
-//                     assignmentID: assignment["id"],
-//                     submissionType: assignment["submissionType"]}
-//             // }
-//           }
-//       }
-//   })
-//   .catch((e) => {
-//       console.warn("There was an error retrieving instructor courses: ", e);
-
-//       this.setState({
-//           error: "There was an error retrieving instructor courses."
-//       });
-//   });
-// }
-
 export default function CourseAssignments(props) {
-  const [pastAssignments, setPastAssignments] = React.useState([
-    {
-        title: "Assignment 1",
-        description: "This is the first assignment",
-        maxPoints: 100,
-        dueDate: "6/30/2020 11:59 PM",
-        assignmentID: '1',
-        submissionType: "TEXTBOX"
-    },
-    {
-        title: "Assignment 2",
-        description: "This is assignment 2",
-        maxPoints: 150,
-        dueDate: "7/1/2020 11:59 PM",
-        assignmentID: '2',
-        submissionType: "TEXTBOX"
+  var fetchedPastAssignments = []
+  var fetchedFutureAssignments = []
+  http.getCourseAssignmentsWithDetails(sessionStorage.getItem("courseId"))
+  .then( async(response) => {
+    var body = await response.json();
+    if(response.status === 200 && body["message"] === "Success"){
+      for (let i in body["assignments"]) {
+        let assignment = {
+                  title: body["assignments"][i]["title"],
+                  description: body["assignments"][i]["description"],
+                  maxPoints: body["assignments"][i]["maxPoints"],
+                  dueDate: body["assignments"][i]["dueDate"],
+                  assignmentID: body["assignments"][i]["id"],
+                  submissionType: body["assignments"][i]["submissionType"],
+        }
+        new Date(Date.parse(assignment["dueDate"])).getTime() < new Date().getTime() ? fetchedPastAssignments.push(assignment) : fetchedFutureAssignments.push(assignment)
+      }      
     }
-])
+  })
+  .catch((e) => {
+      console.warn("There was an error retrieving instructor courses: ", e);
 
-  const [upcomingAssignments, setUpcomingAssignments] = React.useState([
-    {
-        title: "Assignment 3",
-        description: "This is the third assignment",
-        maxPoints: 100,
-        dueDate: "7/7/2020 11:59 PM",
-        assignmentID: '3',
-        submissionType: "TEXTBOX"
-    },
-    {
-        title: "Assignment 4",
-        description: "Assignment 4 yo",
-        maxPoints: 150,
-        dueDate: "7/8/2020 11:59 PM",
-        assignmentID: '4',
-        submissionType: "FILE_UPLOAD"
-    }
-  ])
+      this.setState({
+          error: "There was an error retrieving instructor courses."
+      });
+  });
+  const [pastAssignments, setPastAssignments] = React.useState(fetchedPastAssignments)
+  const [upcomingAssignments, setUpcomingAssignments] = React.useState(fetchedFutureAssignments)
+
   const classes = useStyles();
   const [assignmentListOpen, setassignmentListOpen] = React.useState(true);
   const [pastAssignmentListOpen, setpastAssignmentListOpen] = React.useState(true);
