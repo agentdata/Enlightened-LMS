@@ -84,6 +84,12 @@ export default {
     createNewAssignment(body){
         return fetch(API_BASE_URL+'/api/assignment/new', makeInit("POST", true, body))
     },
+    submitAssignment(body) {
+        return fetch(API_BASE_URL+`/api/assignment/submit`, makeInit("POST", true, body))
+    },
+    submitFileAssignment(body) {
+        return fetch(API_BASE_URL+``, makeInit("POST", true, body))
+    },
     createNewUser (body) {
         return fetch(API_BASE_URL+"/api/auth/register", makeInit("POST", false, body) )
     },

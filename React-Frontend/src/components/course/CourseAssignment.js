@@ -12,10 +12,11 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
-import Divider from '@material-ui/core/Divider'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import TextareaAutosize from '@material-ui/core/TextareaAutosize'
+import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import http from '../../api/http';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,11 +74,40 @@ export default function CourseAssignment(props) {
     setSubmitOpen(true)
   }
 
+  const submitTextInput = () => {
+    let submission = {
+      courseId: sessionStorage.getItem("courseId"),
+      assignmentId: assignmentClicked.assignmentID,
+      submission: textInput
+    };
+
+    http.submitAssignment(JSON.stringify(submission))
+    .then( async (response) => {
+      const body = await response.json();
+      if (response.status === 200 && body["message"] === "Assignment Successfully Submitted") {
+        props.closeModal()
+      }
+    })
+    .catch((e) => {
+      console.warn("There was an error submitting text submission: ", e)
+    })
+  }
+
+  const submitFileUpload = () => {
+    // file upload api
+    let submission = {
+
+    };
+
+    
+  }
+
   const handleAssignmentSubmission = () => {
     if (assignmentClicked.submissionType === 'TEXTBOX') {
       // do something with textInput
+      submitTextInput();
     } else {
-
+      submitFileUpload();
     }
   }
 
