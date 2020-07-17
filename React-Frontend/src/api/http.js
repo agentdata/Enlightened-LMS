@@ -88,8 +88,11 @@ export default {
         return fetch(API_BASE_URL+`/api/assignment/submit`, makeInit("POST", true, body))
     },
     submitFileAssignment(body) {
-        return fetch(API_BASE_URL+``, makeInit("POST", true, body))
+        return fetch(API_BASE_URL+`/api/assignment/submit/${body.assignmentId}/uploadFile`, makeInit("POST", true, body))
     },
+    // getFileAssignment(body) {
+    //     return fetch(API_BASE_URL+`/downloadFile/${body.courseId}/${body.studentId}/${body.fileName}`)
+    // },
     createNewUser (body) {
         return fetch(API_BASE_URL+"/api/auth/register", makeInit("POST", false, body) )
     },
