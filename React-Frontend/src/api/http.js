@@ -4,8 +4,7 @@ export const API_BASE_URL =  'https://cooliocoders.ddns.net'
 // builds init for fetch call, pass in null if there is no body, pass in null if no additional headers are needed.
 // example; makeInit("GET", true, null), makeInit("POST", false, body)
 export function makeInit(requestType, requiresAuthorization, body, headers) {
-
-    if (!headers) {
+    if (headers === null) {
         headers = new Headers();
 
         switch (requestType) {
@@ -42,6 +41,13 @@ export function makeInit(requestType, requiresAuthorization, body, headers) {
             body
         }
     }
+    /*
+    console.log(requestType);
+    for(var pair of headers.entries()){
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+    */
+
     return init
 }
 
@@ -91,12 +97,11 @@ export default {
     submitAssignment(body) {
         return fetch(API_BASE_URL+`/api/assignment/submit`, makeInit("POST", true, body, null))
     },
-    // submitFileAssignment(body) {
-    //     return fetch(API_BASE_URL+`/api/assignment/submit/${body.assignmentId}/uploadFile`, makeInit("POST", true, body))
-    // },
-    submitFileAssignment(assignmentId, body) {
-        return fetch(API_BASE_URL+`/api/assignment/submit/${assignmentId}/uploadFile`,
-            makeInit("POST", true, body, new Headers().append('Content-Type', 'multipart/form-data')))
+    submitFileAssignment(assignmentID, body) {
+        // Passing empty headers
+        var headers = new Headers();
+        return fetch(API_BASE_URL+`/api/assignment/submit/${assignmentID}/uploadFile`,
+            makeInit("POST", true, body, headers))
     },
     // Don't need to explicitly call this API. Just call fetch and pass in the downloadURL with the token in the header.
     // getFileAssignment(body) {

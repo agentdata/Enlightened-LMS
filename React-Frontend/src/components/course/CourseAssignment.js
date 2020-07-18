@@ -97,15 +97,11 @@ export default function CourseAssignment(props) {
     // file upload api
     let data = new FormData();
     let file = document.querySelector('input[type="file"]').files[0];
-    // data.append('assignmentId', assignmentClicked.assignmentID)
 
     // Key needs to be 'file'
     data.append('file', file);
 
-    console.log("file: " + data.get("file"));
-    console.log("assignmentId: " + assignmentClicked.assignmentId);
-
-    http.submitFileAssignment(assignmentClicked.assignmentId, data)
+    http.submitFileAssignment(assignmentClicked.assignmentID, data)
     .then( async (response) => {
       const body = await response.json();
       if (response.status == 200 && body["message"] === "Assignment Successfully Uploaded") {
