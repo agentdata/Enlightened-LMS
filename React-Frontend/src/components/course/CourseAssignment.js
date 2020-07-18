@@ -85,28 +85,41 @@ export default function CourseAssignment(props) {
     .then( async (response) => {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "Assignment Successfully Submitted") {
-        props.closeModal()
+        props.closeModal();
       }
     })
     .catch((e) => {
-      console.warn("There was an error submitting text submission: ", e)
+      console.warn("There was an error submitting text submission: ", e);
     })
   }
 
   const submitFileUpload = () => {
     // file upload api
-    let submission = {
+    let data = new FormData();
+    let file = document.querySelector('input[type="file"]').files[0];
 
-    };
+    // Key needs to be 'file'
+    data.append('file', file);
 
+    http.submitFileAssignment(assignmentClicked.assignmentID, data)
+    .then( async (response) => {
+      const body = await response.json();
+      if (response.status == 200 && body["message"] === "Assignment Successfully Uploaded") {
+        props.closeModal();
+      }
+    })
+    .catch((e) => {
+      console.warn("There was an error submitting file upload: ", e);
+    })
     
   }
 
   const handleAssignmentSubmission = () => {
     if (assignmentClicked.submissionType === 'TEXTBOX') {
-      // do something with textInput
+      // submit textInput
       submitTextInput();
     } else {
+      // submit file upload
       submitFileUpload();
     }
   }
@@ -114,7 +127,6 @@ export default function CourseAssignment(props) {
   const handleTextChange = (target) => { 
     setTextInput(target.currentTarget.value)
   }
-
 
   return (
     
