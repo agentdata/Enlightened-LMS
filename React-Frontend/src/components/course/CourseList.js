@@ -63,11 +63,7 @@ class CourseList extends Component {
             modalOpen: false,
             courses: [
                 {
-                    title: 'Dummy Course',
-                    description: 'Another course description',
-                    id: '',
-                    image: ''
-                },
+                }
             ],
             isInstructor: isInstructorBool,
             allCourses: []

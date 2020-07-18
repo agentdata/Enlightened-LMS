@@ -103,7 +103,7 @@ export const loginUser = (email, password) => dispatch => {
         dispatch(loginError());
         console.log("error:"+e.message)
     });
-    dispatch(successfulLogin());
+    // dispatch(successfulLogin());
 }
 
 export const logoutUser = () => dispatch => {
