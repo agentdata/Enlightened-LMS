@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import AddAssignment from './AddAssignment'
 import CourseAssignment from './CourseAssignment'
+import { Link } from 'react-router-dom'
 import http from '../../api/http';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,9 +49,16 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     top: "100px"
   },
+  flexHorizontal: {
+    display: "flex",
+    justifyContent: "space-between"
+  }
 }));
 
 export default function CourseAssignments(props) {
+
+  const isInstructor = sessionStorage.getItem("isInstructor") === "true" ? true : false
+  const courseId = sessionStorage.getItem("courseId")
 
   const [pastAssignments, setPastAssignments] = React.useState([])
   const [upcomingAssignments, setUpcomingAssignments] = React.useState([])
@@ -127,6 +135,7 @@ export default function CourseAssignments(props) {
     setAssignmentClicked({assignmentID: -1})
   }
 
+
   return (
     <div className={classes.assignmentsDiv}>
 
@@ -142,7 +151,7 @@ export default function CourseAssignments(props) {
             <CourseAssignment closeModal = {handleAssignmentClose} assignmentClicked = {assignmentClicked}/>
           </div>
         </Modal>
-        {sessionStorage.getItem("isInstructor") === "true" ?
+        {isInstructor ?
             <div>
                 <Button className={classes.addAssignmentBtn} onClick={handleAddAssignment}>+ Add New Assignment</Button>
                 <Modal
@@ -176,10 +185,16 @@ export default function CourseAssignments(props) {
 
             {upcomingAssignments.map(currentAssignment => (
                 <div key={currentAssignment.assignmentID}>
-                  <ListItem button className={classes.nested} onClick={() => handleAssignmentClick(currentAssignment.assignmentID)}>
-                      <ListItemText primary={currentAssignment.title} 
-                      secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
-                  </ListItem>
+                  <div className={classes.flexHorizontal}>
+                    <ListItem button className={classes.nested} onClick={() => handleAssignmentClick(currentAssignment.assignmentID)}>
+                        <ListItemText primary={currentAssignment.title} 
+                        secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
+                    </ListItem>
+                    {isInstructor ? 
+                      <Button component={Link} to={`/course/${courseId}/course-grades`}>
+                        Grade Submissions
+                      </Button> : null }
+                  </div>
                   <Divider />
                 </div>
                 

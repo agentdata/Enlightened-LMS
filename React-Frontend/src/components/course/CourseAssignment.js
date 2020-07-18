@@ -56,8 +56,8 @@ const useStyles = makeStyles((theme) => ({
 export default function CourseAssignment(props) {
 
   const classes = useStyles();
-//   const isInstructor = sessionStorage.getItem("isInstructor")
-  const isInstructor = true
+  const isInstructor = sessionStorage.getItem("isInstructor") === "true" ? true : false
+  // const isInstructor = true
   const assignmentClicked = props.assignmentClicked[0]
 
   const [submitOpen, setSubmitOpen] = useState(false);
@@ -100,7 +100,7 @@ export default function CourseAssignment(props) {
     .then( async (response) => {
       const body = await response.json();
       if (response.status == 200 && body["message"] === "Assignment Successfully Uploaded") {
-        props.closeModal();
+        handleDialogOpen();
       }
     })
     .catch((e) => {

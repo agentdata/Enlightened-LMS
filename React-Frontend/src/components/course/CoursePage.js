@@ -6,6 +6,7 @@ import CourseAssignments from './CourseAssignments'
 import CourseGrades from './CourseGrades'
 import CourseAnnouncements from './CourseAnnouncements'
 import CourseDiscussions from './CourseDiscussions'
+import CourseGradesInstructor from './CourseGradesInstructor'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({
@@ -45,7 +46,8 @@ class CoursePage extends Component {
                         </div>
                         <Switch>
                             <Route path={`/course/${this.props.match.params.id}/course-assignments`} exact component={CourseAssignments}/>
-                            <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGrades} />
+                            {sessionStorage.getItem("isInstructor") === "true" ? <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGradesInstructor} /> :
+                                <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGrades} /> }
                             <Route path={`/course/${this.props.match.params.id}/course-announcements`} exact component={CourseAnnouncements} />
                             <Route path={`/course/${this.props.match.params.id}/course-discussions`} exact component={CourseDiscussions} />
                             <Route path="/" component={CourseHome} match={this.props.match} />
