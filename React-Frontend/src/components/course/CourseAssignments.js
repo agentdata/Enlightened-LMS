@@ -67,26 +67,24 @@ export default function CourseAssignments(props) {
                   submissionType: body["assignments"][i]["submissionType"],
         }
         new Date(Date.parse(assignment["dueDate"])).getTime() < new Date().getTime() ? fetchedPastAssignments.push(assignment) : fetchedFutureAssignments.push(assignment)
-      }      
+      }
+      console.log(fetchedFutureAssignments)    
     }
   })
   .catch((e) => {
       console.warn("There was an error retrieving instructor courses: ", e);
-
-      this.setState({
-          error: "There was an error retrieving instructor courses."
-      });
   });
   const [pastAssignments, setPastAssignments] = React.useState(fetchedPastAssignments)
   const [upcomingAssignments, setUpcomingAssignments] = React.useState(fetchedFutureAssignments)
 
   const classes = useStyles();
-  const [assignmentListOpen, setassignmentListOpen] = React.useState(true);
-  const [pastAssignmentListOpen, setpastAssignmentListOpen] = React.useState(true);
+  const [assignmentListOpen, setassignmentListOpen] = React.useState(false);
+  const [pastAssignmentListOpen, setpastAssignmentListOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false)
 
   const [assignmentModalOpen, setAssignmentModalOpen] = React.useState(false);
   const [assignmentClicked, setAssignmentClicked] = React.useState({assignmentID: -1});
+  
   useEffect(() => {
     if (assignmentClicked.assignmentID !== -1) {
       setAssignmentModalOpen(true);
@@ -173,8 +171,8 @@ export default function CourseAssignments(props) {
             <List component="div" disablePadding>
 
             {upcomingAssignments.map(currentAssignment => (
-                <div>
-                  <ListItem button className={classes.nested} key={currentAssignment.assignmentID} onClick={() => handleAssignmentClick(currentAssignment.assignmentID)}>
+                <div key={currentAssignment.assignmentID}>
+                  <ListItem button className={classes.nested} onClick={() => handleAssignmentClick(currentAssignment.assignmentID)}>
                       <ListItemText primary={currentAssignment.title} 
                       secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
                   </ListItem>
@@ -200,8 +198,8 @@ export default function CourseAssignments(props) {
         <Collapse in={pastAssignmentListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
             {pastAssignments.map(currentAssignment => (
-                <div>
-                    <ListItem button className={classes.nested} key={currentAssignment.assignmentID} onClick={() => handlePastAssignmentClick(currentAssignment.assignmentID)}>
+                <div key={currentAssignment.assignmentID}>
+                    <ListItem button className={classes.nested} onClick={() => handlePastAssignmentClick(currentAssignment.assignmentID)}>
                         <ListItemText primary={currentAssignment.title} 
                         secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
                     </ListItem>
