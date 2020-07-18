@@ -72,6 +72,17 @@ class CourseList extends Component {
         this.state.isInstructor === "true" ? this.getInstructorCourses(): this.getStudentCourses()   
     }
 
+    addCourseToList = (title, description, id) => {
+
+        var newList = this.state.courses.concat(
+            {title: title, 
+            description: description,
+            id: id, 
+            image: '',
+            })
+        this.setState({courses: newList})
+    }
+
     // get all courses from db
     getAllCourses() {
         http.getAllCourses()
