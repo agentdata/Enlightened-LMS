@@ -51,35 +51,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CourseAssignments(props) {
-  var fetchedPastAssignments = []
-  var fetchedFutureAssignments = []
-  http.getCourseAssignmentsWithDetails(sessionStorage.getItem("courseId"))
-  .then( async(response) => {
-    var body = await response.json();
-    if(response.status === 200 && body["message"] === "Success"){
-      for (let i in body["assignments"]) {
-        let assignment = {
-                  title: body["assignments"][i]["title"],
-                  description: body["assignments"][i]["description"],
-                  maxPoints: body["assignments"][i]["maxPoints"],
-                  dueDate: body["assignments"][i]["dueDate"],
-                  assignmentID: body["assignments"][i]["id"],
-                  submissionType: body["assignments"][i]["submissionType"],
-        }
-        new Date(Date.parse(assignment["dueDate"])).getTime() < new Date().getTime() ? fetchedPastAssignments.push(assignment) : fetchedFutureAssignments.push(assignment)
-      }
-      console.log(fetchedFutureAssignments)    
-    }
-  })
-  .catch((e) => {
-      console.warn("There was an error retrieving instructor courses: ", e);
-  });
-  const [pastAssignments, setPastAssignments] = React.useState(fetchedPastAssignments)
-  const [upcomingAssignments, setUpcomingAssignments] = React.useState(fetchedFutureAssignments)
+
+  const [pastAssignments, setPastAssignments] = React.useState([])
+  const [upcomingAssignments, setUpcomingAssignments] = React.useState([])
 
   const classes = useStyles();
-  const [assignmentListOpen, setassignmentListOpen] = React.useState(false);
-  const [pastAssignmentListOpen, setpastAssignmentListOpen] = React.useState(false);
+  const [assignmentListOpen, setAssignmentListOpen] = React.useState(true);
+  const [pastAssignmentListOpen, setPastAssignmentListOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false)
 
   const [assignmentModalOpen, setAssignmentModalOpen] = React.useState(false);
@@ -89,14 +67,40 @@ export default function CourseAssignments(props) {
     if (assignmentClicked.assignmentID !== -1) {
       setAssignmentModalOpen(true);
     }
+
+    var fetchedPastAssignments = []
+    var fetchedFutureAssignments = []
+    http.getCourseAssignmentsWithDetails(sessionStorage.getItem("courseId"))
+    .then( async(response) => {
+      var body = await response.json();
+      if(response.status === 200 && body["message"] === "Success"){
+        for (let i in body["assignments"]) {
+          let assignment = {
+                    title: body["assignments"][i]["title"],
+                    description: body["assignments"][i]["description"],
+                    maxPoints: body["assignments"][i]["maxPoints"],
+                    dueDate: body["assignments"][i]["dueDate"],
+                    assignmentID: body["assignments"][i]["id"],
+                    submissionType: body["assignments"][i]["submissionType"],
+          }
+          new Date(Date.parse(assignment["dueDate"])).getTime() < new Date().getTime() ? fetchedPastAssignments.push(assignment) : fetchedFutureAssignments.push(assignment)
+        }
+        console.log(fetchedFutureAssignments)    
+        setUpcomingAssignments(fetchedFutureAssignments)
+        setPastAssignments(fetchedPastAssignments)
+      }
+    })
+    .catch((e) => {
+        console.warn("There was an error retrieving instructor courses: ", e);
+    });
  }, [assignmentClicked]);
 
   const handleAssignmentHeadClick = () => {
-    setassignmentListOpen(!assignmentListOpen);
+    setAssignmentListOpen(!assignmentListOpen);
   };
 
   const handlePastAssignmentHeadClick = () => {
-    setpastAssignmentListOpen(!pastAssignmentListOpen);
+    setPastAssignmentListOpen(!pastAssignmentListOpen);
   };
 
   const handleAddAssignment = () => {
