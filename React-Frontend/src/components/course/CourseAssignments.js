@@ -52,6 +52,13 @@ const useStyles = makeStyles((theme) => ({
   flexHorizontal: {
     display: "flex",
     justifyContent: "space-between"
+  },
+  gradeButton: {
+    margin: "15px",
+    color: "#3f51b5",
+    textDecoration: "underline",
+    minWidth: "180px",
+    height: "42px"
   }
 }));
 
@@ -191,7 +198,7 @@ export default function CourseAssignments(props) {
                         secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
                     </ListItem>
                     {isInstructor ? 
-                      <Button component={Link} to={`/course/${courseId}/course-grades`}>
+                      <Button component={Link} to={`/course/${courseId}/grade-assignments`} className={classes.gradeButton}>
                         Grade Submissions
                       </Button> : null }
                   </div>

@@ -8,6 +8,7 @@ import CourseAnnouncements from './CourseAnnouncements'
 import CourseDiscussions from './CourseDiscussions'
 import CourseGradesInstructor from './CourseGradesInstructor'
 import { withStyles } from '@material-ui/core/styles'
+import GradeAssignments from './GradeAssignments';
 
 const styles = theme => ({
     main: {
@@ -37,6 +38,7 @@ class CoursePage extends Component {
 
     render() {
         const { classes } = this.props
+        const isInstructor = sessionStorage.getItem("isInstructor") === "true" ? true : false 
         return (
             <Router>
                 <div className={classes.main}>
@@ -46,10 +48,11 @@ class CoursePage extends Component {
                         </div>
                         <Switch>
                             <Route path={`/course/${this.props.match.params.id}/course-assignments`} exact component={CourseAssignments}/>
-                            {sessionStorage.getItem("isInstructor") === "true" ? <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGradesInstructor} /> :
+                            {isInstructor ? <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGradesInstructor} /> :
                                 <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGrades} /> }
                             <Route path={`/course/${this.props.match.params.id}/course-announcements`} exact component={CourseAnnouncements} />
                             <Route path={`/course/${this.props.match.params.id}/course-discussions`} exact component={CourseDiscussions} />
+                            {isInstructor ? <Route path={`/course/${this.props.match.params.id}/grade-assignments`} exact component={GradeAssignments} /> : null }
                             <Route path="/" component={CourseHome} match={this.props.match} />
                         </Switch>
                     </div>
