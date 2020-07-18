@@ -62,8 +62,6 @@ class CourseList extends Component {
             error: null,
             modalOpen: false,
             courses: [
-                {
-                }
             ],
             isInstructor: isInstructorBool,
             allCourses: []

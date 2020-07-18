@@ -3,6 +3,11 @@ import { withStyles } from "@material-ui/core/styles"
 import { Typography, Button, List, ListItem, 
         TextField, MenuItem } from '@material-ui/core';
 import http from '../../api/http';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styles = theme => ({
     verticalFlex: {
@@ -131,7 +136,8 @@ class AddCourse extends Component {
             endTimeError: '',
             buildingError: '',
             roomError: '',
-            capacityError: ''
+            capacityError: '',
+            confirmDialogOpen: false
     
                 // 5 - Frontend Courses - instructor can add a course - 
                 // includes title, number, dates, times, location, capacity, 
@@ -383,24 +389,21 @@ class AddCourse extends Component {
         this.validateCapacity()
 
         // no errors
-        if (this.state.newCourse.departmentError === "" &&
-        this.state.newCourse.numberError === "" &&
-        this.state.newCourse.nameError === "" &&
-        this.state.newCourse.descriptionError === "" &&
-        this.state.newCourse.creditsError === "" &&
-        this.state.newCourse.semesterError === "" &&
-        this.state.newCourse.yearError === "" &&
-        this.state.newCourse.blockError === "" &&
-        this.state.newCourse.daysError === "" &&
-        this.state.newCourse.startTimeError === "" &&
-        this.state.newCourse.endTimeError === "" &&
-        this.state.newCourse.platformError === "" &&
-        this.state.newCourse.buildingError === "" &&
-        this.state.newCourse.roomError === "" &&
-        this.state.newCourse.capacityError === "") {
-            
+        if (this.state.departmentError === "" &&
+        this.state.numberError === "" &&
+        this.state.nameError === "" &&
+        this.state.descriptionError === "" &&
+        this.state.creditsError === "" &&
+        this.state.yearError === "" &&
+        this.state.daysError === "" &&
+        this.state.startTimeError === "" &&
+        this.state.endTimeError === "" &&
+        this.state.buildingError === "" &&
+        this.state.roomError === "" &&
+        this.state.capacityError === "") {
+            this.addInstructorCourse(this.state.newCourse);  
         }
-        this.addInstructorCourse(this.state.newCourse);        
+              
     }
 
     // add course to list (instructor)
@@ -411,6 +414,7 @@ class AddCourse extends Component {
             if(response.status === 200 && body["message"] === "Successfully added New Course"){
                 //this.props.closeModal(); //TODO get this modal to close when code get's here
                 //TODO make api call to get courses to reflect new course, or add it to the state to re-render since we know it successfully was added to DB.
+                this.handleDialogOpen();
             }
             else{
                 console.log("server error adding course");
@@ -423,6 +427,15 @@ class AddCourse extends Component {
                 error: "There was an error adding the course to the list."
             })
         })
+    }
+
+    handleDialogOpen = () => {
+        this.setState({confirmDialogOpen: true})
+    }
+
+    handleDialogClose = () => {
+        this.setState({confirmDialogOpen: false})
+        this.props.closeModal();
     }
 
     render() {
@@ -705,6 +718,25 @@ class AddCourse extends Component {
                     error={this.state.capacityError === '' ? false : true}
                     />
                 </div>
+
+                <Dialog
+                    open={this.state.confirmDialogOpen}
+                    onClose={this.handleDialogClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Success"}</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Course Successfully Added!
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={this.handleDialogClose} color="primary" autoFocus>
+                        Nice!
+                    </Button>
+                    </DialogActions>
+                </Dialog>
 
                 <List>
                     <ListItem className={classes.buttons}>
