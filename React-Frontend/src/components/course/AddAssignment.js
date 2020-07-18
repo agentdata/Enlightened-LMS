@@ -3,6 +3,11 @@ import { withStyles } from "@material-ui/core/styles"
 import { Typography, Button, List, ListItem, 
         TextField } from '@material-ui/core';
 import http from '../../api/http';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styles = theme => ({
     verticalFlex: {
@@ -91,7 +96,8 @@ class AddAssignment extends Component {
             descriptionError: '',
             submissionTypeError: '',
             dueDateError: '',
-            pointsPossibleError: ''
+            pointsPossibleError: '',
+            confirmDialogOpen: false
         };
     }
     
@@ -213,7 +219,7 @@ class AddAssignment extends Component {
         .then( async (response) => {
             const body = await response.json()
             if(response.status === 200 && body["message"] === "Successfully added new assignment"){
-                this.props.closeModal();
+                this.handleDialogOpen();
                 //TODO make api call to get courses to reflect new course, or add it to the state to re-render since we know it successfully was added to DB.
 
             }
@@ -228,6 +234,15 @@ class AddAssignment extends Component {
                 error: "There was an error adding the course to the list."
             })
         })
+    }
+
+    handleDialogOpen = () => {
+        this.setState({confirmDialogOpen: true})
+    }
+
+    handleDialogClose = () => {
+        this.setState({confirmDialogOpen: false})
+        this.props.closeModal();
     }
 
     render() {
@@ -315,6 +330,25 @@ class AddAssignment extends Component {
                         <Button className={classes.modalButton} onClick={this.checkErrors}>Add Assignment</Button>
                     </ListItem>
                 </List>
+
+                <Dialog
+                    open={this.state.confirmDialogOpen}
+                    onClose={this.handleDialogClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Success"}</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Assignment Successfully Added.
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={this.handleDialogClose} color="primary" autoFocus>
+                        Nice!
+                    </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
             
         );

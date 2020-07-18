@@ -728,7 +728,7 @@ class AddCourse extends Component {
                     <DialogTitle id="alert-dialog-title">{"Success"}</DialogTitle>
                     <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Course Successfully Added!
+                        Course Successfully Added
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
