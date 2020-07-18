@@ -1,22 +1,15 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import http from '../../api/http';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,6 +63,8 @@ export default function CourseAssignment(props) {
   const [submitOpen, setSubmitOpen] = useState(false);
   const [textInput, setTextInput] = useState("");
 
+  const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false)
+
   const submitButtonPressed = () => {
     setSubmitOpen(true)
   }
@@ -85,7 +80,7 @@ export default function CourseAssignment(props) {
     .then( async (response) => {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "Assignment Successfully Submitted") {
-        props.closeModal();
+        handleDialogOpen();
       }
     })
     .catch((e) => {
@@ -126,6 +121,15 @@ export default function CourseAssignment(props) {
 
   const handleTextChange = (target) => { 
     setTextInput(target.currentTarget.value)
+  }
+
+  const handleDialogOpen = () => {
+    setConfirmDialogOpen(true);
+  }
+
+  const handleDialogClose = () => {
+    setConfirmDialogOpen(false)
+    props.closeModal();
   }
 
   return (
@@ -195,6 +199,26 @@ export default function CourseAssignment(props) {
             </Button>
           </div>
       </div> : null }
+
+      <Dialog
+          open={confirmDialogOpen}
+          onClose={handleDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Success"}</DialogTitle>
+          <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+              Assignment Submitted.
+          </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+          <Button onClick={handleDialogClose} color="primary" autoFocus>
+              Nice!
+          </Button>
+          </DialogActions>
+        </Dialog>
+
     </div>
     
   );
