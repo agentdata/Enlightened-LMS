@@ -91,16 +91,27 @@ export default function CourseAssignments(props) {
       if(response.status === 200 && body["message"] === "Success"){
         for (let i in body["assignments"]) {
           let assignment = {
-                    title: body["assignments"][i]["title"],
-                    description: body["assignments"][i]["description"],
-                    maxPoints: body["assignments"][i]["maxPoints"],
-                    dueDate: body["assignments"][i]["dueDate"],
-                    assignmentID: body["assignments"][i]["id"],
-                    submissionType: body["assignments"][i]["submissionType"],
+            title: body["assignments"][i]["title"],
+            description: body["assignments"][i]["description"],
+            maxPoints: body["assignments"][i]["maxPoints"],
+            dueDate: body["assignments"][i]["dueDate"],
+            assignmentID: body["assignments"][i]["id"],
+            submissionType: body["assignments"][i]["submissionType"],
+            submitted: false,
           }
+          if(body["assignments"][i]["submissions"] !== null){
+            assignment.submitted = true
+            assignment.graded = body["assignments"][i]["submissions"]["graded"]
+            if(body["assignments"][i]["submissions"]["pointsAwarded"] !== null){
+              assignment.pointsAwarded = body["assignments"][i]["submissions"]["pointsAwarded"]
+            }
+            if(assignment.submissionType === "TEXTBOX"){
+              assignment.textBoxSubmissionContent = body["assignments"][i]["submissions"]["submissionContent"]
+            }
+          }
+          
           new Date(Date.parse(assignment["dueDate"])).getTime() < new Date().getTime() ? fetchedPastAssignments.push(assignment) : fetchedFutureAssignments.push(assignment)
-        }
-        console.log(fetchedFutureAssignments)    
+        }  
         setUpcomingAssignments(fetchedFutureAssignments)
         setPastAssignments(fetchedPastAssignments)
       }

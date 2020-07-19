@@ -84,6 +84,17 @@ public class Assignment {
         return new ArrayList<>();
     }
 
+    public AssignmentSubmission getStudentSubmission(String studentId){
+        if(submissions !=null) {
+            for (AssignmentSubmission submission : submissions) {
+                if (submission.studentId.compareTo(studentId) == 0) {
+                    return submission;
+                }
+            }
+        }
+        return null;
+    }
+
     public void setSubmissions(List<AssignmentSubmission> submissions) {
         this.submissions = submissions;
     }

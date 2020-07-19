@@ -88,6 +88,33 @@ public class AssignmentController {
 
     /*
         API Call format example
+        {
+            "assignmentId":     "replaceMeWithAssignmentId",
+            "studentId":   "replaceMeWithStudentId",
+            "grade":       50.5
+        }
+     */
+    @PreAuthorize("hasAuthority('INSTRUCTOR')")
+    @PutMapping("/grade")
+    public ResponseEntity<Map<Object, Object>> addGradeToSubmission(Principal principalUser, @RequestBody JSONObject body){
+        Map<Object, Object> model = new HashMap<>();
+        try{
+            if(assignmentService.gradeAssignmentSubmission(userService.findUserByEmail(principalUser.getName()).getId(), body.getAsString("assignmentId"), body.getAsString("studentId"), body.getAsNumber("grade"))){
+                model.put("message", "Assignment graded successfully.");
+            }
+            else{
+                model.put("message", "something went wrong");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            model.put("message", "Error: " + e.getMessage());
+        }
+        return ok(model);
+    }
+
+    /*
+        API Call format example
 
         {
             "courseId":         "replaceMeWithCourseId",
@@ -254,8 +281,27 @@ public class AssignmentController {
             // user making request must either be a student enrolled in course or the course instructor
             if(user != null && course != null && (course.getInstructor().getId().equals(user.getId()) ||
                                                   courseService.findStudentsInCourse(course).contains(user))){
+                List<Assignment> assignments = assignmentService.findByCourseId(courseId);
 
-                model.put("assignments", assignmentService.findByCourseId(courseId));
+                //if requester is student then filter for student's submissions.
+                if(user.getRole().compareTo("STUDENT") ==  0){
+                    ArrayList modifiedAssignments = new ArrayList();
+                    for (Assignment assignment : assignments) {
+                        Map<Object, Object> modifiedAssignment = new HashMap<>();
+                        modifiedAssignment.put("id", assignment.getId());
+                        modifiedAssignment.put("title", assignment.getTitle());
+                        modifiedAssignment.put("description", assignment.getDescription());
+                        modifiedAssignment.put("submissionType", assignment.getSubmissionType());
+                        modifiedAssignment.put("dueDate", assignment.getDueDate());
+                        modifiedAssignment.put("maxPoints", assignment.getMaxPoints());
+                        modifiedAssignment.put("courseId", assignment.getCourseId());
+                        modifiedAssignment.put("submissions", assignment.getStudentSubmission(user.getId()));
+                        modifiedAssignments.add(modifiedAssignment);
+                    }
+                    model.put("assignments", modifiedAssignments);
+                }else{
+                    model.put("assignments", assignments);
+                }
 
                 //if no error then return success message and OK status
                 model.put("message", "Success");

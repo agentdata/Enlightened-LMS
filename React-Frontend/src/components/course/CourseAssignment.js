@@ -146,7 +146,11 @@ export default function CourseAssignment(props) {
       <Divider />
       <div className={classes.contentDiv}>
         <Typography>
-          Points Possible: {assignmentClicked.maxPoints}
+          { 
+            assignmentClicked.graded ?
+            <div>Graded: {assignmentClicked.pointsAwarded} out of {assignmentClicked.maxPoints}</div>:
+            <div>Points Possible: {assignmentClicked.maxPoints}</div>
+          }
         </Typography>
         <Typography>
           Due: {assignmentClicked.dueDate}
@@ -158,16 +162,35 @@ export default function CourseAssignment(props) {
       <Divider />
       <div className={classes.contentDiv}>
         <Typography>
-          {assignmentClicked.description}
+          Description: {assignmentClicked.description}
         </Typography>
       </div>
+      {
+        assignmentClicked.submitted ?
+        <div><Divider />
+        <div className={classes.contentDiv}>
+          <Typography>
+            Your Submission: {assignmentClicked.textBoxSubmissionContent}
+          </Typography>
+        </div>
+        </div>
+        : 
+        null
+      }
+      
       <Divider />
-      {submitOpen ? null : 
-      <div className={classes.submitDiv}>
-        <Button onClick={submitButtonPressed}>
-          Submit Assignment
-        </Button>
-      </div>
+      {
+        submitOpen ? null : 
+        <div className={classes.submitDiv}>
+          {assignmentClicked.submitted ? 
+          <Button disabled="true">
+            Already Submitted
+          </Button>
+          :
+          <Button onClick={submitButtonPressed}>
+            Submit Assignment
+          </Button>}
+        </div>        
       }
       <Divider className={classes.bottomDivider}/>
       {submitOpen ? 

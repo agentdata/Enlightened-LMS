@@ -1,15 +1,14 @@
 package com.CoolioCoders.LMS.services;
 
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
-import com.CoolioCoders.LMS.models.Assignment;
-import com.CoolioCoders.LMS.models.AssignmentSubmission;
-import com.CoolioCoders.LMS.models.Course;
-import com.CoolioCoders.LMS.models.SimplifiedAssignment;
+import com.CoolioCoders.LMS.models.*;
 import com.CoolioCoders.LMS.repositories.AssignmentRepository;
+import com.CoolioCoders.LMS.repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -21,6 +20,9 @@ public class AssignmentService {
 
     @Autowired
     AssignmentRepository assignmentRepository;
+
+    @Autowired
+    CourseService courseService;
 
     public Assignment findByAssignmentId(String assignmentId) {
         return assignmentRepository.findById(assignmentId).orElseThrow(EntityNotFoundException::new);
@@ -72,5 +74,39 @@ public class AssignmentService {
         return body;
     }
 
+    /**
+     * takes assignmentID, studentID and number grade as parameters and then sets the grade and updates the database.
+     * @param assignmentId
+     * @param studentId
+     * @param grade
+     * @return boolean value, true if there were no issues setting the grade
+     */
+    public boolean  gradeAssignmentSubmission(String instructorId, String assignmentId, String studentId, Number grade){
 
+        Assignment assignment = null;
+        AssignmentSubmission submission = null;
+        try {
+            assignment = findByAssignmentId(assignmentId);
+            Course course =  courseService.findById(assignment.getCourseId()); //.getInstructor().getId()
+
+            //verify requesting instructor is the instructor for this course
+            if(course.getInstructor().getId().compareTo(instructorId) == 0){
+                submission = assignment.getStudentSubmission(studentId);
+            }
+            else{
+                return false;
+            }
+
+        }catch (Exception e){
+            return false;
+        }
+
+        if(assignment != null && submission != null && grade.doubleValue() >= 0 && grade.doubleValue() <= assignment.getMaxPoints()) {
+            submission.setGraded(true);
+            submission.setPointsAwarded(grade.doubleValue());
+            assignmentRepository.save(assignment);
+            return true;
+        }
+        return false;
+    }
 }

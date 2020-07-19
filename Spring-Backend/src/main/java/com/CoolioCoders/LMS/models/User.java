@@ -207,6 +207,10 @@ public class User {
     }
 
     public Set<Role> getRoles() { return roles; }
+    public String getRole(){
+        Role[] rolesArray = {};
+        return this.getRoles().toArray(rolesArray)[0].getRole();
+    }
 
     public void setRoles(Set<Role> roles) { this.roles = roles; }
 

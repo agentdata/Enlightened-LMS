@@ -97,6 +97,9 @@ export default {
     submitAssignment(body) {
         return fetch(API_BASE_URL+`/api/assignment/submit`, makeInit("POST", true, body, null))
     },
+    updateAssignmentGrade(body){
+        return fetch(API_BASE_URL+`/api/assignment/grade`, makeInit("PUT", true, body, null))
+    },
     submitFileAssignment(assignmentID, body) {
         // Passing empty headers
         var headers = new Headers();
