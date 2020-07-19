@@ -110,6 +110,9 @@ export default {
     // getFileAssignment(body) {
     //     return fetch(API_BASE_URL+`/downloadFile/${body.courseId}/${body.studentId}/${body.fileName}`)
     // },
+    getAssignmentSubmissions(body) {
+        // call get submissions endpoint
+    },
     createNewUser (body) {
         return fetch(API_BASE_URL+"/api/auth/register", makeInit("POST", false, body, null) )
     },

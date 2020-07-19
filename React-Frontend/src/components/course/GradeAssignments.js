@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core/styles"
 import { Typography, List, ListItem, 
         ListItemText, Button, Link, Divider } from '@material-ui/core';
+import http from '../../api/http';
 
 const styles = theme => ({
     paper: {
@@ -78,6 +79,34 @@ class GradeAssignments extends Component {
                 pointsAwarded: 130
             }]
         }
+    }
+
+    // load submissions
+    componentDidMount() {
+        
+    }
+
+    // grade submission api call
+    gradeAssignment() {
+        let grade = {
+            assignmentId: 0,
+            studentId: 0,
+            grade: 50
+        }
+        http.updateAssignmentGrade(JSON.stringify(grade))
+        .then( async (response) => {
+            const data = await response.json()
+            if (response.status === 200 && data["message"] === "Assignment graded successfully.") {
+                // UI trigger message indicating grade saved
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error grading the assignment: ", e)
+        });
+
+        this.setState({
+            graded: this.state.graded + 1,
+        })
     }
 
     render() {
