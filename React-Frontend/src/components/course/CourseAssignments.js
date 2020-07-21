@@ -236,11 +236,17 @@ export default function CourseAssignments(props) {
             <List component="div" disablePadding>
             {pastAssignments.map(currentAssignment => (
                 <div key={currentAssignment.assignmentID}>
+                  <div className={classes.flexHorizontal}>
                     <ListItem button className={classes.nested} onClick={() => handlePastAssignmentClick(currentAssignment.assignmentID)}>
                         <ListItemText primary={currentAssignment.title} 
                         secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
                     </ListItem>
+                    {isInstructor ? 
+                      <Button component={Link} to={`/course/${courseId}/grade-assignments`} className={classes.gradeButton}>
+                        Grade Submissions
+                      </Button> : null }
                     <Divider />
+                    </div>
                 </div>
             ))}
             </List>

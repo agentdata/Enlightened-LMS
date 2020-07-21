@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core/styles"
 import { Typography, List, ListItem, 
-        ListItemText, Button, Link, Divider } from '@material-ui/core';
+        ListItemText, Button, Link, Divider, Modal } from '@material-ui/core';
 import http from '../../api/http';
+import GradeAssignmentModal from './GradeAssignmentModal'
 
 const styles = theme => ({
     paper: {
@@ -24,7 +25,9 @@ const styles = theme => ({
         justifyContent: "space-between",
         width: "100%",
         paddingBottom: "10px",
-        borderBottom: "3px solid black"
+        borderBottom: "3px solid black",
+        flexWrap: "wrap",
+        textAlign: "left"
     },
     numGraded: {
         display: "flex",
@@ -50,6 +53,7 @@ class GradeAssignments extends Component {
         super(props)
 
         this.state = {
+            assignmentId: 1008,
             submissions: 0,
             graded: 0,
             submissionType: "TEXTBOX",
@@ -77,7 +81,9 @@ class GradeAssignments extends Component {
                 onTime: false,
                 isGraded: true,
                 pointsAwarded: 130
-            }]
+            }],
+            currentStudentId: null,
+            modalOpen: false
         }
     }
 
@@ -86,27 +92,14 @@ class GradeAssignments extends Component {
         
     }
 
-    // grade submission api call
-    gradeAssignment() {
-        let grade = {
-            assignmentId: 0,
-            studentId: 0,
-            grade: 50
-        }
-        http.updateAssignmentGrade(JSON.stringify(grade))
-        .then( async (response) => {
-            const data = await response.json()
-            if (response.status === 200 && data["message"] === "Assignment graded successfully.") {
-                // UI trigger message indicating grade saved
-            }
-        })
-        .catch((e) => {
-            console.warn("There was an error grading the assignment: ", e)
-        });
+    handleGradeAssignment = (studentId) => {
+        this.setState({currentStudentId: studentId}, () => {
+            this.setState({modalOpen: true})
+        }) 
+    }
 
-        this.setState({
-            graded: this.state.graded + 1,
-        })
+    handleClose = () => {
+        this.setState({modalOpen: false})
     }
 
     render() {
@@ -125,18 +118,33 @@ class GradeAssignments extends Component {
                 <div className={classes.listDiv}>
                     <List component="nav" disablePadding>
                         {this.state.assignmentSubmissions.map(currentSubmission => (
-                            <div key={currentSubmission.studentId + currentSubmission.submittedTimestamp}>
-                            <div className={classes.flexHorizontal}>
-                                <ListItem button className={classes.nested} /*onClick={() => handleSubmissionClick()}*/>
-                                    <ListItemText primary={currentSubmission.studentName} 
-                                    secondary={" Submitted: " + currentSubmission.submittedTimestamp}  />
-                                    <Typography className={currentSubmission.isGraded ? classes.graded : classes.notGraded}>{currentSubmission.isGraded ? "Graded: " + currentSubmission.pointsAwarded + "/" + this.state.maxPoints : "Not Graded"}</Typography>
-                                </ListItem>
-                            </div>
+                            <div key={currentSubmission.studentId} onClick={() => this.handleGradeAssignment(currentSubmission.studentId)}>
+                                <div className={classes.flexHorizontal}>
+                                    <ListItem button className={classes.nested} /*onClick={() => handleSubmissionClick()}*/>
+                                        <ListItemText primary={currentSubmission.studentName} 
+                                        secondary={" Submitted: " + currentSubmission.submittedTimestamp}  />
+                                        <Typography className={currentSubmission.isGraded ? classes.graded : classes.notGraded}>{currentSubmission.isGraded ? "Graded: " + currentSubmission.pointsAwarded + "/" + this.state.maxPoints : "Not Yet Graded"}</Typography>
+                                    </ListItem>
+                                </div>
                             <Divider />
                             </div>
                         ))}
                     </List>
+                </div>
+                <div>
+                    <Modal
+                    className={classes.modal}
+                    disableBackdropClick
+                    open={this.state.modalOpen}
+                    onClose={this.handleClose}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                        >
+                        
+                    <div className = {classes.paper}>
+                        <GradeAssignmentModal closeModal={this.handleClose} studentId={this.state.currentStudentId} assignmentId={this.state.assignmentId} submissionType={this.state.submissionType}/>
+                    </div>
+                    </Modal>
                 </div>
             </div>
         )
