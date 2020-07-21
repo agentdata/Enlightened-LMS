@@ -63,6 +63,8 @@ export default function CourseAssignment(props) {
   const [submitOpen, setSubmitOpen] = useState(false);
   const [textInput, setTextInput] = useState("");
 
+  const [fileName, setFileName] = useState("")
+
   const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false)
 
   const submitButtonPressed = () => {
@@ -132,6 +134,12 @@ export default function CourseAssignment(props) {
     props.closeModal();
   }
 
+  const updateFileLabel = (e) => {
+    if (e.target.files.length > 0) {
+      setFileName(e.target.files[0].name)
+    }
+  }
+
   return (
     
     <div>
@@ -145,13 +153,13 @@ export default function CourseAssignment(props) {
       </div>
       <Divider />
       <div className={classes.contentDiv}>
-        <Typography>
+        <div>
           { 
             assignmentClicked.graded ?
             <div>Graded: {assignmentClicked.pointsAwarded} out of {assignmentClicked.maxPoints}</div>:
             <div>Points Possible: {assignmentClicked.maxPoints}</div>
           }
-        </Typography>
+        </div>
         <Typography>
           Due: {assignmentClicked.dueDate}
         </Typography>
@@ -183,7 +191,7 @@ export default function CourseAssignment(props) {
         submitOpen ? null : 
         <div className={classes.submitDiv}>
           {assignmentClicked.submitted ? 
-          <Button disabled="true">
+          <Button disabled={true}>
             Already Submitted
           </Button>
           :
@@ -210,10 +218,13 @@ export default function CourseAssignment(props) {
             >
               Upload File
               <input
+                id="file"
                 type="file"
                 style={{ display: "none" }}
+                onChange={updateFileLabel}
               />
             </Button>
+            <label htmlFor="file">{fileName}</label>
           </div>  
         }
           <div className={classes.submitDiv}>
