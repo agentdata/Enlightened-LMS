@@ -124,7 +124,7 @@ class GradeAssignmentModal extends Component {
         .then( async (response) => {
             const data = await response.json()
             if (response.status === 200 && data["message"] === "Assignment graded successfully.") {
-                // UI trigger message indicating grade saved
+                this.handleDialogOpen();
             }
         })
         .catch((e) => {
@@ -139,6 +139,12 @@ class GradeAssignmentModal extends Component {
     downloadFileSubmission = () => {
         // download file
         console.log("download")
+    }
+
+    checkErrors = () => {
+        if (this.state.pointsAwarded != -1 && this.state.pointsAwardedError === '') {
+            this.gradeAssignment();
+        }
     }
 
     render() {
