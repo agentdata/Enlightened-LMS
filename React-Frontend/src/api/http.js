@@ -106,10 +106,9 @@ export default {
         return fetch(API_BASE_URL+`/api/assignment/submit/${assignmentID}/uploadFile`,
             makeInit("POST", true, body, headers))
     },
-    // Don't need to explicitly call this API. Just call fetch and pass in the downloadURL with the token in the header.
-    // getFileAssignment(body) {
-    //     return fetch(API_BASE_URL+`/downloadFile/${body.courseId}/${body.studentId}/${body.fileName}`)
-    // },
+    downloadFile(downloadURL){
+        return fetch(downloadURL, makeInit("GET", true, null, null))
+    },
     getAssignmentSubmissions(body) {
         // call get submissions endpoint
     },

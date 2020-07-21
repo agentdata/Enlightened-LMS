@@ -141,6 +141,17 @@ class GradeAssignmentModal extends Component {
     downloadFileSubmission = () => {
         // download file
         console.log("download")
+        http.downloadFile(/*download URL */)
+            .then( async (response) => {
+                const body = await response.json();
+                if (response.status === 200) {
+                    console.log(body);
+                    // See how resource response is loaded by browser
+                }
+            })
+            .catch((e) => {
+                console.warn("There was an error downloading this file: ", e);
+            })
     }
 
     checkErrors = () => {
