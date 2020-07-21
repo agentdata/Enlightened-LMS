@@ -127,27 +127,27 @@ class GradeAssignments extends Component {
 
     // API call - grab submissions from single assignment
     getAssignmentSubmissions = () => {
-        console.log(this.state.assignmentId)
-        http.getAssignmentSubmissions(this.state.assignmentId)
-        .then( async (response) => {
-            const data = await response.json();
-            if (response.status === 200 && data["message"] === "success") {
-                console.log(data)
-                for (let submission of data["submissions"]) {
-                    this.setState({
-                        assignmentSubmissions: [...this.state.assignmentSubmissions, submission]
-                    });
-                    if (submission.isGraded === true) {
-                        this.setState({
-                            graded: this.state.graded + 1
-                        })
-                    }
-                }
-            }
-        })
-        .catch((e) => {
-            console.warn("There was an error retrieving submissions: ", e);
-        })
+        // console.log(this.state.assignmentId)
+        // http.getAssignmentSubmissions(this.state.assignmentId)
+        // .then( async (response) => {
+        //     const data = await response.json();
+        //     if (response.status === 200 && data["message"] === "success") {
+        //         console.log(data)
+        //         for (let submission of data["submissions"]) {
+        //             this.setState({
+        //                 assignmentSubmissions: [...this.state.assignmentSubmissions, submission]
+        //             });
+        //             if (submission.isGraded === true) {
+        //                 this.setState({
+        //                     graded: this.state.graded + 1
+        //                 })
+        //             }
+        //         }
+        //     }
+        // })
+        // .catch((e) => {
+        //     console.warn("There was an error retrieving submissions: ", e);
+        // })
     }
 
     getAssignmentSubmission = () => {
