@@ -318,6 +318,31 @@ public class AssignmentController {
 
     }
 
+    @PreAuthorize("hasAuthority('INSTRUCTOR')")
+    @GetMapping("/{assignmentId}/submissions")
+    public ResponseEntity<Map<Object, Object>> getAssignmentSubmissions(Principal principalUser, @PathVariable String assignmentId){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User instructor = userService.findUserByEmail(principalUser.getName());
+            Assignment assignment = assignmentService.findByAssignmentId(assignmentId);
+            Course course = courseService.findById(assignment.getCourseId());
+
+            if(courseService.isInstructorsCourse(course, instructor)) {
+
+                model.put("submissions", assignment.getSubmissions());
+                model.put("message", "success");
+            }
+            else {
+                model.put("message", "Instructor must teach this course to see submissions");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", e.getMessage());
+        }
+        return ok(model);
+    }
+
     @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
     @GetMapping("/simplified/{courseId}")
     public ResponseEntity<Map<Object, Object>> getSimplifiedCourseAssignments(Principal principalUser, @PathVariable String courseId){
