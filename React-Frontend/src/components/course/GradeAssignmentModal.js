@@ -48,6 +48,10 @@ const styles = theme => ({
         paddingTop: "15px",
         paddingBottom: "15px"
     },
+    gradeContainer: {
+        display: "flex",
+        justifyContent: "flex-end"
+    },
     gradeDiv: {
         display: "flex",
         alignItems: "baseline"
@@ -67,7 +71,8 @@ class GradeAssignmentModal extends Component {
 
         this.state = {
             pointsAwarded: -1,
-            pointsAwardedError: ''
+            pointsAwardedError: '',
+            confirmDialogOpen: false
         };
     }
     
@@ -131,6 +136,11 @@ class GradeAssignmentModal extends Component {
         })
     }
 
+    downloadFileSubmission = () => {
+        // download file
+        console.log("download")
+    }
+
     render() {
         const { classes } = this.props
 
@@ -147,30 +157,32 @@ class GradeAssignmentModal extends Component {
                 <div className={classes.submission}>
                     {this.props.submissionType === "TEXTBOX" ? 
                     <Typography>{this.props.textSubmission}</Typography> :
-                    <Link>{this.props.fileSubmissionName}</Link>
+                    <Link onClick={this.downloadFileSubmission}>{this.props.fileSubmissionName}</Link>
                     }
                 </div>
                 <Divider />
-                <div className={classes.gradeDiv}>
-                    <TextField
-                    id="pointsAwarded"
-                    label="Points"
-                    helperText={this.state.pointsAwardedError === '' ? "" : this.state.pointsAwardedError}
-                    margin="normal"
-                    InputLabelProps={{
-                        shrink: true
-                    }}
-                    InputProps={{
-                        classes: {
-                            input: classes.resize
-                        }
-                    }}
-                    className={classes.textField}
-                    onChange={this.handlePointsAwardedChange}
-                    onBlur={this.validatePointsAwarded}
-                    error={this.state.pointsAwardedError === '' ? false : true}
-                    />
-                    <Typography variant="h3"> / {this.props.pointsPossible} </Typography>
+                <div className={classes.gradeContainer}>
+                    <div className={classes.gradeDiv}>
+                        <TextField
+                        id="pointsAwarded"
+                        label="Points"
+                        helperText={this.state.pointsAwardedError === '' ? "" : this.state.pointsAwardedError}
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                        InputProps={{
+                            classes: {
+                                input: classes.resize
+                            }
+                        }}
+                        className={classes.textField}
+                        onChange={this.handlePointsAwardedChange}
+                        onBlur={this.validatePointsAwarded}
+                        error={this.state.pointsAwardedError === '' ? false : true}
+                        />
+                        <Typography variant="h3"> / {this.props.pointsPossible} </Typography>
+                    </div>
                 </div>
 
                 <List>

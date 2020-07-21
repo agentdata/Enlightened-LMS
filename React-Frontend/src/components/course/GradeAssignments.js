@@ -56,7 +56,7 @@ class GradeAssignments extends Component {
             assignmentId: 1008,
             submissions: 0,
             graded: 0,
-            submissionType: "TEXTBOX",
+            submissionType: "FILEUPLOAD",
             maxPoints: 150,
             assignmentSubmissions: [{
                 studentId: 12345,
