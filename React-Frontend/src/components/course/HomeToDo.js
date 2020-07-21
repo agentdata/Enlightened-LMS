@@ -63,7 +63,6 @@ class HomeToDo extends React.Component {
     .then( async (response) => {
       const body = await response.json();
       if (response.status === 200 && body["message"] === "success") {
-        console.log("All assignments response: ", body)
         for (let a of body["assignments"]) {
           this.setState({
             assignments: [...this.state.assignments, a]

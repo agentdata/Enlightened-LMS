@@ -22,6 +22,12 @@ public class Assignment {
 
     public Assignment(){}
 
+    public Assignment(String title, String courseId, List<AssignmentSubmission> submissions) {
+        this.title = title;
+        this.courseId = courseId;
+        this.submissions = submissions;
+    }
+
     public String getId() {
         return id;
     }
