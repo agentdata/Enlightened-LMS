@@ -83,7 +83,12 @@ class GradeAssignments extends Component {
                 pointsAwarded: 130
             }],
             currentStudentId: null,
-            modalOpen: false
+            currentStudentName: null,
+            modalOpen: false,
+
+            // store text submission here
+            textSubmission: null,
+            fileSubmissionName: null
         }
     }
 
@@ -92,10 +97,28 @@ class GradeAssignments extends Component {
         
     }
 
-    handleGradeAssignment = (studentId) => {
-        this.setState({currentStudentId: studentId}, () => {
-            this.setState({modalOpen: true})
+    handleGradeAssignment = (studentId, studentName) => {
+        this.setState({currentStudentId: studentId, currentStudentName: studentName}, () => {
+            this.getAssignmentSubmission()
         }) 
+    }
+
+    getAssignmentSubmission = () => {
+
+        if (this.state.submissionType == "TEXTBOX") {
+            // get submission and store it in textSubmission then
+            this.setState({textSubmission: "the quick brown fox jumped over the lazy dog"}, () => {
+                this.setState({modalOpen: true})
+            })
+            
+        } else {
+            // get file name and store it in fileSubmissionName
+            this.setState({fileSubmissionName: "fileupload.txt"}, () => {
+                this.setState({modalOpen: true})
+            })
+        }
+        
+        
     }
 
     handleClose = () => {
@@ -118,7 +141,7 @@ class GradeAssignments extends Component {
                 <div className={classes.listDiv}>
                     <List component="nav" disablePadding>
                         {this.state.assignmentSubmissions.map(currentSubmission => (
-                            <div key={currentSubmission.studentId} onClick={() => this.handleGradeAssignment(currentSubmission.studentId)}>
+                            <div key={currentSubmission.studentId} onClick={() => this.handleGradeAssignment(currentSubmission.studentId, currentSubmission.studentName)}>
                                 <div className={classes.flexHorizontal}>
                                     <ListItem button className={classes.nested} /*onClick={() => handleSubmissionClick()}*/>
                                         <ListItemText primary={currentSubmission.studentName} 
@@ -142,7 +165,10 @@ class GradeAssignments extends Component {
                         >
                         
                     <div className = {classes.paper}>
-                        <GradeAssignmentModal closeModal={this.handleClose} studentId={this.state.currentStudentId} assignmentId={this.state.assignmentId} submissionType={this.state.submissionType}/>
+                        <GradeAssignmentModal closeModal={this.handleClose} studentId={this.state.currentStudentId} 
+                        assignmentId={this.state.assignmentId} submissionType={this.state.submissionType} 
+                        pointsPossible={this.state.maxPoints} studentName={this.state.currentStudentName} 
+                        textSubmission={this.state.textSubmission} fileSubmissionName={this.state.fileSubmissionName}/>
                     </div>
                     </Modal>
                 </div>

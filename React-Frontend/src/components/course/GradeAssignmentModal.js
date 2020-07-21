@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core/styles"
 import { Typography, Button, List, ListItem, 
-        TextField } from '@material-ui/core';
+        TextField, Divider, Link} from '@material-ui/core';
 import http from '../../api/http';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -29,45 +29,6 @@ const styles = theme => ({
         borderBottom: "2px solid #3f51b5",
         marginBottom: "10px"
     },
-    dayTitle: {
-        padding: "8px"
-    },
-    submissionButton: {
-        borderRadius: "3px",
-        border: "1px solid rgba(0, 0, 0, 0.54)",
-        minWidth: "50px",
-        marginRight: "10px",
-    },
-    submissionSelected: {
-        borderRadius: "3px",
-        border: "1px solid rgba(0, 0, 0, 0.54)",
-        backgroundColor: "#80e2a7",
-        minWidth: "50px",
-        '&:hover': {
-            backgroundColor: "#57ad79"
-        },
-        marginRight: "10px"
-    },
-    daysFlex: {
-        marginLeft: "5px",
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap"
-    },
-    daysError: {
-        textAlign: "center",
-        color: "#f44336",
-        fontWeight: "initial",
-        fontSize: "15px",
-        marginTop: "5px"
-    },
-    timesFlex: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: "5px",
-        marginBottom: "10px"
-    },
     buttons: {
         display: "flex",
         justifyContent: "space-around"
@@ -75,6 +36,27 @@ const styles = theme => ({
     modalButton: {
         paddingRight: "12px",
         paddingLeft: "12px"
+    },
+    assignmentDetails: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between"
+    },
+    submission: {
+        minHeight: "100px",
+        color: "black",
+        paddingTop: "15px",
+        paddingBottom: "15px"
+    },
+    gradeDiv: {
+        display: "flex",
+        alignItems: "baseline"
+    },
+    textField: {
+        width: "200px",
+    },
+    resize: {
+        fontSize: "45px"
     }
 })
 
@@ -102,6 +84,16 @@ class GradeAssignmentModal extends Component {
         this.setState({pointsAwarded: target.currentTarget.value})
     }
 
+    validatePointsAwarded = () => {
+        if (this.state.pointsAwarded === -1) {
+            this.setState({pointsAwardedError: 'Cannot Be Empty'})
+        } else if (!/^\d+$/.test(this.state.pointsAwarded)) {
+            this.setState({pointsAwardedError: 'Numbers Only'})
+        } else {
+            this.setState({pointsAwardedError: ''})
+        }
+    }
+
     handleDialogOpen = () => {
         this.setState({confirmDialogOpen: true})
     }
@@ -113,10 +105,15 @@ class GradeAssignmentModal extends Component {
 
     // grade submission api call
     gradeAssignment() {
+
+        // student id stored in this.props.studentId
+        // assignment id stored in this.props.assignmentId
+        // grade stored in this.state.pointsAwarded
+
         let grade = {
-            assignmentId: 0,
-            studentId: 0,
-            grade: 50
+            assignmentId: this.props.assignmentId,
+            studentId: this.state.studentId,
+            grade: this.state.pointsAwarded
         }
         http.updateAssignmentGrade(JSON.stringify(grade))
         .then( async (response) => {
@@ -134,41 +131,47 @@ class GradeAssignmentModal extends Component {
         })
     }
 
-    validatePointsAwarded = () => {
-        if (this.state.pointsAwarded === -1) {
-            this.setState({pointsAwardedError: 'Cannot Be Empty'})
-        } else if (!/^\d+$/.test(this.state.pointsAwarded)) {
-            this.setState({pointsAwardedError: 'Numbers Only'})
-        } else {
-            this.setState({pointsAwardedError: ''})
-        }
-    }
-
     render() {
         const { classes } = this.props
 
         return (
             <div className={classes.verticalFlex}>
                 <div className={classes.title}>
-                    <Typography variant="h5">Grade Assignment </Typography>
+                    <Typography variant="h5">Grade Assignment</Typography>
                 </div>
                 <div className={classes.assignmentDetails}>
-                    <Typography>{this.props.studentId}</Typography>
-                    <Typography>{this.props.assignmentId}</Typography>
+                    <Typography>Student Name: {this.props.studentName}</Typography>
+                    <Typography>Assignment ID: {this.props.assignmentId}</Typography>
                 </div>
-                <TextField
-                id="pointsAwarded"
-                label="Points"
-                style={{ margin: 8 }}
-                helperText={this.state.pointsAwardedError === '' ? "" : this.state.pointsAwardedError}
-                margin="normal"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                onChange={this.handlePointsAwardedChange}
-                onBlur={this.validatePointsAwarded}
-                error={this.state.pointsAwardedError === '' ? false : true}
-                />
+                <Divider />
+                <div className={classes.submission}>
+                    {this.props.submissionType === "TEXTBOX" ? 
+                    <Typography>{this.props.textSubmission}</Typography> :
+                    <Link>{this.props.fileSubmissionName}</Link>
+                    }
+                </div>
+                <Divider />
+                <div className={classes.gradeDiv}>
+                    <TextField
+                    id="pointsAwarded"
+                    label="Points"
+                    helperText={this.state.pointsAwardedError === '' ? "" : this.state.pointsAwardedError}
+                    margin="normal"
+                    InputLabelProps={{
+                        shrink: true
+                    }}
+                    InputProps={{
+                        classes: {
+                            input: classes.resize
+                        }
+                    }}
+                    className={classes.textField}
+                    onChange={this.handlePointsAwardedChange}
+                    onBlur={this.validatePointsAwarded}
+                    error={this.state.pointsAwardedError === '' ? false : true}
+                    />
+                    <Typography variant="h3"> / {this.props.pointsPossible} </Typography>
+                </div>
 
                 <List>
                     <ListItem className={classes.buttons}>
@@ -186,7 +189,7 @@ class GradeAssignmentModal extends Component {
                     <DialogTitle id="alert-dialog-title">{"Success"}</DialogTitle>
                     <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Assignment Successfully Added.
+                        Assignment Successfully Graded.
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
