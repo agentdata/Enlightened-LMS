@@ -40,7 +40,9 @@ const styles = theme => ({
     assignmentDetails: {
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        paddingTop: "10px",
+        paddingBottom: "10px"
     },
     submission: {
         minHeight: "100px",
@@ -117,7 +119,7 @@ class GradeAssignmentModal extends Component {
 
         let grade = {
             assignmentId: this.props.assignmentId,
-            studentId: this.state.studentId,
+            studentId: this.props.studentId,
             grade: this.state.pointsAwarded
         }
         http.updateAssignmentGrade(JSON.stringify(grade))

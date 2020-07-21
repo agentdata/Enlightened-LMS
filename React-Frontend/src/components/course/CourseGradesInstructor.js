@@ -5,7 +5,7 @@ const styles = theme => ({
 
 })
 
-class CourseGrades extends Component {
+class CourseGradesInstructor extends Component {
 
     render() {
         return (
@@ -16,4 +16,4 @@ class CourseGrades extends Component {
     }
 }
 
-export default withStyles(styles)(CourseGrades)
+export default withStyles(styles)(CourseGradesInstructor)

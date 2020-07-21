@@ -94,7 +94,7 @@ class GradeAssignments extends Component {
 
     // load submissions
     componentDidMount() {
-        
+        // set assignmentSubmissions state here
     }
 
     handleGradeAssignment = (studentId, studentName) => {
@@ -106,13 +106,13 @@ class GradeAssignments extends Component {
     getAssignmentSubmission = () => {
 
         if (this.state.submissionType == "TEXTBOX") {
-            // get submission and store it in textSubmission then
+            // get submission and store it in textSubmission then open modal
             this.setState({textSubmission: "the quick brown fox jumped over the lazy dog"}, () => {
                 this.setState({modalOpen: true})
             })
             
         } else {
-            // get file name and store it in fileSubmissionName
+            // get file name and store it in fileSubmissionName then open modal
             this.setState({fileSubmissionName: "fileupload.txt"}, () => {
                 this.setState({modalOpen: true})
             })
