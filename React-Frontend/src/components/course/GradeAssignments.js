@@ -58,7 +58,7 @@ class GradeAssignments extends Component {
             graded: 0,
             submissionType: "FILEUPLOAD",
             maxPoints: 150,
-            assignmentSubmissions: [{
+            assignmentSubmissions: [/*{
                 studentId: 12345,
                 studentName: "Justin Edwards",
                 submittedTimestamp: "2020-07-15T22:17:41.714+00:00",
@@ -81,7 +81,7 @@ class GradeAssignments extends Component {
                 onTime: false,
                 isGraded: true,
                 pointsAwarded: 130
-            }],
+            }*/],
             currentStudentId: null,
             currentStudentName: null,
             modalOpen: false,
@@ -95,6 +95,12 @@ class GradeAssignments extends Component {
     // load submissions
     componentDidMount() {
         // set assignmentSubmissions state here
+        this.getAssignmentSubmissions();
+
+        this.setState({
+            submissions: this.state.assignmentSubmissions.length
+        });
+        
     }
 
     handleGradeAssignment = (studentId, studentName) => {
@@ -103,10 +109,54 @@ class GradeAssignments extends Component {
         }) 
     }
 
+    // API call - get assignment data
+    getAssignment = () => {
+        http.getCourseAssignment()
+        .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200 && data["message"] === "success") {
+                console.log(data)
+                this.setState({
+                    assignmentId: data["id"],
+                    submissionType: data["submissionType"],
+                    maxPoints: data["maxPoints"],
+                })
+            }
+        })
+    }
+
+    // API call - grab submissions from single assignment
+    getAssignmentSubmissions = () => {
+        console.log(this.state.assignmentId)
+        http.getAssignmentSubmissions(this.state.assignmentId)
+        .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200 && data["message"] === "success") {
+                console.log(data)
+                for (let submission of data["submissions"]) {
+                    this.setState({
+                        assignmentSubmissions: [...this.state.assignmentSubmissions, submission]
+                    });
+                    if (submission.isGraded === true) {
+                        this.setState({
+                            graded: this.state.graded + 1
+                        })
+                    }
+                }
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error retrieving submissions: ", e);
+        })
+    }
+
     getAssignmentSubmission = () => {
 
         if (this.state.submissionType == "TEXTBOX") {
             // get submission and store it in textSubmission then open modal
+
+            
+
             this.setState({textSubmission: "the quick brown fox jumped over the lazy dog"}, () => {
                 this.setState({modalOpen: true})
             })

@@ -22,33 +22,33 @@ public class AssignmentControllerTest {
     static String testCourseId;
 
     // Executes before all the tests
-    @BeforeAll
-    static void initialize() {
-        TOKEN = getStudentToken();
-    }
+    // @BeforeAll
+    // static void initialize() {
+    //     TOKEN = getStudentToken();
+    // }
 
-    static String getStudentToken() {
-        String studentToken = "";
+    // static String getStudentToken() {
+    //     String studentToken = "";
 
-        try {
-            URL url = new URL("http://localhost:8080/api/auth/login");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        }
-    }
+    //     try {
+    //         URL url = new URL("http://localhost:8080/api/auth/login");
+    //         HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    //     }
+    // }
 
-    // Use at least one assert* method in each test
-    @Test
-    void testMultiply(){
-        assertEquals(15, x * y);
-    }
-    @Test
-    void testCompare(){
-        assertTrue(x > y);
-    }
+    // // Use at least one assert* method in each test
+    // @Test
+    // void testMultiply(){
+    //     assertEquals(15, x * y);
+    // }
+    // @Test
+    // void testCompare(){
+    //     assertTrue(x > y);
+    // }
 
-    // This executes after all the tests
-    @AfterAll
-    static void cleanup() {
+    // // This executes after all the tests
+    // @AfterAll
+    // static void cleanup() {
 
-    }
+    // }
 }
