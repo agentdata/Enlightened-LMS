@@ -145,7 +145,7 @@ class GradeAssignments extends Component {
             studentName: _currentSubmission.studentName,
             pointsAwarded: _currentSubmission.pointsAwarded,
             currentStudentId: _currentSubmission.studentId})
-            
+
         if (this.state.submissionType === "TEXTBOX") {
             this.setState({ textSubmission: _currentSubmission.submissionContent }, () => {
                 this.setState({modalOpen: true})
@@ -183,7 +183,7 @@ class GradeAssignments extends Component {
                                 <div className={classes.flexHorizontal}>
                                     <ListItem button className={classes.nested} /*onClick={() => handleSubmissionClick()}*/>
                                         <ListItemText primary={currentSubmission.studentName} 
-                                        secondary={" Submitted: " + currentSubmission.submittedTimestamp}  />
+                                        secondary={" Submitted: " + currentSubmission.submittedTimeStamp}  />
                                         <Typography className={currentSubmission.graded ? classes.graded : classes.notGraded}>{currentSubmission.graded ? "Graded: " + currentSubmission.pointsAwarded + "/" + this.state.maxPoints : "Not Yet Graded"}</Typography>
                                     </ListItem>
                                 </div>
