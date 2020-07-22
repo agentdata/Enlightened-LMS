@@ -329,8 +329,23 @@ public class AssignmentController {
 
             if(courseService.isInstructorsCourse(course, instructor)) {
 
-                model.put("submissions", assignment.getSubmissions());
-                model.put("assignment", assignment);
+                ArrayList assignmentSubmissionsForGrading = new ArrayList();
+                for (AssignmentSubmission assignmentSubmission : assignment.getSubmissions()) {
+                    Map<Object, Object> modifiedAssignmentSubmission = new HashMap<>();
+
+                    modifiedAssignmentSubmission.put("studentId", assignmentSubmission.getStudentId());
+                    modifiedAssignmentSubmission.put("studentName", userService.findById(assignmentSubmission.getStudentId()).getFirstName() +" "+ userService.findById(assignmentSubmission.getStudentId()).getLastName());
+                    modifiedAssignmentSubmission.put("pointsAwarded", assignmentSubmission.getPointsAwarded());
+                    modifiedAssignmentSubmission.put("submissionContent", assignmentSubmission.getSubmissionContent());
+                    modifiedAssignmentSubmission.put("submittedFile", assignmentSubmission.getSubmittedFile());
+                    modifiedAssignmentSubmission.put("submittedTimeStamp", assignmentSubmission.getSubmittedTimestamp());
+                    modifiedAssignmentSubmission.put("graded", assignmentSubmission.isGraded());
+
+
+                    assignmentSubmissionsForGrading.add(modifiedAssignmentSubmission);
+                }
+                model.put("assignment", assignmentService.getAssignmentDetailsAsJson(assignment));
+                model.put("submissions", assignmentSubmissionsForGrading);
                 model.put("message", "success");
             }
             else {

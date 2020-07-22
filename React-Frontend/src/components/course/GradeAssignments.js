@@ -53,6 +53,7 @@ class GradeAssignments extends Component {
         super(props)
         
         this.state = {
+            assignmentName: "Assignment Name",
             assignmentId: this.props.match.params.assignmentid,
             submissions: 0,
             graded: 0,
@@ -88,7 +89,7 @@ class GradeAssignments extends Component {
 
             // store text submission here
             textSubmission: null,
-            fileSubmissionName: null
+            submittedFile: null
         }
     }
 
@@ -103,9 +104,10 @@ class GradeAssignments extends Component {
         
     }
 
-    handleGradeAssignment = (studentId, studentName) => {
-        this.setState({currentStudentId: studentId, currentStudentName: studentName}, () => {
-            this.getAssignmentSubmission()
+    handleGradeAssignment = (_currentSubmission) => {
+        this.setState({currentSubmission: _currentSubmission}, () => {
+            
+            this.getAssignmentSubmission(_currentSubmission)
         }) 
     }
 
@@ -119,10 +121,10 @@ class GradeAssignments extends Component {
                 console.log(data)
                 for (let submission of data["submissions"]) {
                     this.setState({
-                        submissions: 0,
-                        graded: 0,
+                        submissions: this.state.submissions + 1,
                         submissionType: data["assignment"]["submissionType"],
                         maxPoints: data["assignment"]["maxPoints"],
+                        assignmentName: data["assignment"]["title"],
                         assignmentSubmissions: [...this.state.assignmentSubmissions, submission]
                     });
                     if (submission.graded === true) {
@@ -138,25 +140,23 @@ class GradeAssignments extends Component {
         })
     }
 
-    getAssignmentSubmission = () => {
-
-        if (this.state.submissionType == "TEXTBOX") {
-            // get submission and store it in textSubmission then open modal
-
-                    
-
-            this.setState({textSubmission: "the quick brown fox jumped over the lazy dog"}, () => {
-                this.setState({modalOpen: true})
-            })
+    getAssignmentSubmission = (_currentSubmission) => {
+        this.setState({
+            studentName: _currentSubmission.studentName,
+            pointsAwarded: _currentSubmission.pointsAwarded,
+            currentStudentId: _currentSubmission.studentId})
             
-        } else {
+        if (this.state.submissionType === "TEXTBOX") {
+            this.setState({ textSubmission: _currentSubmission.submissionContent }, () => {
+                this.setState({modalOpen: true})
+            })    
+        } 
+        else {
             // get file name and store it in fileSubmissionName then open modal
-            this.setState({fileSubmissionName: "fileupload.txt"}, () => {
+            this.setState({ submittedFile: _currentSubmission.submittedFile, }, () => {
                 this.setState({modalOpen: true})
             })
-        }
-        
-        
+        }        
     }
 
     handleClose = () => {
@@ -169,17 +169,17 @@ class GradeAssignments extends Component {
         return (
             <div className={classes.mainContainer}>
                 <div className={classes.head}>
-                    <Typography variant="h2">Assignment Name</Typography>
+                    <Typography variant="h2">{this.state.assignmentName}</Typography>
                     <div className={classes.numGraded}>
-                        <Typography variant="h5">Submissions: 17</Typography>
-                        <Typography variant="h5">Graded: 0</Typography>
+                        <Typography variant="h5">Submissions: {this.state.submissions}</Typography>
+                        <Typography variant="h5">Graded: {this.state.graded}</Typography>
                     </div>
                 </div>
 
                 <div className={classes.listDiv}>
                     <List component="nav" disablePadding>
                         {this.state.assignmentSubmissions.map(currentSubmission => (
-                            <div key={currentSubmission.studentId} onClick={() => this.handleGradeAssignment(currentSubmission.studentId, currentSubmission.studentName)}>
+                            <div key={currentSubmission.studentId} onClick={() => this.handleGradeAssignment(currentSubmission)}>
                                 <div className={classes.flexHorizontal}>
                                     <ListItem button className={classes.nested} /*onClick={() => handleSubmissionClick()}*/>
                                         <ListItemText primary={currentSubmission.studentName} 
@@ -204,9 +204,10 @@ class GradeAssignments extends Component {
                         
                     <div className = {classes.paper}>
                         <GradeAssignmentModal closeModal={this.handleClose} studentId={this.state.currentStudentId} 
-                        assignmentId={this.state.assignmentId} submissionType={this.state.submissionType} 
-                        pointsPossible={this.state.maxPoints} studentName={this.state.currentStudentName} 
-                        textSubmission={this.state.textSubmission} fileSubmissionName={this.state.fileSubmissionName}/>
+                        assignmentId={this.state.assignmentId} submissionType={this.state.submissionType}
+                        pointsAwarded={this.state.pointsAwarded}
+                        pointsPossible={this.state.maxPoints} studentName={this.state.studentName} 
+                        textSubmission={this.state.textSubmission} submittedFile={this.state.submittedFile}/>
                     </div>
                     </Modal>
                 </div>
