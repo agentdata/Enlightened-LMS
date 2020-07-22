@@ -125,7 +125,7 @@ class GradeAssignments extends Component {
                         maxPoints: data["assignment"]["maxPoints"],
                         assignmentSubmissions: [...this.state.assignmentSubmissions, submission]
                     });
-                    if (submission.isGraded === true) {
+                    if (submission.graded === true) {
                         this.setState({
                             graded: this.state.graded + 1
                         })
@@ -143,7 +143,7 @@ class GradeAssignments extends Component {
         if (this.state.submissionType == "TEXTBOX") {
             // get submission and store it in textSubmission then open modal
 
-            
+                    
 
             this.setState({textSubmission: "the quick brown fox jumped over the lazy dog"}, () => {
                 this.setState({modalOpen: true})
@@ -184,7 +184,7 @@ class GradeAssignments extends Component {
                                     <ListItem button className={classes.nested} /*onClick={() => handleSubmissionClick()}*/>
                                         <ListItemText primary={currentSubmission.studentName} 
                                         secondary={" Submitted: " + currentSubmission.submittedTimestamp}  />
-                                        <Typography className={currentSubmission.isGraded ? classes.graded : classes.notGraded}>{currentSubmission.isGraded ? "Graded: " + currentSubmission.pointsAwarded + "/" + this.state.maxPoints : "Not Yet Graded"}</Typography>
+                                        <Typography className={currentSubmission.graded ? classes.graded : classes.notGraded}>{currentSubmission.graded ? "Graded: " + currentSubmission.pointsAwarded + "/" + this.state.maxPoints : "Not Yet Graded"}</Typography>
                                     </ListItem>
                                 </div>
                             <Divider />
