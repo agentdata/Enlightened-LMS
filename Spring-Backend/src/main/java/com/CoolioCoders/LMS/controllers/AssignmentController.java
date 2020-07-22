@@ -5,6 +5,7 @@ import com.CoolioCoders.LMS.services.AssignmentService;
 import com.CoolioCoders.LMS.services.CourseService;
 import com.CoolioCoders.LMS.services.FileStoreService;
 import com.CoolioCoders.LMS.services.LMSUserDetailsService;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -396,4 +397,45 @@ public class AssignmentController {
         return ok(model);
     }
 
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @GetMapping("/{courseId}/grades")
+    public ResponseEntity<Map<Object, Object>> getStudentGrades(Principal principalUser, @PathVariable String courseId){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+            Course course = courseService.findById(courseId);
+            if (courseService.isStudentEnrolledInCourse(user, course) == true && course != null) {
+                List<Assignment> assignments = new ArrayList<>();
+                assignments.addAll(assignmentService.findByCourseId(courseId));
+                ArrayList<Map<Object, Object>> assignmentsAndGradesDetails = new ArrayList<Map<Object, Object>>();
+                ArrayList<Map<Object, Object>> List = new ArrayList<Map<Object, Object>>();
+
+                for (Assignment assignment : assignments) {
+                    AssignmentSubmission assignmentSubmission = assignment.getStudentSubmission(user.getId());
+                    Map<Object, Object> assignmentAndGradeDetails = new HashMap<>();
+                    assignmentAndGradeDetails.put("assignmentDetails", assignmentService.getAssignmentDetailsAsJson(assignment));
+                    if (assignmentSubmission != null) {
+                        assignmentAndGradeDetails.put("graded", assignmentSubmission.isGraded());
+                        assignmentAndGradeDetails.put("pointsAwarded", assignmentSubmission.getPointsAwarded());
+                    } else {
+                        assignmentAndGradeDetails.put("graded", null);
+                        assignmentAndGradeDetails.put("pointsAwarded", null);
+                    }
+                    assignmentsAndGradesDetails.add(assignmentAndGradeDetails);
+                }
+
+                model.put("assignmentsAndGradesDetails", assignmentsAndGradesDetails);
+                model.put("message", "Success");
+            }
+            else{
+                model.put("message", "Student not registered for this course.");
+            }
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+            model.put("message", "An exception occurred");
+        }
+        return ok(model);
+    }
 }
