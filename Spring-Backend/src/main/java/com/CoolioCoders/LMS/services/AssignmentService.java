@@ -20,9 +20,10 @@ public class AssignmentService {
 
     @Autowired
     AssignmentRepository assignmentRepository;
-
     @Autowired
     CourseService courseService;
+    @Autowired
+    LMSUserDetailsService userService;
 
     public Assignment findByAssignmentId(String assignmentId) {
         return assignmentRepository.findById(assignmentId).orElseThrow(EntityNotFoundException::new);
@@ -37,6 +38,18 @@ public class AssignmentService {
     }
 
     public Assignment save(Assignment assignment){
+
+        //Assignment updatedAssignment = findByAssignmentId(assignment.getId());
+        if(assignment.getId() == null){
+            // new assignment
+
+            //Generate notifications for the students
+            Course course = courseService.findById(assignment.getCourseId());
+            for(String studentId : course.getStudentIds()) {
+                userService.generateNotification(studentId, course.getId(), "New assignment created: " + assignment.getTitle());
+            }
+        }
+
         return assignmentRepository.save(assignment);
     }
 
@@ -45,6 +58,10 @@ public class AssignmentService {
         submissions.add(submission);
         assignment.setSubmissions(submissions);
         save(assignment);
+
+        //Generate notification for instructor
+        Course course = courseService.findById(assignment.getCourseId());
+        userService.generateNotification(course.getInstructor().getId(), course.getId(), "New submission for " + assignment.getTitle());
     }
 
     public List<SimplifiedAssignment> getSimplifiedAssignmentList(List<Assignment> assignments) {
@@ -105,6 +122,9 @@ public class AssignmentService {
             submission.setGraded(true);
             submission.setPointsAwarded(grade.doubleValue());
             assignmentRepository.save(assignment);
+
+            userService.generateNotification(studentId, assignment.getCourseId(), "New grade posted for " + assignment.getTitle());
+
             return true;
         }
         return false;

@@ -1,10 +1,7 @@
 package com.CoolioCoders.LMS.services;
 
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
-import com.CoolioCoders.LMS.models.Notification;
-import com.CoolioCoders.LMS.models.Role;
-import com.CoolioCoders.LMS.models.User;
-import com.CoolioCoders.LMS.models.UserProfile;
+import com.CoolioCoders.LMS.models.*;
 import com.CoolioCoders.LMS.repositories.RoleRepository;
 import com.CoolioCoders.LMS.repositories.UserRepository;
 import net.minidev.json.JSONObject;
@@ -17,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -124,50 +122,60 @@ public class LMSUserDetailsService implements UserDetailsService{
         return model;
     }
 
-    public Set<Notification> getNotifications(String email)
+    public List<Notification> getNewUserNotifications(User user)
     {
-        User currentUser = findUserByEmail(email);
-        Set<Notification> notifications = currentUser.getNotifications();
+        List<Notification> notifications = user.getNotifications();
+        List<Notification> newNotifications = new ArrayList<>();
 
-        return notifications;
+        for(Notification notification : notifications) {
+            if(!notification.isCleared()){
+                newNotifications.add(notification);
+            }
+        }
+
+        return newNotifications;
     }
 
-    public Map<Object, Object> addNotification(String email, JSONObject body)
-    {
-        User currentUser = findUserByEmail(email);
-        Notification notification = new Notification(body.get("title").toString(), body.get("description").toString());
-        currentUser.addNotification(notification);
+    public Notification generateNotification(String userId, String courseId, String title){
+        User user = findById(userId);
+        Course course = courseService.findById(courseId);
 
-        userRepository.save(currentUser);
+        Notification notification = new Notification();
+        notification.setId(UUID.randomUUID().toString());
+        notification.setTitle(title);
+        notification.setCourseId(course.getId());
+        notification.setCourseName(course.getCourseName());
+        notification.setTimestamp(LocalDateTime.now());
+        notification.setLink("Link TBD");
+        notification.setCleared(false);
 
-        Map<Object, Object> model = new HashMap<>();
-        model.put("message", "Notification added successfully");
-        return model;
+        List<Notification> notificationList = user.getNotifications();
+        notificationList.add(notification);
+        user.setNotifications(notificationList);
+        userRepository.save(user);
+        return notification;
     }
 
-    public Map<Object, Object> removeNotification(String email, JSONObject body)
+    public Notification clearNotification(String notificationId, User user)
     {
-        User currentUser = findUserByEmail(email);
-        Notification notification = new Notification(body.get("title").toString(), body.get("description").toString());
-        currentUser.removeNotification(notification);
+        List<Notification> notificationList = user.getNotifications();
+        Notification updatedNotification = null;
 
-        userRepository.save(currentUser);
+        for(Notification notification : notificationList){
+            if(notification.getId().equals(notificationId)){
+                updatedNotification = notificationList.remove(notificationList.indexOf(notification));
+                break;
+            }
+        }
 
-        Map<Object, Object> model = new HashMap<>();
-        model.put("message", "Notification removed successfully");
-        return model;
-    }
+        if(updatedNotification != null) {
+            updatedNotification.setCleared(true);
 
-    public Map<Object, Object> clearNotification(String email)
-    {
-        User currentUser = findUserByEmail(email);
-        currentUser.clearNotifications();
-
-        userRepository.save(currentUser);
-
-        Map<Object, Object> model = new HashMap<>();
-        model.put("message", "Notifications cleared successfully");
-        return model;
+            notificationList.add(updatedNotification);
+            user.setNotifications(notificationList);
+            userRepository.save(user);
+        }
+        return updatedNotification;
     }
 
     public Map<Object, Object> userToJSONResponse(User user){

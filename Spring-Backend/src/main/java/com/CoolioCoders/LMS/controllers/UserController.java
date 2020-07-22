@@ -72,22 +72,39 @@ public class UserController {
     }
 
     @GetMapping("/notifications")
-    public Set<Notification> getUserNotifications(Principal principalUser){
-        return userService.getNotifications(principalUser.getName());
+    public ResponseEntity<Map<Object, Object>> getUserNotifications(Principal principalUser){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+
+            //all notifications for that user
+            model.put("notifications", user.getNotifications());
+            //notifications for that user that have not been cleared by the user
+            model.put("newNotifications", userService.getNewUserNotifications(user));
+
+            model.put("message", "success");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            model.put("message", "Error: " + e.getMessage());
+        }
+        return ok(model);
     }
 
-    @PutMapping(value = "/notification/new")
-    public ResponseEntity<Map<Object, Object>> addUserNotification(Principal principalUser, @RequestBody JSONObject body){
-        return ok(userService.addNotification(principalUser.getName(), body));
-    }
+    @PutMapping("/notification/clear/{notificationId}")
+    public ResponseEntity<Map<Object, Object>> clearUserNotification(Principal principalUser, @PathVariable String notificationId){
+        Map<Object, Object> model = new HashMap<>();
+        try {
+            User user = userService.findUserByEmail(principalUser.getName());
+            Notification clearedNotification = userService.clearNotification(notificationId, user);
 
-    @PutMapping(value = "/notification/remove")
-    public ResponseEntity<Map<Object, Object>> removeUserNotification(Principal principalUser, @RequestBody JSONObject body){
-        return ok(userService.removeNotification(principalUser.getName(), body));
-    }
-
-    @PutMapping(value = "/notification/clear")
-    public ResponseEntity<Map<Object, Object>> clearUserNotification(Principal principalUser, @RequestBody JSONObject body){
-        return ok(userService.clearNotification(principalUser.getName()));
+            model.put("notification", clearedNotification);
+            model.put("message", "success");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            model.put("message", "Error: " + e.getMessage());
+        }
+        return ok(model);
     }
 }

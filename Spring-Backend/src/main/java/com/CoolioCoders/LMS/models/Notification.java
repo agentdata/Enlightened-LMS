@@ -1,39 +1,86 @@
 package com.CoolioCoders.LMS.models;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Notification {
 
-    private String title;           //The course name goes here.
-    private String description;
-    private String link = "";
-    private LocalDateTime time;
+    private String id;
+    private String title;
+    private String courseId;
+    private String courseName;
+    private LocalDateTime timestamp;
+    private String link;
+    private boolean cleared;
 
-    //Rudimentary notification with only title and description
-    public Notification(String title, String description) {
-        this.title = title;
-        this.description = description;
-        time = LocalDateTime.now();
+    public Notification() {}
+
+    public String getId() {
+        return id;
     }
 
-    //Notification with link
-    public Notification(String title, String description, String link){
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
-        this.description = description;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
         this.link = link;
-        time = LocalDateTime.now();
     }
 
-    public void setTitle(String title){this.title = title;}
-    public String getTitle(){return title;}
+    public boolean isCleared() {
+        return cleared;
+    }
 
-    public void setDescription(String description){this.description = description;}
-    public String getDescription(){return description;}
+    public void setCleared(boolean cleared) {
+        this.cleared = cleared;
+    }
 
-    public void setLink(String link){this.link = link;}
-    public String getLink(){return link;}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification)o;
+        return id.equals(that.id);
+    }
 
-    public void setTime(LocalDateTime time){this.time = time;}
-    public LocalDateTime getTime(){return time;}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

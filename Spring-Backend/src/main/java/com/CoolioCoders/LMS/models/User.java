@@ -33,7 +33,7 @@ public class User {
     @DBRef
     private Set<Role> roles;
     private Set<String> courseIds;
-    private Set<Notification> notifications;
+    private List<Notification> notifications;
 
     public User(){}
 
@@ -46,7 +46,7 @@ public class User {
 
     public User(String firstName, String lastName, LocalDate birthDate, String email, String password, String bio,
                 String link1, String link2, String link3, String avatar, String phone, String address1, String address2,
-                String city, String state, String zip, Set<Role> roles, Set<Notification> notifications) {
+                String city, String state, String zip, Set<Role> roles, List<Notification> notifications) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -225,31 +225,13 @@ public class User {
         return courseIds;
     }
 
-    public void setNotifications(Set<Notification> notifications){this.notifications = notifications;}
+    public void setNotifications(List<Notification> notifications){this.notifications = notifications;}
 
-    public Set<Notification> getNotifications(){
+    public List<Notification> getNotifications(){
         if(notifications == null){
-            return new HashSet<>();
+            return new ArrayList<>();
         }
         return notifications;
-    }
-
-
-
-
-
-    public void addNotification(Notification notification){
-        if(notifications == null)
-            notifications = new HashSet<>();
-        this.notifications.add(notification);
-    }
-
-    public void removeNotification(Notification notification){
-        this.notifications.remove(notification);
-    }
-
-    public void clearNotifications(){
-        this.notifications.removeAll(notifications);
     }
 
     @Override
