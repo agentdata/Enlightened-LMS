@@ -72,7 +72,8 @@ class GradeAssignmentModal extends Component {
         super(props)
 
         this.state = {
-            pointsAwarded: -1,
+            submittedFile: this.props.submittedFile,
+            pointsAwarded: this.props.pointsAwarded,
             pointsAwardedError: '',
             confirmDialogOpen: false
         };
@@ -85,6 +86,8 @@ class GradeAssignmentModal extends Component {
 
     componentDidMount() {
         this.getLoggedIn();
+        
+        this.setState({pointsAwarded: this.state.pointsAwarded})
     }
 
     handlePointsAwardedChange = (target) => {
@@ -92,7 +95,7 @@ class GradeAssignmentModal extends Component {
     }
 
     validatePointsAwarded = () => {
-        if (this.state.pointsAwarded === -1) {
+        if (this.state.pointsAwarded === '') {
             this.setState({pointsAwardedError: 'Cannot Be Empty'})
         } else if (!/^\d+$/.test(this.state.pointsAwarded)) {
             this.setState({pointsAwardedError: 'Numbers Only'})
@@ -141,7 +144,7 @@ class GradeAssignmentModal extends Component {
     downloadFileSubmission = () => {
         // download file
         console.log("download")
-        http.downloadFile(/*download URL */)
+        http.downloadFile(this.state.submittedFile.fileDownloadUrl)
             .then( async (response) => {
                 const body = await response.json();
                 if (response.status === 200) {
@@ -176,7 +179,7 @@ class GradeAssignmentModal extends Component {
                 <div className={classes.submission}>
                     {this.props.submissionType === "TEXTBOX" ? 
                     <Typography>{this.props.textSubmission}</Typography> :
-                    <Link onClick={this.downloadFileSubmission}>{this.props.fileSubmissionName}</Link>
+                    <Link onClick={this.downloadFileSubmission}>{this.state.submittedFile.fileName}</Link>
                     }
                 </div>
                 <Divider />
@@ -195,6 +198,7 @@ class GradeAssignmentModal extends Component {
                                 input: classes.resize
                             }
                         }}
+                        value={this.state.pointsAwarded}
                         className={classes.textField}
                         onChange={this.handlePointsAwardedChange}
                         onBlur={this.validatePointsAwarded}
