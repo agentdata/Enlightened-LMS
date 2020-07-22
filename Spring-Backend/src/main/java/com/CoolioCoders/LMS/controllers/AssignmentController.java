@@ -330,6 +330,7 @@ public class AssignmentController {
             if(courseService.isInstructorsCourse(course, instructor)) {
 
                 model.put("submissions", assignment.getSubmissions());
+                model.put("assignment", assignment);
                 model.put("message", "success");
             }
             else {
