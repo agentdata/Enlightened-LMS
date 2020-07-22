@@ -109,26 +109,6 @@ class GradeAssignments extends Component {
         }) 
     }
 
-    // API call - get assignment data
-    getAssignment = () => {
-        http.getCourseAssignment()
-        .then( async (response) => {
-            const data = await response.json();
-            if (response.status === 200 && data["message"] === "success") {
-                console.log(data)
-                this.setState({
-                    studentName: "Student Name",
-                    assignmentId: data["id"],
-                    submissionType: data["submissionType"],
-                    maxPoints: data["maxPoints"],
-                    submittedTimestamp: data["submittedTimeStamp"],
-                    isGraded: data["graded"],
-                    pointsAwarded: data["pointsAwarded"]
-                })
-            }
-        })
-    }
-
     // API call - grab submissions from single assignment
     getAssignmentSubmissions = () => {
         console.log(this.state.assignmentId)
@@ -139,6 +119,10 @@ class GradeAssignments extends Component {
                 console.log(data)
                 for (let submission of data["submissions"]) {
                     this.setState({
+                        submissions: 0,
+                        graded: 0,
+                        submissionType: data["assignment"]["submissionType"],
+                        maxPoints: data["assignment"]["maxPoints"],
                         assignmentSubmissions: [...this.state.assignmentSubmissions, submission]
                     });
                     if (submission.isGraded === true) {
