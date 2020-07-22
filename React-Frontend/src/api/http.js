@@ -79,6 +79,9 @@ export default {
     getCourseAssignments(courseId) {
         return fetch(API_BASE_URL+`/api/assignment/simplified/${courseId}`, makeInit("GET", true, null, null))
     },
+    getStudentGrades(courseId) {
+        return fetch(API_BASE_URL+`/api/assignment/${courseId}/grades`, makeInit("GET", true, null, null))
+    },
     updateUserAvatar(body){
         return fetch(API_BASE_URL+'/api/user/profile/avatar', makeInit("PUT", true, body, null))
     },
