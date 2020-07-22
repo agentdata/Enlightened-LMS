@@ -52,7 +52,7 @@ class CoursePage extends Component {
                                 <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGrades} /> }
                             <Route path={`/course/${this.props.match.params.id}/course-announcements`} exact component={CourseAnnouncements} />
                             <Route path={`/course/${this.props.match.params.id}/course-discussions`} exact component={CourseDiscussions} />
-                            {isInstructor ? <Route path={`/course/${this.props.match.params.id}/grade-assignments`} exact component={GradeAssignments} /> : null }
+                            {isInstructor ? <Route path={`/course/${this.props.match.params.id}/grade-assignments/:assignmentid`} component={GradeAssignments} /> : null }
                             <Route path="/" component={CourseHome} match={this.props.match} />
                         </Switch>
                     </div>

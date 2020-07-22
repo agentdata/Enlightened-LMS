@@ -51,9 +51,9 @@ class GradeAssignments extends Component {
 
     constructor(props) {
         super(props)
-
+        
         this.state = {
-            assignmentId: 1008,
+            assignmentId: this.props.match.params.assignmentid,
             submissions: 0,
             graded: 0,
             submissionType: "FILEUPLOAD",
@@ -117,9 +117,13 @@ class GradeAssignments extends Component {
             if (response.status === 200 && data["message"] === "success") {
                 console.log(data)
                 this.setState({
+                    studentName: "Student Name",
                     assignmentId: data["id"],
                     submissionType: data["submissionType"],
                     maxPoints: data["maxPoints"],
+                    submittedTimestamp: data["submittedTimeStamp"],
+                    isGraded: data["graded"],
+                    pointsAwarded: data["pointsAwarded"]
                 })
             }
         })
@@ -127,27 +131,27 @@ class GradeAssignments extends Component {
 
     // API call - grab submissions from single assignment
     getAssignmentSubmissions = () => {
-        // console.log(this.state.assignmentId)
-        // http.getAssignmentSubmissions(this.state.assignmentId)
-        // .then( async (response) => {
-        //     const data = await response.json();
-        //     if (response.status === 200 && data["message"] === "success") {
-        //         console.log(data)
-        //         for (let submission of data["submissions"]) {
-        //             this.setState({
-        //                 assignmentSubmissions: [...this.state.assignmentSubmissions, submission]
-        //             });
-        //             if (submission.isGraded === true) {
-        //                 this.setState({
-        //                     graded: this.state.graded + 1
-        //                 })
-        //             }
-        //         }
-        //     }
-        // })
-        // .catch((e) => {
-        //     console.warn("There was an error retrieving submissions: ", e);
-        // })
+        console.log(this.state.assignmentId)
+        http.getAssignmentSubmissions(this.state.assignmentId)
+        .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200 && data["message"] === "success") {
+                console.log(data)
+                for (let submission of data["submissions"]) {
+                    this.setState({
+                        assignmentSubmissions: [...this.state.assignmentSubmissions, submission]
+                    });
+                    if (submission.isGraded === true) {
+                        this.setState({
+                            graded: this.state.graded + 1
+                        })
+                    }
+                }
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error retrieving submissions: ", e);
+        })
     }
 
     getAssignmentSubmission = () => {

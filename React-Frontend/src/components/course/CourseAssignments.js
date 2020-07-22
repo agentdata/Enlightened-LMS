@@ -209,7 +209,7 @@ export default function CourseAssignments(props) {
                         secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
                     </ListItem>
                     {isInstructor ? 
-                      <Button component={Link} to={`/course/${courseId}/grade-assignments`} className={classes.gradeButton}>
+                      <Button component={Link} to={`/course/${courseId}/grade-assignments/${currentAssignment.assignmentID}`} className={classes.gradeButton} assignmentID={currentAssignment.assignmentID}>
                         Grade Submissions
                       </Button> : null }
                   </div>
@@ -242,7 +242,7 @@ export default function CourseAssignments(props) {
                         secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
                     </ListItem>
                     {isInstructor ? 
-                      <Button component={Link} to={`/course/${courseId}/grade-assignments`} className={classes.gradeButton}>
+                      <Button component={Link} to={`/course/${courseId}/grade-assignments/${currentAssignment.assignmentID}`} className={classes.gradeButton}>
                         Grade Submissions
                       </Button> : null }
                     <Divider />
