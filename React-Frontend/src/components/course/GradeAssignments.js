@@ -51,9 +51,9 @@ class GradeAssignments extends Component {
 
     constructor(props) {
         super(props)
-
+        
         this.state = {
-            assignmentId: 1008,
+            assignmentId: this.props.match.params.assignmentid,
             submissions: 0,
             graded: 0,
             submissionType: "FILEUPLOAD",
@@ -117,9 +117,13 @@ class GradeAssignments extends Component {
             if (response.status === 200 && data["message"] === "success") {
                 console.log(data)
                 this.setState({
+                    studentName: "Student Name",
                     assignmentId: data["id"],
                     submissionType: data["submissionType"],
                     maxPoints: data["maxPoints"],
+                    submittedTimestamp: data["submittedTimeStamp"],
+                    isGraded: data["graded"],
+                    pointsAwarded: data["pointsAwarded"]
                 })
             }
         })

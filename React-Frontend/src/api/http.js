@@ -110,7 +110,7 @@ export default {
         return fetch(downloadURL, makeInit("GET", true, null, null))
     },
     getAssignmentSubmissions(assignmentId) {
-        return fetch(API_BASE_URL+"/api/assignment/{assignmentId}/submissions", makeInit("GET", true, null, null))
+        return fetch(API_BASE_URL+`/api/assignment/${assignmentId}/submissions`, makeInit("GET", true, null, null))
     },
     createNewUser (body) {
         return fetch(API_BASE_URL+"/api/auth/register", makeInit("POST", false, body, null) )
