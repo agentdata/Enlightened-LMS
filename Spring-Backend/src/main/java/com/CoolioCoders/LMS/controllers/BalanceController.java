@@ -60,6 +60,7 @@ public class BalanceController {
 
             try{
                 balance.setUser(userService.findUserByEmail(principalUser.getName()));
+                balance.setRemaining(balance.getBalance());
                 balanceService.saveBalance(balance);
 
                 model.put("message", "Sucessfully added new balance");
