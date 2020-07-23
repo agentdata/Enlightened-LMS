@@ -53,7 +53,7 @@ class HomeToDo extends React.Component {
 
     this.state = {
       isLoggedIn: false,
-      assignments: [],
+      assignments: []
       // error: null
     };
   }
@@ -92,7 +92,7 @@ class HomeToDo extends React.Component {
   
         { this.state.assignments ? ( 
          this.state.assignments.map(currentAssignment => (
-            <ListItem alignItems="flex-start" key={ currentAssignment.title + " " + currentAssignment.course }>
+            <ListItem alignItems="flex-start" key={ currentAssignment.id }>
               <Link href={ currentAssignment.link }>
                 <ListItemText
                   primary={ currentAssignment.title }

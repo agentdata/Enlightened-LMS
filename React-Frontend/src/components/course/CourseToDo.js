@@ -8,29 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link'
 import http from '../../api/http';
 
-// const state = {
-//   isLoggedIn: false,
-//   assignments: [
-//       {
-//           title: 'Assignment 3',
-//           course: 'CS 3100',
-//           due: '2020-06-13T23:59:59Z',
-//           link: 'http://www.google.com'
-//       },
-//       {
-//           title: 'Quiz 3',
-//           course: 'CS 3260',
-//           due: '2020-06-14T23:59:59Z',
-//           link: 'link to assignment'
-//       },
-//       {
-//           title: 'Assignment 4',
-//           course: 'CS 3260',
-//           due: '2020-06-16T23:59:59Z',
-//           link: 'link to assignment'
-//       }
-//   ]
-// };
 
 const styles = theme => ({
   root: {
@@ -89,7 +66,7 @@ class CourseToDo extends React.Component {
   
         { this.state.assignments ? ( 
           this.state.assignments.map(currentAssignment => (
-            <ListItem alignItems="flex-start" key={ currentAssignment.title + " " + currentAssignment.dueDate }>
+            <ListItem alignItems="flex-start" key={ currentAssignment.id }>
               <Link href={ currentAssignment.link }>
                 <ListItemText
                   primary={ currentAssignment.title }
