@@ -1,5 +1,5 @@
 export const API_BASE_URL =  'https://api.stripe.com';
-export const API_KEY = 'pk_test_51H4HWYCI6wJm5zzTHFNrK4VpjX1W3YGJn79GiwAjW8aibKekAMwraEXJsmtPmOrrDZCKf2fmzaDmKQz2OOgfQcoL00EkxWGwHQ';   //Replace with team test key
+export const API_KEY = 'sk_test_51H4HWYCI6wJm5zzTPyXR3FOFMs2y8r8QkUpeI3o7CXhdUYKqR06m5xCiX0c03MYoiJxXjefDfan1AmFljhpuA54700LF1vfLcj';   //Replace with team test key
 
 /*
     To process a payment, call the following methods in this order:
