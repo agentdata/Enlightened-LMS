@@ -6,31 +6,35 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link'
+import http from "../api/http";
+import utilities from "../actions/utilities";
 
 const state = {
+
     notifications: [
         {
+            id: "123456",
             title: "New comment for \"Assignment 4 Fork Help\"",
-            course: "CS 3100",
-            date: "06/13/20",
-            time: "11:51pm",
-            link: "link to discussion"
-        },
-        {
-            title: "Assignment 4 due date changed",
-            course: "CS 3100",
-            date: "06/13/20",
-            time: "11:45pm",
-            link: "link to assignment"
-        },
-        {
-            title: "Assignment 4 graded",
-            course: "CS 3260",
-            date: "06/13/20",
-            time: "11:30pm",
-            link: "link to assignment"
+            courseName: "CS 3100",
+            timestamp: "2020-07-20T11:51:00",
+            link: "link to assignment",
+            cleared: false
         }
     ]
+}
+
+const getNotifications = () => {
+
+    http.getUserNotifications()
+        .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200 && data["message"] === "success") {
+                state.notifications = data["newNotifications"];
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error retrieving notifications: ", e);
+        })
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -49,12 +53,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AlignItemsList() {
   const classes = useStyles();
+  getNotifications();
 
   return (
     <List className={classes.root}>
         {state.notifications ? (
             state.notifications.map(currentNotification => (
-                <div key={currentNotification.title + " " + currentNotification.course}>
+                <div key={ currentNotification.id }>
                 <ListItem alignItems="flex-start">
                     <Link href={currentNotification.link}>
                         <ListItemText className={classes.title}
@@ -67,10 +72,10 @@ export default function AlignItemsList() {
                                         className={classes.inline}
                                         color="textPrimary"
                                         >
-                                            {currentNotification.course}
+                                            {currentNotification.courseName}
                                         </Typography>
                                         <br />
-                                        {currentNotification.date + " | " + currentNotification.time}
+                                        { utilities.formatDateTime(currentNotification.timestamp) }
                                     </React.Fragment>
                                 }
                             />

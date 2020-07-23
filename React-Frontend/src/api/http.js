@@ -88,6 +88,9 @@ export default {
     updateUserProfileDetails(body){
         return fetch(API_BASE_URL+'/api/user/profile', makeInit("PUT", true, body, null))
     },
+    getUserNotifications(){
+        return fetch(API_BASE_URL+'/api/user/notifications', makeInit("GET", true, null, null))
+    },
     enrollForCourse(body){
         return fetch(API_BASE_URL+'/api/course/enroll', makeInit("POST", true, body, null))
     },
