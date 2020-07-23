@@ -37,6 +37,9 @@ class Account extends React.Component {
                 fullName: '',
                 cardNo: '',
                 expiryDate: '',
+                // TODO: Add expiry month & expiry year fields, parse from expiry date
+                expiryMonth: '',
+                expiryYear: '',
                 cvv: '',
                 amount: ''
             },
@@ -96,6 +99,9 @@ class Account extends React.Component {
                 fullName: '',
                 cardNo: '',
                 expiryDate: '',
+                // TODO: Add expiry month & expiry year fields, parse from expiry date
+                expiryMonth: '',
+                expiryYear: '',
                 cvv: '',
                 amount: ''
             },
@@ -108,29 +114,74 @@ class Account extends React.Component {
     }
 
     newPayment(payment) {
-
         // TODO: subtract payment from balance, update account on backend
+        // TODO: send payment to stripe & backend
 
-        // TODO: send payment to stripe / backend
+        let paymentIntentId = '';
+        let paymentMethodId = '';
+
+        // ------- CREATE NEW PAYMENT INTENT call ------------
 
         httpStripe.createNewPaymentIntent(`amount=${this.state.payment.amount}&currency=usd`)
         .then( async (response) => {
-            let data = await response.json()
+            const data = await response.json();
             if (response.status === 200) {
-                console.log("Successfully created payment intent.")
-                console.log(data)
-
+                console.log("Successfully created new payment intent.");
+                console.log(data);
+                paymentIntentId = data["id"];
             }
         } )
         .catch((e) => {
-            console.warn("Error creating payment intent: ", e)
+            console.warn("Error creating new payment intent: ", e);
+        });
+
+
+        // ------- CREATE NEW PAYMENT METHOD call --------
+        // createNewPaymentMethod params
+        let newPaymentMethodParams = {
+            "type": "card",
+            "card[number]": `${this.state.payment.cardNo}`,
+            "card[exp_month]": `${this.state.payment.expiryMonth}`,
+            "card[exp_year]": `${this.state.payment.expiryYear}`,
+            "card[cvc]": `${this.state.payment.cvv}`
+        }
+
+        // In progress, may require changes. (REQUIRES TESTING)
+        httpStripe.createNewPaymentMethod(
+            `type=${newPaymentMethodParams["type"]}&
+            card[number]=${newPaymentMethodParams["card[number]"]}&
+            card[exp_month]=${newPaymentMethodParams["card[exp_month]"]}&
+            card[exp_year]=${newPaymentMethodParams["card[exp_year]"]}&
+            card[cvc]=${newPaymentMethodParams["card[cvc]"]}`
+        )
+        .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200) {
+                console.log("Successfully created new payment method");
+                console.log(data);
+            }
         })
+        .catch((e) => {
+            console.warn("Error creating new payment method: ", e)
+        });
 
-        // httpStripe.createNewPaymentMethod()
 
+        // ----- CONFIRM PAYMENT call ------
+        // In progress, may require changes. (REQUIRES TESTING)
+        // httpStripe.confirmPayment(/*payment method*/, paymentIntentId)
+        // .then( async (response) => {
+        //     const data = await response.json();
+        //     if (response.status === 200) {
+        //         console.log("Successfully confirmed payment");
+        //         console.log(data);
+        //     }
+        // })
+        // .catch((e) => {
+        //     console.warn("Error confirming payment: ", e)
+        // });
 
         // Update on front end
-        this.getUserAccountInfo()
+        this.getUserAccountInfo();
     }
 
     handleNameChange = ({ target }) => {
