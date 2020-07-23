@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import http from '../../api/http';
+import utilities from '../../actions/utilities';
 
 // const state = {
 //   isLoggedIn: false,
@@ -106,7 +107,7 @@ class HomeToDo extends React.Component {
                           { currentAssignment.course }
                         </Typography>
                         <br />
-                        { "Due: " + currentAssignment.dueDate }
+                        { "Due: " + utilities.formatDateTime(currentAssignment.dueDate) }
                     </React.Fragment>
                   }
                   />

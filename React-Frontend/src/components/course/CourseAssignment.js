@@ -10,6 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import utilities from "../../actions/utilities";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -161,7 +162,7 @@ export default function CourseAssignment(props) {
           }
         </div>
         <Typography>
-          Due: {assignmentClicked.dueDate}
+          Due: {utilities.formatDateTime(assignmentClicked.dueDate)}
         </Typography>
         <Typography>
           {assignmentClicked.submissionType === "TEXTBOX" ? 'Submission Type: Text Input' : 'Submission Type: File Upload'}

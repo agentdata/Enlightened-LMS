@@ -15,6 +15,7 @@ import AddAssignment from './AddAssignment'
 import CourseAssignment from './CourseAssignment'
 import { Link } from 'react-router-dom'
 import http from '../../api/http';
+import utilities from "../../actions/utilities";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -206,7 +207,7 @@ export default function CourseAssignments(props) {
                   <div className={classes.flexHorizontal}>
                     <ListItem button className={classes.nested} onClick={() => handleAssignmentClick(currentAssignment.assignmentID)}>
                         <ListItemText primary={currentAssignment.title} 
-                        secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
+                        secondary={" Due: " + utilities.formatDateTime(currentAssignment.dueDate) + " | " + currentAssignment.maxPoints + " pts"}  />
                     </ListItem>
                     {isInstructor ? 
                       <Button component={Link} to={`/course/${courseId}/grade-assignments/${currentAssignment.assignmentID}`} className={classes.gradeButton} assignmentID={currentAssignment.assignmentID}>
@@ -239,7 +240,7 @@ export default function CourseAssignments(props) {
                   <div className={classes.flexHorizontal}>
                     <ListItem button className={classes.nested} onClick={() => handlePastAssignmentClick(currentAssignment.assignmentID)}>
                         <ListItemText primary={currentAssignment.title} 
-                        secondary={" Due: " + currentAssignment.dueDate + " | " + currentAssignment.maxPoints + " pts"}  />
+                        secondary={" Due: " + utilities.formatDateTime(currentAssignment.dueDate) + " | " + currentAssignment.maxPoints + " pts"}  />
                     </ListItem>
                     {isInstructor ? 
                       <Button component={Link} to={`/course/${courseId}/grade-assignments/${currentAssignment.assignmentID}`} className={classes.gradeButton}>
