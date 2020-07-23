@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { Container, Card, CardContent, Typography, 
     List, ListItem, Button, TextField } from '@material-ui/core';
 import http from '../api/http';
+import httpStripe from '../api/https-stripe';
 
 const styles = theme => ({
     payBtn: {
@@ -110,26 +111,23 @@ class Account extends React.Component {
 
         // TODO: subtract payment from balance, update account on backend
 
+        // TODO: send payment to stripe / backend
 
-        // TODO: send payment to backend / third party service
-        
-        // http.createNewPayment(JSON.stringify(payment))
-        // .then( async (response) => {
-        //     const body = await response.json()
-        //     if(response.status == 200 && body["message"] === "Successfully added new payment"){
+        httpStripe.createNewPaymentIntent(`amount=${this.state.payment.amount}&currency=usd`)
+        .then( async (response) => {
+            let data = await response.json()
+            if (response.status === 200) {
+                console.log("Successfully created payment intent.")
+                console.log(data)
 
-        //     }
-        //     else{
-        //         console.log("server error adding payment");
-        //     }
-        // })
-        // .catch((e) => {
-        //     console.warn("There was an error adding the payment: ", e);
+            }
+        } )
+        .catch((e) => {
+            console.warn("Error creating payment intent: ", e)
+        })
 
-        //     this.setState({
-        //         error: "There was an error adding the payment."
-        //     })
-        // })
+        // httpStripe.createNewPaymentMethod()
+
 
         // Update on front end
         this.getUserAccountInfo()
@@ -217,20 +215,20 @@ class Account extends React.Component {
 
     checkErrors = () => {
 
-        this.validateName()
-        this.validateCardNo()
-        this.validateExpiry()
-        this.validateCvv()
-        this.validateAmount()
+        // this.validateName()
+        // this.validateCardNo()
+        // this.validateExpiry()
+        // this.validateCvv()
+        // this.validateAmount()
 
         // no errors
-        if (this.state.payment.nameError === "" &&
-        this.state.payment.cardError === "" &&
-        this.state.payment.expiryError === "" &&
-        this.state.payment.cvvError === "" &&
-        this.state.payment.amountError === "") {
+        // if (this.state.payment.nameError === "" &&
+        // this.state.payment.cardError === "" &&
+        // this.state.payment.expiryError === "" &&
+        // this.state.payment.cvvError === "" &&
+        // this.state.payment.amountError === "") {
             this.newPayment(this.state.payment); 
-        }       
+        // }       
     }
 
     componentDidMount() {
