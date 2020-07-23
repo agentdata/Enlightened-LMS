@@ -11,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import utilities from "../../actions/utilities";
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -122,6 +123,13 @@ export default function CourseAssignment(props) {
     }
   }
 
+  const handleSaveFileSubmission = () => {
+    utilities.downloadFileSubmission(assignmentClicked.Submission.submittedFile.fileDownloadUrl, "save", assignmentClicked.Submission.submittedFile.fileName)
+  }
+  const handleOpenFileSubmission = () => {
+    utilities.downloadFileSubmission(assignmentClicked.Submission.submittedFile.fileDownloadUrl, "open", assignmentClicked.Submission.submittedFile.fileName)
+  }
+
   const handleTextChange = (target) => { 
     setTextInput(target.currentTarget.value)
   }
@@ -145,7 +153,7 @@ export default function CourseAssignment(props) {
     
     <div>
       <Button onClick={props.closeModal}>
-        Cancel
+        Close
       </Button>
       <div className={classes.contentDiv}>
         <Typography variant="h3">
@@ -174,66 +182,84 @@ export default function CourseAssignment(props) {
           Description: {assignmentClicked.description}
         </Typography>
       </div>
-      {
-        assignmentClicked.submitted ?
-        <div><Divider />
-        <div className={classes.contentDiv}>
-          <Typography>
-            Your Submission: {assignmentClicked.textBoxSubmissionContent}
-          </Typography>
-        </div>
-        </div>
-        : 
-        null
-      }
       
-      <Divider />
-      {
-        submitOpen ? null : 
-        <div className={classes.submitDiv}>
-          {assignmentClicked.submitted ? 
-          <Button disabled={true}>
-            Already Submitted
-          </Button>
-          :
-          <Button onClick={submitButtonPressed}>
-            Submit Assignment
-          </Button>}
-        </div>        
-      }
-      <Divider className={classes.bottomDivider}/>
-      {submitOpen ? 
-      <div className={classes.submissionDiv}>
-        {assignmentClicked.submissionType === "TEXTBOX" ?
-          <div className={classes.textInput}>
-            <TextareaAutosize className={classes.textInput}
-              onChange={handleTextChange}>
-              
-            </TextareaAutosize>
+      {sessionStorage.getItem("isInstructor") === "true" ?
+        null
+        :
+        <div>
+        {
+          assignmentClicked.submitted ?
+          <div><Divider />
+          <div className={classes.contentDiv}>
+            <Typography>
+                {assignmentClicked.submissionType === "TEXTBOX" ?
+                  <div>
+                    Your text Submission: {assignmentClicked.Submission.submissionContent}
+                  </div>
+                  :
+                  <div>
+                    Your file Submission: {assignmentClicked.studentId}
+                    {" "}<button backgroundColor="gray"><Link onClick={handleOpenFileSubmission}> open </Link></button>
+                    {" "}-or-{" "}
+                    <button backgroundColor="gray"><Link onClick={handleSaveFileSubmission}> save </Link></button>
+                  </div>
+                }
+            </Typography>
           </div>
-           :
-          <div>
-            <Button
-              variant="contained"
-              component="label"
-            >
-              Upload File
-              <input
-                id="file"
-                type="file"
-                style={{ display: "none" }}
-                onChange={updateFileLabel}
-              />
-            </Button>
-            <label htmlFor="file">{fileName}</label>
-          </div>  
+          </div>
+          : 
+          null
         }
+        
+        <Divider />
+        {
+          submitOpen ? null : 
           <div className={classes.submitDiv}>
-            <Button onClick={handleAssignmentSubmission}>
-              Submit
+            {assignmentClicked.submitted ? 
+            <Button disabled={true}>
+              Already Submitted
             </Button>
-          </div>
-      </div> : null }
+            :
+            <Button onClick={submitButtonPressed}>
+              Submit Assignment
+            </Button>}
+          </div>        
+        }
+        <Divider className={classes.bottomDivider}/>
+        {submitOpen ? 
+          <div className={classes.submissionDiv}>
+            {assignmentClicked.submissionType === "TEXTBOX" ?
+              <div className={classes.textInput}>
+                <TextareaAutosize className={classes.textInput}
+                  onChange={handleTextChange}>
+                  
+                </TextareaAutosize>
+              </div>
+              :
+              <div>
+                <Button
+                  variant="contained"
+                  component="label"
+                >
+                  Upload File
+                  <input
+                    id="file"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={updateFileLabel}
+                  />
+                </Button>
+                <label htmlFor="file">{fileName}</label>
+              </div>  
+            }
+              <div className={classes.submitDiv}>
+                <Button onClick={handleAssignmentSubmission}>
+                  Submit
+                </Button>
+              </div>
+          </div> : null 
+        }
+      </div>}
 
       <Dialog
           open={confirmDialogOpen}

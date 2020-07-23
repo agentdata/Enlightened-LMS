@@ -8,6 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import utilities from '../../actions/utilities';
 
 const styles = theme => ({
     verticalFlex: {
@@ -141,22 +142,14 @@ class GradeAssignmentModal extends Component {
         })
     }
 
-    downloadFileSubmission = () => {
-        // download file
-        console.log("download")
-        http.downloadFile(this.state.submittedFile.fileDownloadUrl)
-            .then( async (response) => {
-                const body = await response.json();
-                if (response.status === 200) {
-                    console.log(body);
-                    // See how resource response is loaded by browser
-                }
-            })
-            .catch((e) => {
-                console.warn("There was an error downloading this file: ", e);
-            })
+    handleOpenFileSubmission = () => {
+        utilities.downloadFileSubmission(this.state.submittedFile.fileDownloadUrl, "open", this.state.submittedFile.fileName)
     }
 
+    handleSaveFileSubmission = () => {
+        utilities.downloadFileSubmission(this.state.submittedFile.fileDownloadUrl, "save", this.state.submittedFile.fileNam)
+    }
+    
     checkErrors = () => {
         if (this.state.pointsAwarded != -1 && this.state.pointsAwardedError === '') {
             this.gradeAssignment();
@@ -179,7 +172,12 @@ class GradeAssignmentModal extends Component {
                 <div className={classes.submission}>
                     {this.props.submissionType === "TEXTBOX" ? 
                     <Typography>{this.props.textSubmission}</Typography> :
-                    <Link onClick={this.downloadFileSubmission}>{this.state.submittedFile.fileName}</Link>
+                    <div>
+                        {this.state.submittedFile.fileName}
+                        {" "}<button backgroundColor="gray"><Link onClick={this.handleOpenFileSubmission}> open </Link></button>
+                        {" "}-or-{" "}
+                        <button backgroundColor="gray"><Link onClick={this.handleSaveFileSubmission}> save </Link></button>
+                    </div>
                     }
                 </div>
                 <Divider />
@@ -210,7 +208,7 @@ class GradeAssignmentModal extends Component {
 
                 <List>
                     <ListItem className={classes.buttons}>
-                        <Button className={classes.modalButton} onClick={this.props.closeModal}>Cancel</Button>
+                        <Button className={classes.modalButton} onClick={this.props.closeModal}>Close</Button>
                         <Button className={classes.modalButton} onClick={this.checkErrors}>Submit Grade</Button>
                     </ListItem>
                 </List>

@@ -106,9 +106,8 @@ export default function CourseAssignments(props) {
             if(body["assignments"][i]["submissions"]["pointsAwarded"] !== null){
               assignment.pointsAwarded = body["assignments"][i]["submissions"]["pointsAwarded"]
             }
-            if(assignment.submissionType === "TEXTBOX"){
-              assignment.textBoxSubmissionContent = body["assignments"][i]["submissions"]["submissionContent"]
-            }
+            assignment.Submission = body["assignments"][i]["submissions"]
+            
           }
           
           new Date(Date.parse(assignment["dueDate"])).getTime() < new Date().getTime() ? fetchedPastAssignments.push(assignment) : fetchedFutureAssignments.push(assignment)
@@ -139,10 +138,7 @@ export default function CourseAssignments(props) {
   }
 
   const handleAssignmentClick = (key) => {
-    // do api call first, then
-    console.log(key)
     setAssignmentClicked(upcomingAssignments.filter(obj => obj.assignmentID === key))
-
   }
 
   const handlePastAssignmentClick = (key) => {
