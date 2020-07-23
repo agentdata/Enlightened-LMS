@@ -46,7 +46,7 @@ public class AssignmentService {
             //Generate notifications for the students
             Course course = courseService.findById(assignment.getCourseId());
             for(String studentId : course.getStudentIds()) {
-                userService.generateNotification(studentId, course.getId(), "New assignment created: " + assignment.getTitle());
+                userService.generateNotification(studentId, course.getId(), "New Assignment Created: " + assignment.getTitle());
             }
         }
 
@@ -61,7 +61,7 @@ public class AssignmentService {
 
         //Generate notification for instructor
         Course course = courseService.findById(assignment.getCourseId());
-        userService.generateNotification(course.getInstructor().getId(), course.getId(), "New submission for " + assignment.getTitle());
+        userService.generateNotification(course.getInstructor().getId(), course.getId(), "New Submission For: " + assignment.getTitle());
     }
 
     public List<SimplifiedAssignment> getSimplifiedAssignmentList(List<Assignment> assignments) {
@@ -123,7 +123,7 @@ public class AssignmentService {
             submission.setPointsAwarded(grade.doubleValue());
             assignmentRepository.save(assignment);
 
-            userService.generateNotification(studentId, assignment.getCourseId(), "New grade posted for " + assignment.getTitle());
+            userService.generateNotification(studentId, assignment.getCourseId(), "New Grade Posted For: " + assignment.getTitle());
 
             return true;
         }
