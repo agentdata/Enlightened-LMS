@@ -129,5 +129,8 @@ export default {
     },
     payBalance(body){
         return fetch(API_BASE_URL+'/api/balance/pay', makeInit("POST", true, body, null))
+    },
+    getBalance(){
+        return fetch(API_BASE_URL+'/api/balance/amount', makeInit("GET", true, null, null))
     }
 }
