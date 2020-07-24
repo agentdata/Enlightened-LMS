@@ -37,18 +37,42 @@ const getNotifications = () => {
         })
 }
 
+const clearNotification = (currentNotification) => {
+    http.clearUserNotification(currentNotification.id)
+        .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200 && data["message"] === "success") {
+                state.notifications = state.notifications.filter((value, index, arr)=>{return value.id !== currentNotification.id;})
+                // need to figure out how to refresh the list without having to close the notifcations and reopen
+            }
+        })
+        .catch((e) => {
+            console.warn("There was an error retrieving notifications: ", e);
+        })
+}
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    maxWidth: '36ch',
-    backgroundColor: theme.palette.background.paper,
-  },
-  inline: {
-    display: 'inline',
-  },
-  title: {
-      whiteSpace: "normal"
-  }
+    root: {
+        width: '100%',
+        maxWidth: '36ch',
+        backgroundColor: theme.palette.background.paper,
+    },
+    inline: {
+        display: 'inline',
+    },
+    title: {
+        whiteSpace: "normal"
+    },
+    clearButton: {
+        border: 'none',
+        backgroundColor: theme.palette.primary.contrastText,
+        margin: 'auto',
+        padding: '10px',
+    },
+    clearIcon: {
+        fontSize: "x-large",
+        color: theme.palette.primary.light,
+    }
 }));
 
 export default function AlignItemsList() {
@@ -80,6 +104,9 @@ export default function AlignItemsList() {
                                 }
                             />
                     </Link>
+                    <button type="button" className={classes.clearButton} onClick={() => clearNotification(currentNotification, state)} >
+                        <span className={classes.clearIcon}>&times;</span>
+                    </button>
                 </ListItem>
                 <Divider />
                 </div>

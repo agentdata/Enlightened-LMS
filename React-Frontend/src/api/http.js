@@ -91,6 +91,9 @@ export default {
     getUserNotifications(){
         return fetch(API_BASE_URL+'/api/user/notifications', makeInit("GET", true, null, null))
     },
+    clearUserNotification(notificationId) {
+        return fetch(API_BASE_URL+`/api/user/notification/clear/${notificationId}`, makeInit("PUT", true, null, null))
+    },
     enrollForCourse(body){
         return fetch(API_BASE_URL+'/api/course/enroll', makeInit("POST", true, body, null))
     },
