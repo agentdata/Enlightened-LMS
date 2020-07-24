@@ -173,10 +173,13 @@ public class AssignmentController {
             Course course = courseService.findById(assignment.getCourseId());
 
             if(courseService.isStudentEnrolledInCourse(student, course)){
-                //store the file in directory i.e. /{courseId}/{userId}/filename.txt
+                //store the file in directory i.e. /{courseId}/{userId}/{assignmentId}/filename.txt
                 String fileName = fileStoreService.storeFile(file, student, assignment);
 
-                String filePath = "/api/assignment/downloadFile/" + assignment.getCourseId() + "/" + student.getId() + "/";
+                String filePath = "/api/assignment/downloadFile/" +
+                                  assignment.getCourseId() + "/" +
+                                  student.getId() + "/" +
+                                  assignmentId + "/";
 
                 //build download API call string
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -219,13 +222,13 @@ public class AssignmentController {
         Use the fileUpload fileDownloadUrl to make the call to this endpoint
      */
     @PreAuthorize("hasAnyAuthority({'INSTRUCTOR', 'STUDENT'})")
-    @GetMapping("/downloadFile/{courseId}/{studentId}/{fileName:.+}")
+    @GetMapping("/downloadFile/{courseId}/{studentId}/{assignmentId}/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(Principal principalUser,
-            @PathVariable String courseId, @PathVariable String studentId,
+            @PathVariable String courseId, @PathVariable String studentId, @PathVariable String assignmentId,
             @PathVariable String fileName, HttpServletRequest request){
 
         try {
-            Resource resource = fileStoreService.getFileAsResource(courseId, studentId, fileName);
+            Resource resource = fileStoreService.getFileAsResource(courseId, studentId, assignmentId, fileName);
 
             String contentType = null;
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());

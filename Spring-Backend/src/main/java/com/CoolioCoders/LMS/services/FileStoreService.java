@@ -34,8 +34,8 @@ public class FileStoreService {
             throw new Exception("Error: Filename contains invalid character sequence.");
         }
 
-        //i.e.  /{courseId/{userId}/filename
-        Path submissionDirectory = fileStoreLocation.resolve(assignment.getCourseId()).resolve(user.getId());
+        //i.e.  /{courseId/{userId}/{assignmentId}/filename
+        Path submissionDirectory = fileStoreLocation.resolve(assignment.getCourseId()).resolve(user.getId()).resolve(assignment.getId());
         Files.createDirectories(submissionDirectory);
 
         Path storageTarget = submissionDirectory.resolve(fileName);
@@ -43,11 +43,10 @@ public class FileStoreService {
         return fileName;
     }
 
-//    public Resource getFileAsResource(Assignment assignment, User user, String fileName) throws Exception {
-    public Resource getFileAsResource(String courseId, String studentId, String fileName) throws Exception {
+    public Resource getFileAsResource(String courseId, String studentId, String assignmentId, String fileName) throws Exception {
 
-        //i.e.  /{courseId/{userId}/filename
-        Path filePath = fileStoreLocation.resolve(courseId).resolve(studentId).resolve(fileName).normalize();
+        //i.e.  /{courseId/{userId}/{assignmentId}/filename
+        Path filePath = fileStoreLocation.resolve(courseId).resolve(studentId).resolve(assignmentId).resolve(fileName).normalize();
 
         Resource urlResource = new UrlResource(filePath.toUri());
         if(urlResource.exists()){
