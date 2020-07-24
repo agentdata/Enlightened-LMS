@@ -183,6 +183,7 @@ public class AssignmentController {
 
                 //build download API call string
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .scheme("https")
                         .path(filePath)
                         .path(fileName)
                         .toUriString();
