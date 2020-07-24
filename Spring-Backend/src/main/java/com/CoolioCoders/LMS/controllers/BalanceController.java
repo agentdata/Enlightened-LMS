@@ -3,6 +3,7 @@ package com.CoolioCoders.LMS.controllers;
 import com.CoolioCoders.LMS.configuration.JwtTokenProvider;
 import com.CoolioCoders.LMS.models.Balance;
 import com.CoolioCoders.LMS.models.Course;
+import com.CoolioCoders.LMS.models.Payment;
 import com.CoolioCoders.LMS.models.User;
 import com.CoolioCoders.LMS.services.BalanceService;
 import com.CoolioCoders.LMS.services.CourseService;
@@ -60,6 +61,7 @@ public class BalanceController {
 
             try{
                 balance.setUser(userService.findUserByEmail(principalUser.getName()));
+                balance.setRemaining(balance.getBalance());
                 balanceService.saveBalance(balance);
 
                 model.put("message", "Sucessfully added new balance");
@@ -69,6 +71,27 @@ public class BalanceController {
             }
 
             return ok(model);
+    }
+
+    @PostMapping("/pay") //TODO fix functionality
+    public ResponseEntity<Map<Object, Object>> payBalance(Principal principalUser, @RequestBody Payment payment) {
+        Map<Object, Object> model = new HashMap<>();
+
+        try{
+            User user = userService.findUserByEmail(principalUser.getName());
+            List<Balance> balanceList = balanceService.getBalance(user);
+
+            Balance balance = balanceList.get(0);
+            balance.setRemaining(balance.getRemaining() - payment.getAmount());
+            balanceService.saveBalance(balance);
+
+            model.put("message", "Sucessfully paid $" + payment.getAmount());
+        }
+        catch(Exception e) {
+            model.put("message", e.getMessage());
+        }
+
+        return ok(model);
     }
 
     @PostMapping("/update")

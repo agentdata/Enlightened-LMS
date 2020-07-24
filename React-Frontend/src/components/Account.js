@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { Container, Card, CardContent, Typography, 
     List, ListItem, Button, TextField } from '@material-ui/core';
 import http from '../api/http';
+import httpStripe from '../api/https-stripe';
 
 const styles = theme => ({
     payBtn: {
@@ -36,6 +37,9 @@ class Account extends React.Component {
                 fullName: '',
                 cardNo: '',
                 expiryDate: '',
+                // TODO: Add expiry month & expiry year fields, parse from expiry date
+                expiryMonth: '',
+                expiryYear: '',
                 cvv: '',
                 amount: ''
             },
@@ -95,6 +99,9 @@ class Account extends React.Component {
                 fullName: '',
                 cardNo: '',
                 expiryDate: '',
+                // TODO: Add expiry month & expiry year fields, parse from expiry date
+                expiryMonth: '',
+                expiryYear: '',
                 cvv: '',
                 amount: ''
             },
@@ -107,32 +114,74 @@ class Account extends React.Component {
     }
 
     newPayment(payment) {
-
         // TODO: subtract payment from balance, update account on backend
+        // TODO: send payment to stripe & backend
+
+        let paymentIntentId = '';
+        let paymentMethodId = '';
+
+        // ------- CREATE NEW PAYMENT INTENT call ------------
+
+        httpStripe.createNewPaymentIntent(`amount=${this.state.payment.amount}&currency=usd`)
+        .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200) {
+                console.log("Successfully created new payment intent.");
+                console.log(data);
+                paymentIntentId = data["id"];
+            }
+        } )
+        .catch((e) => {
+            console.warn("Error creating new payment intent: ", e);
+        });
 
 
-        // TODO: send payment to backend / third party service
-        
-        // http.createNewPayment(JSON.stringify(payment))
+        // ------- CREATE NEW PAYMENT METHOD call --------
+        // createNewPaymentMethod params
+        let newPaymentMethodParams = {
+            "type": "card",
+            "card[number]": `${this.state.payment.cardNo}`,
+            "card[exp_month]": `${this.state.payment.expiryMonth}`,
+            "card[exp_year]": `${this.state.payment.expiryYear}`,
+            "card[cvc]": `${this.state.payment.cvv}`
+        }
+
+        // In progress, may require changes. (REQUIRES TESTING)
+        httpStripe.createNewPaymentMethod(
+            `type=${newPaymentMethodParams["type"]}&
+            card[number]=${newPaymentMethodParams["card[number]"]}&
+            card[exp_month]=${newPaymentMethodParams["card[exp_month]"]}&
+            card[exp_year]=${newPaymentMethodParams["card[exp_year]"]}&
+            card[cvc]=${newPaymentMethodParams["card[cvc]"]}`
+        )
+        .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200) {
+                console.log("Successfully created new payment method");
+                console.log(data);
+            }
+        })
+        .catch((e) => {
+            console.warn("Error creating new payment method: ", e)
+        });
+
+
+        // ----- CONFIRM PAYMENT call ------
+        // In progress, may require changes. (REQUIRES TESTING)
+        // httpStripe.confirmPayment(/*payment method*/, paymentIntentId)
         // .then( async (response) => {
-        //     const body = await response.json()
-        //     if(response.status == 200 && body["message"] === "Successfully added new payment"){
-
-        //     }
-        //     else{
-        //         console.log("server error adding payment");
+        //     const data = await response.json();
+        //     if (response.status === 200) {
+        //         console.log("Successfully confirmed payment");
+        //         console.log(data);
         //     }
         // })
         // .catch((e) => {
-        //     console.warn("There was an error adding the payment: ", e);
-
-        //     this.setState({
-        //         error: "There was an error adding the payment."
-        //     })
-        // })
+        //     console.warn("Error confirming payment: ", e)
+        // });
 
         // Update on front end
-        this.getUserAccountInfo()
+        this.getUserAccountInfo();
     }
 
     handleNameChange = ({ target }) => {
@@ -217,20 +266,20 @@ class Account extends React.Component {
 
     checkErrors = () => {
 
-        this.validateName()
-        this.validateCardNo()
-        this.validateExpiry()
-        this.validateCvv()
-        this.validateAmount()
+        // this.validateName()
+        // this.validateCardNo()
+        // this.validateExpiry()
+        // this.validateCvv()
+        // this.validateAmount()
 
         // no errors
-        if (this.state.payment.nameError === "" &&
-        this.state.payment.cardError === "" &&
-        this.state.payment.expiryError === "" &&
-        this.state.payment.cvvError === "" &&
-        this.state.payment.amountError === "") {
+        // if (this.state.payment.nameError === "" &&
+        // this.state.payment.cardError === "" &&
+        // this.state.payment.expiryError === "" &&
+        // this.state.payment.cvvError === "" &&
+        // this.state.payment.amountError === "") {
             this.newPayment(this.state.payment); 
-        }       
+        // }       
     }
 
     componentDidMount() {
