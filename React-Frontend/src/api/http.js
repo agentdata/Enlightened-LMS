@@ -121,10 +121,13 @@ export default {
     getAssignmentSubmissions(assignmentId) {
         return fetch(API_BASE_URL+`/api/assignment/${assignmentId}/submissions`, makeInit("GET", true, null, null))
     },
-    createNewUser (body) {
+    createNewUser(body) {
         return fetch(API_BASE_URL+"/api/auth/register", makeInit("POST", false, body, null) )
     },
-    loginUser (body){
+    processPayment(body){
+        return fetch(API_BASE_URL+"/api/balance/pay", makeInit("POST", true, body, null))
+    },
+    loginUser(body){
         return fetch(API_BASE_URL+"/api/auth/login", makeInit("POST", false, body, null))
     },
     validateToken(){
