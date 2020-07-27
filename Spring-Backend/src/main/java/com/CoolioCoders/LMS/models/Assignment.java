@@ -5,7 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Document(collection = "assignments")
 public class Assignment {
@@ -17,6 +19,7 @@ public class Assignment {
     private SubmissionType submissionType;
     private LocalDateTime dueDate;
     private int maxPoints;
+    private Map<String, Double> analytics;
     private String courseId;
     private List<AssignmentSubmission> submissions;
 
@@ -74,6 +77,15 @@ public class Assignment {
 
     public void setMaxPoints(int maxPoints) {
         this.maxPoints = maxPoints;
+    }
+
+    public Map<String, Double> getAnalytics() {
+        if(analytics == null) { analytics = new HashMap<>(); }
+        return analytics;
+    }
+
+    public void setAnalytics(Map<String, Double> analytics) {
+        this.analytics = analytics;
     }
 
     public String getCourseId() {
