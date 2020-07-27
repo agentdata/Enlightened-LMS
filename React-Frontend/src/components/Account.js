@@ -64,8 +64,6 @@ class Account extends React.Component {
         this.validateExpiry = this.validateExpiry.bind(this);
         this.validateCvv = this.validateCvv.bind(this);
         this.validateAmount = this.validateAmount.bind(this);
-        this.startNewPayment = this.createNewPaymentMethod.bind(this);
-        this.createIntent = this.submitPayment.bind(this);
 
     }
 
@@ -138,7 +136,9 @@ class Account extends React.Component {
             if (response.status === 200 && data["message"] === "Payment processed successfully.") {
                 //backend will log this transaction if it was successful and upate the balance due.
                 
-                // Update on front end (probably change this so the info is returned in the pay endpoint if the payment was successful instead of making another api call)
+                // Update on front end (probably change this so the info is returned 
+                // in the pay endpoint if the payment was successful instead of making another api call)
+                this.payButtonPressed();
                 this.getUserAccountInfo();
             }
         } )
