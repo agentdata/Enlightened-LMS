@@ -1,11 +1,11 @@
 export const API_BASE_URL =  'https://api.stripe.com';
-export const API_KEY = 'sk_test_51H4HWYCI6wJm5zzTPyXR3FOFMs2y8r8QkUpeI3o7CXhdUYKqR06m5xCiX0c03MYoiJxXjefDfan1AmFljhpuA54700LF1vfLcj';   //Replace with team test key
+export const API_KEY = 'pk_test_BkU5GWvqVFsOMAUM5xQn7Cid00JcpHeqty';   // public test key
 
 /*
     To process a payment, call the following methods in this order:
-        1.createNewPaymentIntent
-        2.createNewPaymentMethod
-        3.confirmPayment    SEND THE PAYMENT INTENT ID AS A SECOND PARAMETER
+        1.createNewPaymentMethod (frontend to stripe)
+        2.createNewPaymentIntent including the paymentMethodId (frontend to backend to stripe)
+        The payment is processed immediately when sent from backend
 */
 
 // builds init for fetch call, pass in null if there is no body.

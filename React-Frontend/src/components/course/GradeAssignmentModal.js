@@ -147,7 +147,7 @@ class GradeAssignmentModal extends Component {
     }
 
     handleSaveFileSubmission = () => {
-        utilities.downloadFileSubmission(this.state.submittedFile.fileDownloadUrl, "save", this.state.submittedFile.fileNam)
+        utilities.downloadFileSubmission(this.state.submittedFile.fileDownloadUrl, "save", this.state.submittedFile.fileName)
     }
     
     checkErrors = () => {
