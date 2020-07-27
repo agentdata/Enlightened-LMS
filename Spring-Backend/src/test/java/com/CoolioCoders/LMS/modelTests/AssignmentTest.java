@@ -42,5 +42,11 @@ public class AssignmentTest {
     public void submissionsAddedToList() {
         submissions.add(submission1);
         submissions.add(submission2);
+
+        assignment.setSubmissions(submissions);
+
+        for (AssignmentSubmission submission : submissions) {
+            assertTrue(assignment.getSubmissions().contains(submission));
+        }
     }
 }
