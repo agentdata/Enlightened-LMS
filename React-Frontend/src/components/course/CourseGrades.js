@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, 
-    TablePagination, TableRow, TableSortLabel, Checkbox, Paper } from '@material-ui/core'
+    TablePagination, TableRow, TableSortLabel, Typography, Checkbox, Paper } from '@material-ui/core'
 import { withStyles } from "@material-ui/core/styles"
 import http from '../../api/http'
 
@@ -13,6 +13,9 @@ const styles = theme => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
+    tableHeading: {
+        fontWeight: 700
+    }
 })
 
 let pointsEarned = 0
@@ -79,49 +82,50 @@ class CourseGrades extends Component {
     render() {
         const classes = styles;
 
-        const headCells = [
-            { id: 'Title', numeric: false, disablePadding: true, label: 'Title' },
-            { id: 'Due', numeric: false, disablePadding: false, label: 'Due' },
-            { id: 'Status', numeric: false, disablePadding: false, label: 'Status' },
-            { id: 'Score', numeric: true, disablePadding: false, label: 'Score' },
-            { id: 'Out of', numeric: true, disablePadding: false, label: 'Out of' },
-          ];
+        // const headCells = [
+        //     { id: 'Title', numeric: false, disablePadding: true, label: 'Title' },
+        //     { id: 'Due', numeric: false, disablePadding: false, label: 'Due' },
+        //     { id: 'Status', numeric: false, disablePadding: false, label: 'Status' },
+        //     { id: 'Score', numeric: true, disablePadding: false, label: 'Score' },
+        //     { id: 'Out of', numeric: true, disablePadding: false, label: 'Out of' },
+        //   ];
 
         return (
             <div className={classes.root} /*class="studentGradeView"*/>
                 <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="simple table">
+                    <Typography variant="h4">Grades</Typography>
+                    <Table className={classes.table} aria-label="grades table">
                         <TableHead>
-                        <TableRow>
-                            <TableCell>Title</TableCell>
-                            <TableCell align="right">Due</TableCell>
-                            <TableCell align="right">Status</TableCell>
-                            <TableCell align="right">Score</TableCell>
-                            <TableCell align="right">Out of</TableCell>
-                            <TableCell align="right">Class average</TableCell>
-                        </TableRow>
+                            <TableRow>
+                                <TableCell className={classes.tableHeading}>Title</TableCell>
+                                <TableCell align="right">Due</TableCell>
+                                <TableCell align="right">Status</TableCell>
+                                <TableCell align="right">Score</TableCell>
+                                <TableCell align="right">Out of</TableCell>
+                                <TableCell align="right">Class average</TableCell>
+                            </TableRow>
                         </TableHead>
                         <TableBody>
                         {this.state.grades.map((assignment) => (
                             <TableRow key={assignment.title}>
-                            <TableCell component="th" scope="row">
-                                {assignment.title}
-                            </TableCell>
-                            <TableCell align="right">{assignment.dueDate}</TableCell>
-                            <TableCell align="right">{assignment.graded === null? "Not Submitted": assignment.graded ? "Graded": "Submitted"}</TableCell>
-                            <TableCell align="right">{assignment.graded === null? "-": assignment.graded ? assignment.pointsAwarded : "-" }</TableCell>
-                            <TableCell align="right">{assignment.maxPoints}</TableCell>
-                            <TableCell>avg</TableCell>
+                                <TableCell component="th" scope="row">
+                                    {assignment.title}
+                                </TableCell>
+                                <TableCell align="right">{assignment.dueDate}</TableCell>
+                                <TableCell align="right">{assignment.graded === null? "Not Submitted": assignment.graded ? "Graded": "Submitted"}</TableCell>
+                                <TableCell align="right">{assignment.graded === null? "-": assignment.graded ? assignment.pointsAwarded : "-" }</TableCell>
+                                <TableCell align="right">{assignment.maxPoints}</TableCell>
+                                <TableCell align="right">avg</TableCell>
                             </TableRow>
                         ))}
-                        <TableRow>
-                            <TableCell align="right">
-                                Total Grade
-                            </TableCell>
-                            <TableCell align="right">
-                            {Math.floor((pointsEarned/totalPoints)*10000)/100}%
-                            </TableCell>
-                        </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row" align="center">
+                                    Total Grade
+                                </TableCell>
+                                <TableCell align="right">
+                                    {Math.floor((pointsEarned/totalPoints)*10000)/100}%
+                                </TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
