@@ -5,6 +5,8 @@ import http from '../../api/http'
 const styles = theme => ({
 
 })
+let pointsEarned = 0
+let totalPoints = 0
 
 class CourseGrades extends Component {
     constructor(props){
@@ -26,7 +28,6 @@ class CourseGrades extends Component {
     componentDidMount(){
         this.getGrades();
     }
-    
     getGrades = () => {
         http.getStudentGrades(sessionStorage.getItem("courseId"))
         .then( async (response) => {
@@ -45,7 +46,17 @@ class CourseGrades extends Component {
                         graded: assignment["graded"],
                         pointsAwarded: assignment["pointsAwarded"],
                     }
+                    // Only count if assignment is graded
+                    if(parsedAssignment.graded == true){
+                        totalPoints += parsedAssignment.maxPoints
+                        pointsEarned += parsedAssignment.pointsAwarded
+                    }
+
                     grades.push(parsedAssignment)
+                }
+                if(totalPoints == 0){
+                    totalPoints = 1
+                    pointsEarned = 1
                 }
                 this.setState({grades: grades})
             }
@@ -80,6 +91,13 @@ class CourseGrades extends Component {
                         <td>avg</td>
                     </tr>
                 ))}
+                    <tr></tr>
+                    <tr>
+                        <td>Total Grade</td>
+                        <td>{
+                            Math.floor((pointsEarned/totalPoints)*10000)/100
+                        }%</td>
+                    </tr>
                 </table>
             </div>
         )

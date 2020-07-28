@@ -1,8 +1,11 @@
 package com.CoolioCoders.LMS.services;
 
 import com.CoolioCoders.LMS.exceptions.EntityNotFoundException;
+import com.CoolioCoders.LMS.models.Assignment;
+import com.CoolioCoders.LMS.models.AssignmentSubmission;
 import com.CoolioCoders.LMS.models.Course;
 import com.CoolioCoders.LMS.models.User;
+import com.CoolioCoders.LMS.repositories.AssignmentRepository;
 import com.CoolioCoders.LMS.repositories.CourseRepository;
 import com.CoolioCoders.LMS.repositories.RoleRepository;
 import com.CoolioCoders.LMS.repositories.UserRepository;
@@ -24,6 +27,8 @@ public class CourseService {
     private LMSUserDetailsService userService;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private AssignmentRepository assignmentRepository;
 
     public List<Course> findAll(){
         return courseRepository.findAll();
@@ -151,4 +156,60 @@ public class CourseService {
         return body;
     }
 
+    protected void updateCourseGradeAnalytics(Course course) {
+        Set<String> studentIds = course.getStudentIds();
+        Map<String, Double> analytics = course.getAnalytics();
+
+        int studentCount = 0;
+        double courseGradeTotal = 0;
+        double high = 0;
+        double low = 1;
+        double average;
+
+        for(String studentId : studentIds){
+            User student = userService.findById(studentId);
+            double studentsTotalGrade = calculateStudentTotalGrade(course, student);
+
+            courseGradeTotal += studentsTotalGrade;
+            studentCount++;
+
+            if(studentsTotalGrade > high) { high = studentsTotalGrade; }
+            if(studentsTotalGrade < low) { low = studentsTotalGrade; }
+        }
+
+        if(studentCount > 0) {
+            average = courseGradeTotal / studentCount;
+
+            analytics.put("high", high);
+            analytics.put("low", low);
+            analytics.put("average", average);
+        }
+
+        course.setAnalytics(analytics);
+        courseRepository.save(course);
+    }
+
+    private double calculateStudentTotalGrade(Course course, User student){
+        List<Assignment> courseAssignments = assignmentRepository.findByCourseId(course.getId());
+        double totalMaxPoints = 0;
+        double totalPointsAwarded = 0;
+        double totalGradePercentage = 1;
+        AssignmentSubmission studentSubmission;
+
+        for(Assignment assignment : courseAssignments) {
+            for(AssignmentSubmission submission : assignment.getSubmissions()){
+                if(submission.getStudentId().equals(student.getId()) && submission.isGraded()){
+
+                    totalMaxPoints += assignment.getMaxPoints();
+                    totalPointsAwarded += submission.getPointsAwarded();
+                }
+            }
+        }
+
+        if(totalMaxPoints > 0){
+            totalGradePercentage = totalPointsAwarded / totalMaxPoints;
+        }
+
+        return totalGradePercentage;
+    }
 }

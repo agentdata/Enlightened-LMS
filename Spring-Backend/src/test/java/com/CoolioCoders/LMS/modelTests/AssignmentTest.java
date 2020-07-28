@@ -21,7 +21,6 @@ public class AssignmentTest {
     static List<AssignmentSubmission> submissions;
     static Course course;
 
-
     @BeforeAll
     static void initialize() {
         course = new Course("iOS development", "3260", "1", 4);
