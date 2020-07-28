@@ -5,8 +5,8 @@ import http from '../../api/http'
 const styles = theme => ({
 
 })
-let totalGrade = 0.0
-let gradeCount = 0
+let pointsEarned = 0
+let totalPoints = 0
 
 class CourseGrades extends Component {
     constructor(props){
@@ -46,17 +46,18 @@ class CourseGrades extends Component {
                         graded: assignment["graded"],
                         pointsAwarded: assignment["pointsAwarded"],
                     }
-                    if(parsedAssignment.graded == true) {
-                        totalGrade += parsedAssignment.pointsAwarded / parsedAssignment.maxPoints
-                        gradeCount++
+                    // Only count if assignment is graded
+                    if(parsedAssignment.graded == true){
+                        totalPoints += parsedAssignment.maxPoints
+                        pointsEarned += parsedAssignment.pointsAwarded
                     }
+
                     grades.push(parsedAssignment)
                 }
-                if(gradeCount == 0){
-                    gradeCount = 1
-                    totalGrade = 1
+                if(totalPoints == 0){
+                    totalPoints = 1
+                    pointsEarned = 1
                 }
-
                 this.setState({grades: grades})
             }
         })
@@ -94,7 +95,7 @@ class CourseGrades extends Component {
                     <tr>
                         <td>Total Grade</td>
                         <td>{
-                            Math.floor(((totalGrade / gradeCount) * 10000))/100
+                            Math.floor((pointsEarned/totalPoints)*10000)/100
                         }%</td>
                     </tr>
                 </table>
