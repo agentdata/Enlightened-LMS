@@ -114,19 +114,57 @@ public class AssignmentService {
                 return false;
             }
 
+            if(assignment != null && submission != null && grade.doubleValue() >= 0 && grade.doubleValue() <= assignment.getMaxPoints()) {
+                submission.setGraded(true);
+                submission.setPointsAwarded(grade.doubleValue());
+                assignmentRepository.save(assignment);
+
+                userService.generateNotification(studentId, assignment.getCourseId(), "New Grade Posted For: " + assignment.getTitle());
+                updateAssignmentGradeAnalytics(assignment);
+                courseService.updateCourseGradeAnalytics(course);
+
+                return true;
+            }
         }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
 
-        if(assignment != null && submission != null && grade.doubleValue() >= 0 && grade.doubleValue() <= assignment.getMaxPoints()) {
-            submission.setGraded(true);
-            submission.setPointsAwarded(grade.doubleValue());
-            assignmentRepository.save(assignment);
-
-            userService.generateNotification(studentId, assignment.getCourseId(), "New Grade Posted For: " + assignment.getTitle());
-
-            return true;
-        }
         return false;
+    }
+
+    private void updateAssignmentGradeAnalytics(Assignment assignment){
+
+        double high = 0;
+        double low = assignment.getMaxPoints();
+        double average;
+
+        int gradedCount = 0;    //use for average
+        double scoreTotal = 0;  //use for average
+        Map<String, Double> analytics = assignment.getAnalytics();
+
+        for(AssignmentSubmission submission : assignment.getSubmissions()){
+            if(submission.isGraded()){
+                double grade = submission.getPointsAwarded();
+
+                gradedCount++;
+                scoreTotal += grade;
+
+                if(grade > high) { high = grade; }
+                if(grade < low) { low = grade; }
+
+            }
+        }
+        if(gradedCount > 0) {
+            average = scoreTotal / gradedCount;
+
+            analytics.put("high", high);
+            analytics.put("low", low);
+            analytics.put("average", average);
+        }
+
+        assignment.setAnalytics(analytics);
+        assignmentRepository.save(assignment);
+
     }
 }

@@ -275,70 +275,82 @@ class Account extends React.Component {
                         { this.state ? (
                             <List>
                                 <ListItem>
-                                    <Typography variant="h5">Current balance: { this.state.account.balanceDetails.balance }</Typography>
-                        <Button className={classes.payBtn} onClick={this.payButtonPressed}>{this.state.showPaymentForm ? "Cancel" : "Pay balance"}</Button>
+                                    <Card>
+                                        <CardContent>
+                                            <Typography variant="h5">
+                                            Current balance: { this.state.account.balanceDetails.balance }
+                                            </Typography>
+                                            <br />
+                                            <Button className={classes.payBtn} onClick={this.payButtonPressed}>{this.state.showPaymentForm ? "Cancel" : "Pay balance"}</Button>
+
+                                            {this.state.showPaymentForm && 
+                                            <ListItem>
+                                                <Card>
+                                                    <CardContent>
+                                                        <TextField
+                                                        error={this.state.nameError}
+                                                        label="Full Name"
+                                                        id="fullName"
+                                                        helperText={ this.state.nameError === '' ? "Full name on credit card" : this.state.nameError }
+                                                        required
+                                                        onChange={this.handleNameChange}
+                                                        onBlur={this.validateName}
+                                                        >
+                                                        </TextField>
+                                                        <TextField
+                                                        error={this.state.cardError}
+                                                        label="Card Number"
+                                                        id="cardNo"
+                                                        helperText={ this.state.cardError }
+                                                        required
+                                                        inputProps = {{ maxLength: 16 }}
+                                                        onChange={this.handleCardChange}
+                                                        onBlur={this.validateCardNo}
+                                                        >
+                                                        </TextField>
+                                                        <TextField
+                                                        error={this.state.expiryError}
+                                                        label="Expiry Date"
+                                                        id="expiryDate"
+                                                        helperText={ this.state.expiryError === '' ? "Date of expiration" : this.state.expiryError }
+                                                        required
+                                                        inputProps = {{ maxLength: 16 }}
+                                                        onChange={this.handleExpiryChange}
+                                                        onBlur={this.validateExpiry}
+                                                        >
+                                                        </TextField>
+                                                        <TextField
+                                                        error={this.state.cvvError}
+                                                        label="CVV"
+                                                        id="cvv"
+                                                        helperText={ this.state.cvvError === '' ? "3-digit security code" : this.state.cvvError }
+                                                        required
+                                                        onChange={this.handleCvvChange}
+                                                        onBlur={this.validateCvv}
+                                                        >
+                                                        </TextField>
+                                                        <TextField
+                                                        error={this.state.amountError}
+                                                        label="Amount"
+                                                        id="amount"
+                                                        helperText={ this.state.amountError === '' ? "US dollar amount" : this.state.amountError }
+                                                        required
+                                                        onChange={this.handleAmountChange}
+                                                        onBlur={this.validateAmount}
+                                                        >
+                                                        </TextField>
+                                                        <Button className={classes.payBtn} onClick={this.checkErrors}>Submit payment</Button>
+                                                    </CardContent>
+                                                </Card> 
+                                            </ListItem>
+                                            }
+
+                                        </CardContent>
+                                    </Card>
+                                    
+                                    
                                 </ListItem>
-                                {this.state.showPaymentForm && 
-                                    <ListItem>
-                                        <Card>
-                                            <CardContent>
-                                                <TextField
-                                                error={this.state.nameError}
-                                                label="Full Name"
-                                                id="fullName"
-                                                helperText={ this.state.nameError === '' ? "Full name on credit card" : this.state.nameError }
-                                                required
-                                                onChange={this.handleNameChange}
-                                                onBlur={this.validateName}
-                                                >
-                                                </TextField>
-                                                <TextField
-                                                error={this.state.cardError}
-                                                label="Card Number"
-                                                id="cardNo"
-                                                helperText={ this.state.cardError }
-                                                required
-                                                inputProps = {{ maxLength: 16 }}
-                                                onChange={this.handleCardChange}
-                                                onBlur={this.validateCardNo}
-                                                >
-                                                </TextField>
-                                                <TextField
-                                                error={this.state.expiryError}
-                                                label="Expiry Date"
-                                                id="expiryDate"
-                                                helperText={ this.state.expiryError === '' ? "Date of expiration" : this.state.expiryError }
-                                                required
-                                                inputProps = {{ maxLength: 16 }}
-                                                onChange={this.handleExpiryChange}
-                                                onBlur={this.validateExpiry}
-                                                >
-                                                </TextField>
-                                                <TextField
-                                                error={this.state.cvvError}
-                                                label="CVV"
-                                                id="cvv"
-                                                helperText={ this.state.cvvError === '' ? "3-digit security code" : this.state.cvvError }
-                                                required
-                                                onChange={this.handleCvvChange}
-                                                onBlur={this.validateCvv}
-                                                >
-                                                </TextField>
-                                                <TextField
-                                                error={this.state.amountError}
-                                                label="Amount"
-                                                id="amount"
-                                                helperText={ this.state.amountError === '' ? "US dollar amount" : this.state.amountError }
-                                                required
-                                                onChange={this.handleAmountChange}
-                                                onBlur={this.validateAmount}
-                                                >
-                                                </TextField>
-                                                <Button className={classes.payBtn} onClick={this.checkErrors}>Submit payment</Button>
-                                            </CardContent>
-                                        </Card> 
-                                    </ListItem>
-                                }
+
                                 <ListItem>
                                     <Typography variant="h5">
                                         Total credit hours: { totalCreditHours }

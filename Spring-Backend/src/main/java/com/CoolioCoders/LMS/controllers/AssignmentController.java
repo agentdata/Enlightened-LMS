@@ -408,9 +408,8 @@ public class AssignmentController {
         try {
             User user = userService.findUserByEmail(principalUser.getName());
             Course course = courseService.findById(courseId);
-            if (courseService.isStudentEnrolledInCourse(user, course) == true && course != null) {
-                List<Assignment> assignments = new ArrayList<>();
-                assignments.addAll(assignmentService.findByCourseId(courseId));
+            if (course != null && courseService.isStudentEnrolledInCourse(user, course)) {
+                List<Assignment> assignments = new ArrayList<>(assignmentService.findByCourseId(courseId));
                 ArrayList<Map<Object, Object>> assignmentsAndGradesDetails = new ArrayList<Map<Object, Object>>();
                 ArrayList<Map<Object, Object>> List = new ArrayList<Map<Object, Object>>();
 
@@ -421,9 +420,11 @@ public class AssignmentController {
                     if (assignmentSubmission != null) {
                         assignmentAndGradeDetails.put("graded", assignmentSubmission.isGraded());
                         assignmentAndGradeDetails.put("pointsAwarded", assignmentSubmission.getPointsAwarded());
+                        assignmentAndGradeDetails.put("analytics", assignment.getAnalytics());
                     } else {
                         assignmentAndGradeDetails.put("graded", null);
                         assignmentAndGradeDetails.put("pointsAwarded", null);
+                        assignmentAndGradeDetails.put("analytics", null);
                     }
                     assignmentsAndGradesDetails.add(assignmentAndGradeDetails);
                 }

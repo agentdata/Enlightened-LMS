@@ -31,6 +31,7 @@ public class Course {
     private String roomNumber;
     private int capacity;
     private int credits;
+    private Map<String, Double> analytics;
 
     public Course(){}
 
@@ -182,6 +183,15 @@ public class Course {
 
     public void setStudentIds(Set<String> studentIds) {
         this.studentIds = studentIds;
+    }
+
+    public Map<String, Double> getAnalytics() {
+        if(analytics == null) { analytics = new HashMap<>(); }
+        return analytics;
+    }
+
+    public void setAnalytics(Map<String, Double> analytics) {
+        this.analytics = analytics;
     }
 
     @Override
