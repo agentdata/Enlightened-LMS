@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
+import { Grid, Paper } from '@material-ui/core'
 import { withStyles } from "@material-ui/core/styles"
 import http from '../../api/http'
 
 const styles = theme => ({
-
+    root: {
+        flexGrow: 1,
+      },
+      paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+      },
 })
+
 let pointsEarned = 0
 let totalPoints = 0
 
@@ -67,19 +76,35 @@ class CourseGrades extends Component {
     }
 
     render() {
+
+        const classes = styles;
+
         return (
-            <div class="studentGradeView">
-                <table border = "5px" cellPadding="7px">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Due</th>
-                            <th>Status</th>
-                            <th>Score</th>
-                            <th>Out of</th>
-                            <th>class average</th>
-                        </tr>
-                    </thead>
+            <div className={classes.root} /*class="studentGradeView"*/>
+                <Grid container spacing={3}>
+                    <Grid>
+                        
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Paper className={classes.paper}>Title</Paper>
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Paper className={classes.paper}>Due</Paper>
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Paper className={classes.paper}>Status</Paper>
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Paper className={classes.paper}>Score</Paper>
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Paper className={classes.paper}>Out of</Paper>
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Paper className={classes.paper}>class average</Paper>
+                    </Grid>
+
+
                 {this.state.grades.map(assignment =>(
                     
                     <tr>
@@ -98,7 +123,7 @@ class CourseGrades extends Component {
                             Math.floor((pointsEarned/totalPoints)*10000)/100
                         }%</td>
                     </tr>
-                </table>
+                </Grid>
             </div>
         )
     }
