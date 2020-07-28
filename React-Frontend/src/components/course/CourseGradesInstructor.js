@@ -67,8 +67,8 @@ class CourseGradesInstructor extends Component {
                 submitted: false,
                 }
                 if(body["assignments"][i]["submissions"] !== null){
-                assignment.submitted = true
-                assignment.graded = body["assignments"][i]["submissions"]["graded"]
+                    assignment.submitted = true
+                    assignment.graded = body["assignments"][i]["submissions"]["graded"]
                 if(body["assignments"][i]["submissions"]["pointsAwarded"] !== null){
                     assignment.pointsAwarded = body["assignments"][i]["submissions"]["pointsAwarded"]
                 }
@@ -90,8 +90,9 @@ class CourseGradesInstructor extends Component {
       
 
     render() {
+        const classes = this.props
         return (
-            <div class="studentGradeView">
+            <div className={classes.studentGradeView}>
                 <table border = "5px" cellPadding="7px">
                     <thead>
                         <tr>
@@ -104,9 +105,9 @@ class CourseGradesInstructor extends Component {
                             <th>Grade Submissions</th>
                         </tr>
                     </thead>
+                <tbody>
                 {this.state.assignments.map(assignment =>(
-                    
-                    <tr>
+                    <tr key={assignment.title}>
                         <td>{assignment.title}</td>
                         <td>{assignment.dueDate}</td>
                         <td>{assignment.Submission.length}</td>
@@ -116,6 +117,7 @@ class CourseGradesInstructor extends Component {
                         <td><Button component={Link} to={`/course/${this.state.courseId}/grade-assignments/${assignment.assignmentID}`}>Grade</Button></td>
                     </tr>
                 ))}
+                </tbody>
                 </table>
             </div>
         )
