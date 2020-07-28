@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Grid, Paper } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableContainer, TableHead, 
+    TablePagination, TableRow, TableSortLabel, Checkbox, Paper } from '@material-ui/core'
 import { withStyles } from "@material-ui/core/styles"
 import http from '../../api/http'
 
@@ -7,11 +8,11 @@ const styles = theme => ({
     root: {
         flexGrow: 1,
       },
-      paper: {
+    paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-      },
+    },
 })
 
 let pointsEarned = 0
@@ -76,54 +77,54 @@ class CourseGrades extends Component {
     }
 
     render() {
-
         const classes = styles;
+
+        const headCells = [
+            { id: 'Title', numeric: false, disablePadding: true, label: 'Title' },
+            { id: 'Due', numeric: false, disablePadding: false, label: 'Due' },
+            { id: 'Status', numeric: false, disablePadding: false, label: 'Status' },
+            { id: 'Score', numeric: true, disablePadding: false, label: 'Score' },
+            { id: 'Out of', numeric: true, disablePadding: false, label: 'Out of' },
+          ];
 
         return (
             <div className={classes.root} /*class="studentGradeView"*/>
-                <Grid container spacing={3}>
-                    <Grid>
-                        
-                    </Grid>
-                    <Grid item xs={1}>
-                        <Paper className={classes.paper}>Title</Paper>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <Paper className={classes.paper}>Due</Paper>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <Paper className={classes.paper}>Status</Paper>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <Paper className={classes.paper}>Score</Paper>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <Paper className={classes.paper}>Out of</Paper>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <Paper className={classes.paper}>class average</Paper>
-                    </Grid>
-
-
-                {this.state.grades.map(assignment =>(
-                    
-                    <tr>
-                        <td>{assignment.title}</td>
-                        <td>{assignment.dueDate}</td>
-                        <td>{assignment.graded === null? "Not Submitted": assignment.graded ? "Graded": "Submitted"}</td>
-                        <td>{assignment.graded === null? "-": assignment.graded ? assignment.pointsAwarded : "-" }</td>
-                        <td>{assignment.maxPoints}</td>
-                        <td>avg</td>
-                    </tr>
-                ))}
-                    <tr></tr>
-                    <tr>
-                        <td>Total Grade</td>
-                        <td>{
-                            Math.floor((pointsEarned/totalPoints)*10000)/100
-                        }%</td>
-                    </tr>
-                </Grid>
+                <TableContainer component={Paper}>
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead>
+                        <TableRow>
+                            <TableCell>Title</TableCell>
+                            <TableCell align="right">Due</TableCell>
+                            <TableCell align="right">Status</TableCell>
+                            <TableCell align="right">Score</TableCell>
+                            <TableCell align="right">Out of</TableCell>
+                            <TableCell align="right">Class average</TableCell>
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {this.state.grades.map((assignment) => (
+                            <TableRow key={assignment.title}>
+                            <TableCell component="th" scope="row">
+                                {assignment.title}
+                            </TableCell>
+                            <TableCell align="right">{assignment.dueDate}</TableCell>
+                            <TableCell align="right">{assignment.graded === null? "Not Submitted": assignment.graded ? "Graded": "Submitted"}</TableCell>
+                            <TableCell align="right">{assignment.graded === null? "-": assignment.graded ? assignment.pointsAwarded : "-" }</TableCell>
+                            <TableCell align="right">{assignment.maxPoints}</TableCell>
+                            <TableCell>avg</TableCell>
+                            </TableRow>
+                        ))}
+                        <TableRow>
+                            <TableCell align="right">
+                                Total Grade
+                            </TableCell>
+                            <TableCell align="right">
+                            {Math.floor((pointsEarned/totalPoints)*10000)/100}%
+                            </TableCell>
+                        </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </div>
         )
     }
