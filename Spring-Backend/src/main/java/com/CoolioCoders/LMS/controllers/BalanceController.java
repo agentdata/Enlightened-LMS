@@ -128,23 +128,23 @@ public class BalanceController {
         return ok(response);
     }
 
-//    @PostMapping("/new")
-//    public ResponseEntity<Map<Object, Object>> addBalance(Principal principalUser, @RequestBody Balance balance) {
-//        Map<Object, Object> model = new HashMap<>();
-//
-//        try{
-//            balance.setUser(userService.findUserByEmail(principalUser.getName()));
-//            balance.setRemaining(balance.getBalance());
-//            balanceService.saveBalance(balance);
-//
-//            model.put("message", "Sucessfully added new balance");
-//        }
-//        catch(Exception e) {
-//            model.put("message", e.getMessage());
-//        }
-//
-//        return ok(model);
-//    }
+    @PostMapping("/new")    // Uncommented for making the tests easier
+    public ResponseEntity<Map<Object, Object>> addBalance(Principal principalUser, @RequestBody Balance balance) {
+        Map<Object, Object> model = new HashMap<>();
+
+        try{
+            balance.setUser(userService.findUserByEmail(principalUser.getName()));
+            balance.setRemaining(balance.getBalance());
+            balanceService.saveBalance(balance);
+
+            model.put("message", "Sucessfully added new balance");
+        }
+        catch(Exception e) {
+            model.put("message", e.getMessage());
+        }
+
+        return ok(model);
+    }
 //
 //    @PostMapping("/pay") //TODO fix functionality
 //    public ResponseEntity<Map<Object, Object>> payBalance(Principal principalUser, @RequestBody Payment payment) {
