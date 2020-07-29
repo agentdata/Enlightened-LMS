@@ -12,6 +12,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import utilities from "../../actions/utilities";
 import { Link } from 'react-router-dom';
+import StudentGradesChart from '../charts/StudentGradesChart';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -164,9 +165,14 @@ export default function CourseAssignment(props) {
       <div className={classes.contentDiv}>
         <div>
           { 
-            assignmentClicked.graded ?
-            <div>Graded: {assignmentClicked.pointsAwarded} out of {assignmentClicked.maxPoints}</div>:
+            assignmentClicked.graded ? (
+            <div>
+              Graded: {assignmentClicked.pointsAwarded} out of {assignmentClicked.maxPoints}
+              <StudentGradesChart></StudentGradesChart>
+            </div>
+            ):
             <div>Points Possible: {assignmentClicked.maxPoints}</div>
+
           }
         </div>
         <Typography>

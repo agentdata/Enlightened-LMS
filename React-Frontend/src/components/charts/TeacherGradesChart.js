@@ -6,8 +6,8 @@ const styles = theme => ({
     //styles
 })
 
-// chart that displays analytics for individual assignment grade
-class StudentGradesChart extends React.Component {
+// chart that displays analytics for individual assignment grade (Instructor side)
+class TeacherGradesChart extends React.Component {
     render() {
         return (
             <div>
@@ -17,5 +17,4 @@ class StudentGradesChart extends React.Component {
     }
 }
 
-export default withStyles(styles)(StudentGradesChart)
-
+export default withStyles(styles)(TeacherGradesChart)
