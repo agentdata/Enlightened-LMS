@@ -3,6 +3,7 @@ import http from '../api/http'
 export default {
 
     formatDateTime(timestampString){
+        if(timestampString === null || timestampString === "") return "";
         var date = new Date(timestampString);
         return  (new Intl.DateTimeFormat().format(date) + " | " +
                 (new Intl.DateTimeFormat("Default", {

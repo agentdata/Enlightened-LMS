@@ -24,18 +24,18 @@ class CourseGrades extends Component {
         super(props)
         this.state ={
             grades: [{
-                courseId: "courseId",
-                description: "description",
-                dueDate: "2020-08-15T11:59:00", //"dueDate",
-                assignmentId: "assignmentId",
-                maxPoints: "maxPoints",
-                submissionType: "submissionType",
-                title: "title",
-                graded: "graded",
-                pointsAwarded: "pointsAwarded",
-                highScore: "highScore",
-                lowScore: "lowScore",
-                averageScore: "averageScore",
+                courseId: "",//"courseId",
+                description: "",//"description",
+                dueDate: "", //"2020-08-15T11:59:00",
+                assignmentId: "", //"assignmentId",
+                maxPoints: "", //"maxPoints",
+                submissionType: "", //"submissionType",
+                title: "", //"title",
+                graded: null, //"graded",
+                pointsAwarded: "", //"pointsAwarded",
+                highScore: "", //"highScore",
+                lowScore: "", //"lowScore",
+                averageScore: "", //"averageScore",
             },]
         }
     }
@@ -59,19 +59,23 @@ class CourseGrades extends Component {
                         title: assignment["assignmentDetails"]["title"],
                         graded: assignment["graded"],
                         pointsAwarded: assignment["pointsAwarded"],
-                        highScore: assignment["analytics"]["high"],
-                        lowScore: assignment["analytics"]["low"],
-                        averageScore: assignment["analytics"]["average"],
+                        highScore: "",
+                        lowScore: "",
+                        averageScore: "",
                     }
                     // Only count if assignment is graded
-                    if(parsedAssignment.graded == true){
+                    if(parsedAssignment.graded === true){
                         totalPoints += parsedAssignment.maxPoints
                         pointsEarned += parsedAssignment.pointsAwarded
+
+                        parsedAssignment.highScore = assignment["analytics"]["high"]
+                        parsedAssignment.lowScore = assignment["analytics"]["low"]
+                        parsedAssignment.averageScore = assignment["analytics"]["average"]
                     }
 
                     grades.push(parsedAssignment)
                 }
-                if(totalPoints == 0){
+                if(totalPoints === 0){
                     totalPoints = 1
                     pointsEarned = 1
                 }
@@ -126,7 +130,7 @@ class CourseGrades extends Component {
                                 Total Grade
                             </TableCell>
                             <TableCell align="right">
-                            {Math.floor((pointsEarned/totalPoints)*10000)/100}%
+                            {totalPoints !== 0? Math.floor((pointsEarned/totalPoints)*10000)/100 : 100}%
                             </TableCell>
                         </TableRow>
                         </TableBody>
