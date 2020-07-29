@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead,
     TablePagination, TableRow, TableSortLabel, Checkbox, Paper } from '@material-ui/core'
 import { withStyles } from "@material-ui/core/styles"
 import http from '../../api/http'
+import utilities from '../../actions/utilities'
 
 const styles = theme => ({
     root: {
@@ -25,13 +26,16 @@ class CourseGrades extends Component {
             grades: [{
                 courseId: "courseId",
                 description: "description",
-                dueDate: "dueDate",
+                dueDate: "2020-08-15T11:59:00", //"dueDate",
                 assignmentId: "assignmentId",
                 maxPoints: "maxPoints",
                 submissionType: "submissionType",
                 title: "title",
                 graded: "graded",
                 pointsAwarded: "pointsAwarded",
+                highScore: "highScore",
+                lowScore: "lowScore",
+                averageScore: "averageScore",
             },]
         }
     }
@@ -55,6 +59,9 @@ class CourseGrades extends Component {
                         title: assignment["assignmentDetails"]["title"],
                         graded: assignment["graded"],
                         pointsAwarded: assignment["pointsAwarded"],
+                        highScore: assignment["analytics"]["high"],
+                        lowScore: assignment["analytics"]["low"],
+                        averageScore: assignment["analytics"]["average"],
                     }
                     // Only count if assignment is graded
                     if(parsedAssignment.graded == true){
@@ -107,11 +114,11 @@ class CourseGrades extends Component {
                             <TableCell component="th" scope="row">
                                 {assignment.title}
                             </TableCell>
-                            <TableCell align="right">{assignment.dueDate}</TableCell>
+                            <TableCell align="right">{utilities.formatDateTime(assignment.dueDate)}</TableCell>
                             <TableCell align="right">{assignment.graded === null? "Not Submitted": assignment.graded ? "Graded": "Submitted"}</TableCell>
                             <TableCell align="right">{assignment.graded === null? "-": assignment.graded ? assignment.pointsAwarded : "-" }</TableCell>
                             <TableCell align="right">{assignment.maxPoints}</TableCell>
-                            <TableCell>avg</TableCell>
+                            <TableCell align="right">{assignment.averageScore}</TableCell>
                             </TableRow>
                         ))}
                         <TableRow>
