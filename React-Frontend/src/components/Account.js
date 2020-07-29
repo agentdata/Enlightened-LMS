@@ -75,7 +75,7 @@ class Account extends React.Component {
                 console.log(data)
                 return this.setState({
                     account: {
-                        balanceDetails: data["balance"],
+                        balanceDetails:{ balance: data["balance"]},
                         totalCreditHours: data["totalCredits"]
                     }
                 })
