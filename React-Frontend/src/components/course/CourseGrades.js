@@ -90,14 +90,6 @@ class CourseGrades extends Component {
     render() {
         const classes = styles;
 
-        const headCells = [
-            { id: 'Title', numeric: false, disablePadding: true, label: 'Title' },
-            { id: 'Due', numeric: false, disablePadding: false, label: 'Due' },
-            { id: 'Status', numeric: false, disablePadding: false, label: 'Status' },
-            { id: 'Score', numeric: true, disablePadding: false, label: 'Score' },
-            { id: 'Out of', numeric: true, disablePadding: false, label: 'Out of' },
-          ];
-
         return (
             <div className={classes.root} /*class="studentGradeView"*/>
                 <TableContainer component={Paper}>
