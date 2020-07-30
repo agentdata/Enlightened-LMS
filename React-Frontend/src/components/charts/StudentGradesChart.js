@@ -11,7 +11,7 @@ class StudentGradesChart extends React.Component {
     render() {
         return (
             <div>
-                
+                I am the student grade chart for an assignment
             </div>
         );
     }

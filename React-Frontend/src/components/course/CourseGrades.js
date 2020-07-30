@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, 
-    TablePagination, TableRow, TableSortLabel, Typography, Checkbox, Paper } from '@material-ui/core'
-import { withStyles } from "@material-ui/core/styles"
-import http from '../../api/http'
-import utilities from '../../actions/utilities'
+import { Box, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, 
+    TablePagination, TableRow, TableSortLabel, Typography, Checkbox, Paper } from '@material-ui/core';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
+import http from '../../api/http';
+import utilities from '../../actions/utilities';
+import StudentGradesChart from '../charts/StudentGradesChart';
 
 const styles = theme => ({
     root: {
@@ -24,6 +28,7 @@ class CourseGrades extends Component {
         super(props)
         this.state ={
             grades: [{
+                open: false,
                 courseId: "",//"courseId",
                 description: "",//"description",
                 dueDate: "", //"2020-08-15T11:59:00",
@@ -87,6 +92,12 @@ class CourseGrades extends Component {
         })
     }
 
+    setOpen() {
+        this.setState({
+            open: !this.state.open
+        })
+    }
+
     render() {
         const classes = styles;
 
@@ -107,16 +118,51 @@ class CourseGrades extends Component {
                             </TableHead>
                         <TableBody>
                         {this.state.grades.map((assignment) => (
-                            <TableRow key={assignment.title}>
-                                <TableCell component="th" scope="row">
-                                    {assignment.title}
-                                </TableCell>
-                                <TableCell align="right">{utilities.formatDateTime(assignment.dueDate)}</TableCell>
-                                <TableCell align="right">{assignment.graded === null? "Not Submitted": assignment.graded ? "Graded": "Submitted"}</TableCell>
-                                <TableCell align="right">{assignment.graded === null? "-": assignment.graded ? assignment.pointsAwarded : "-" }</TableCell>
-                                <TableCell align="right">{assignment.maxPoints}</TableCell>
-                                <TableCell align="right">{assignment.averageScore}</TableCell>
-                            </TableRow>
+                            <React.Fragment>
+                                <TableRow key={assignment.title}>
+                                    <TableCell>
+                                        <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen()}>
+                                            {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell component="th" scope="row">
+                                        {assignment.title}
+                                    </TableCell>
+                                    <TableCell align="right">{utilities.formatDateTime(assignment.dueDate)}</TableCell>
+                                    <TableCell align="right">{assignment.graded === null? "Not Submitted": assignment.graded ? "Graded": "Submitted"}</TableCell>
+                                    <TableCell align="right">{assignment.graded === null? "-": assignment.graded ? assignment.pointsAwarded : "-" }</TableCell>
+                                    <TableCell align="right">{assignment.maxPoints}</TableCell>
+                                    <TableCell align="right">{assignment.averageScore}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                        <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                                            <Box margin={1}>
+                                            <Typography variant="h6" gutterBottom component="div">
+                                                (GradeChart)
+                                            </Typography>
+                                            <StudentGradesChart></StudentGradesChart>
+                                            {/* <Table size="small" aria-label="chart">
+                                                <TableHead>
+                                                <TableRow>
+                                                </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    <TableRow>
+                                                    <TableCell component="th" scope="row">
+                                                    </TableCell>
+                                                    <TableCell></TableCell>
+                                                    <TableCell align="right"></TableCell>
+                                                    <TableCell align="right">
+                                                    </TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table> */}
+                                            </Box>
+                                        </Collapse>
+                                    </TableCell>
+                                </TableRow>
+                            </React.Fragment>
                         ))}
                         <TableRow>
                             <TableCell align="right">
