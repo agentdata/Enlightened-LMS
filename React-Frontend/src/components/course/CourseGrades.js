@@ -47,27 +47,11 @@ function Row(props) {
                 <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                         <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                (GradeChart)
-                            </Typography>
-                            <StudentGradesChart></StudentGradesChart>
-                            {/* <Table size="small" aria-label="chart">
-                                <TableHead>
-                                <TableRow>
-                                </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <TableRow>
-                                    <TableCell component="th" scope="row">
-                                    </TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell align="right"></TableCell>
-                                    <TableCell align="right">
-                                    </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table> */}
+                            <Box style={{height: '500px'}}>
+                                <Typography variant="h6" gutterBottom component="div">
+                                    (GradeChart)
+                                </Typography>
+                                <StudentGradesChart></StudentGradesChart>
                             </Box>
                         </Collapse>
                     </TableCell>
@@ -80,6 +64,7 @@ export default function CourseGrades() {
 
     const classes = styles;
     const [grades, setGrades] = React.useState([]);
+    const [assignmentClicked, setAssignmentClicked] = React.useState({assignmentId: -1});
 
     // this.state ={
     //         grades: [{
@@ -142,7 +127,7 @@ export default function CourseGrades() {
         .catch((e) => {
             console.warn("There was an error retrieving submissions: ", e);
         })
-    })
+    }, [assignmentClicked])
 
     return (
         <div className={classes.root} /*class="studentGradeView"*/>
