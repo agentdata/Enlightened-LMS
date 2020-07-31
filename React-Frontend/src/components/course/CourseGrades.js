@@ -44,14 +44,14 @@ function Row(props) {
                     <TableCell align="right">{assignment.maxPoints}</TableCell>
                     <TableCell align="right">{assignment.averageScore}</TableCell>
                 </TableRow>
-                <TableRow key={assignment.title}>
+                <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                         <Collapse in={open} timeout="auto" unmountOnExit>
                             <Box style={{height: '550px', width: '600px'}}>
                                 <Typography variant="h6" gutterBottom component="div">
                                     Grade Analytics
                                 </Typography>
-                                <StudentGradesChart></StudentGradesChart>
+                                <StudentGradesChart assignment={assignment}></StudentGradesChart>
                             </Box>
                         </Collapse>
                     </TableCell>
