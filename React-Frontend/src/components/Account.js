@@ -281,8 +281,9 @@ class Account extends React.Component {
                                             Current balance: { this.state.account.balanceDetails.balance }
                                             </Typography>
                                             <br />
-                                            <Button className={classes.payBtn} onClick={this.payButtonPressed}>{this.state.showPaymentForm ? "Cancel" : "Pay balance"}</Button>
-
+                                            {this.state.account.balanceDetails.balance == 0 ? null:
+                                                <div><Button className={classes.payBtn} onClick={this.payButtonPressed}>{this.state.showPaymentForm ? "Cancel" : "Pay balance"}</Button></div>
+                                            }
                                             {this.state.showPaymentForm && 
                                             <ListItem>
                                                 <Card>

@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -50,8 +51,8 @@ public class BalanceController {
         //trigger recalculate and confirm balance to send back.
         try{
             User user = userService.findUserByEmail(principalUser.getName());
-            List<Balance> balance = balanceService.getBalance(user);
-            model.put("balance", balance);
+
+            model.put("balance", userService.getCurrentBalance(user));
             model.put("totalCredits", userService.getCreditHours(user));
             model.put("message", "Successfully retrieved balance");
         }
@@ -66,6 +67,7 @@ public class BalanceController {
 //        "payment_method": "pm_1H9NIIFVMGnqF5Jhxv1usTbh",
 //        "amount": 100
 //    }
+    @PreAuthorize("hasAuthority('STUDENT')")
     @PostMapping("/pay")
     public ResponseEntity<Map<Object, Object>> processPayment(Principal principalUser, @RequestBody JSONObject body) {
         Map<Object, Object> response = new HashMap<>();
@@ -73,7 +75,7 @@ public class BalanceController {
         final String KEY = "";
 
         try{
-            userService.findUserByEmail(principalUser.getName());
+            User student = userService.findUserByEmail(principalUser.getName());
             String currencyType = "usd";
             Double amount = Double.parseDouble(body.getAsString("amount"));
 
@@ -106,9 +108,12 @@ public class BalanceController {
                 JsonObject stripeResponse = new Gson().fromJson(content.toString(), JsonObject.class);
                 String paymentStatus = stripeResponse.get("status").toString().replace("\"","");
                 if(paymentStatus.equals("succeeded")){
-                    response.put("message", "Payment processed successfully.");
-                    //TODO
                     //recalculate balance and log payment info to balance object
+                    if(userService.saveProcessedPayment(student, stripeResponse.get("id").toString().replace("\"",""),amount)){
+                        response.put("message", "Payment processed successfully.");
+                    }else{
+                        response.put("message", "Payment succeeded but error occurred saving the payment details.");
+                    }
                 }
                 else{
                     response.put("message", "There was an issu processing the payment.");

@@ -88,6 +88,10 @@ public class CourseService {
         studentsCourseIds.add(course.getId());
         student.setCourseIds(studentsCourseIds);
         userRepository.save(student);
+
+        //update Users current Balance
+        userService.updateCurrentBalance(student, course.getCredits());
+        userRepository.save(student);
     }
 
     public boolean isInstructorsCourse(Course course, User instructor) throws Exception {

@@ -34,6 +34,8 @@ public class User {
     private Set<Role> roles;
     private Set<String> courseIds;
     private List<Notification> notifications;
+    private double currentAccountBalance;
+    private ArrayList<Map<Object, Object>> paymentsMade;
 
     public User(){}
 
@@ -46,7 +48,8 @@ public class User {
 
     public User(String firstName, String lastName, LocalDate birthDate, String email, String password, String bio,
                 String link1, String link2, String link3, String avatar, String phone, String address1, String address2,
-                String city, String state, String zip, Set<Role> roles, List<Notification> notifications) {
+                String city, String state, String zip, Set<Role> roles, List<Notification> notifications, double currentAccountBalance,
+                ArrayList<Map<Object, Object>> paymentsMade) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
@@ -65,6 +68,8 @@ public class User {
         this.zip = zip;
         this.roles = roles;
         this.notifications = notifications;
+        this.currentAccountBalance = currentAccountBalance;
+        this.paymentsMade = paymentsMade;
     }
 
     public String getId() {
@@ -245,5 +250,35 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    public double getCurentAccountBalance() {
+        return currentAccountBalance;
+    }
+
+    public void setCurrentAccountBalance(double currentAccountBalance){
+        this.currentAccountBalance = currentAccountBalance;
+    }
+
+    public void updateCurrentAccountBalance(double currentAccountBalance) {
+        this.currentAccountBalance += currentAccountBalance;
+    }
+
+    public void setPaymentsMade(ArrayList<Map<Object, Object>> paymentsMade) {
+        this.paymentsMade= paymentsMade;
+    }
+
+    public List<Map<Object, Object>> getPaymentsMade(){
+        return this.paymentsMade;
+    }
+
+    public void addPayment(String intentId, double total){
+        Map<Object, Object> payment = new HashMap<>();
+        payment.put(intentId, total);
+        if(paymentsMade == null){
+            paymentsMade = new ArrayList<Map<Object, Object>>();
+        }
+        this.paymentsMade.add(payment);
+        this.currentAccountBalance -= total;
     }
 }
