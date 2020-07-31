@@ -44,12 +44,12 @@ function Row(props) {
                     <TableCell align="right">{assignment.maxPoints}</TableCell>
                     <TableCell align="right">{assignment.averageScore}</TableCell>
                 </TableRow>
-                <TableRow>
+                <TableRow key={assignment.title}>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                         <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box style={{height: '500px'}}>
+                            <Box style={{height: '550px', width: '600px'}}>
                                 <Typography variant="h6" gutterBottom component="div">
-                                    (GradeChart)
+                                    Grade Analytics
                                 </Typography>
                                 <StudentGradesChart></StudentGradesChart>
                             </Box>
@@ -136,6 +136,7 @@ export default function CourseGrades() {
                 <Table className={classes.table} aria-label="grades table">
                     <TableHead>
                         <TableRow>
+                            <TableCell></TableCell>
                             <TableCell>Title</TableCell>
                             <TableCell align="right">Due</TableCell>
                             <TableCell align="right">Status</TableCell>
