@@ -202,6 +202,23 @@ public class LMSUserDetailsService implements UserDetailsService{
         return body;
     }
 
+    public boolean updateCurrentBalance(User user, int creditHours){
+        //credithours multiplied by 300$ per credit hour
+        user.updateCurrentAccountBalance(creditHours*300);
+        userRepository.save(user);
+        return true;
+    }
+
+    public double getCurrentBalance(User student){
+        return student.getCurentAccountBalance();
+    }
+
+    public boolean saveProcessedPayment(User student, String stripeIntentId, double paymentAmount){
+        student.addPayment(stripeIntentId, paymentAmount);
+        userRepository.save(student);
+        return true;
+    }
+
     //region User Details Service Methods for Security Configuration
     //------------------------------------------------------------------------------------------------------------------
     public void saveUser(User user, Role role) {
