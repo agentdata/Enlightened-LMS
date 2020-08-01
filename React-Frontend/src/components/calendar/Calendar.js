@@ -5,12 +5,14 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import CourseAssignment from '../course/CourseAssignment';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from 'moment';
+import http from '../../api/http';
 
 const localizer = momentLocalizer(moment);
 
 const styles = withStyles => ({
     calendar: {
-        
+
+
     },
     modal: {
         
@@ -18,6 +20,32 @@ const styles = withStyles => ({
   });
 
 class LMSCalendar extends React.Component {
+
+    getAllAssignments()
+    {
+        http.getAllAssignments()
+            .then(async (response) => {
+                const body = await response.json();
+                if (response.status === 200 && body["message"] === "success") {
+                    for (let a of body["assignments"]) {
+                        console.log(a)
+                        this.setState({
+                            events: [...this.state.events,
+                                {
+                                    start: a.dueDate,
+                                    end: a.dueDate,
+                                    title: a.title,
+                                    courseId: a.courseId,
+                                    assignmentId: a.assignmentId
+                                }]
+                        })
+                    }
+                }
+            })
+            .catch((e) => {
+                console.warn("There was an error getting all assignments: ", e);
+            })
+    }
 
     constructor(props) {
         super(props)
@@ -30,9 +58,13 @@ class LMSCalendar extends React.Component {
                     end: moment()
                         .toDate(),
                     title: "Some event title",
+                    courseId: 'Course',
+                    assignmentId: 'Assignment'
                 }
             ]
         };
+
+        this.getAllAssignments()
     }
 
     loadEvents() {
