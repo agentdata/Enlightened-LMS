@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// These are the allowed file extensions
+const allowedFileExtensions = ['pdf', 'docx', 'png', 'jpg', 'zip'];
+
 export default function CourseAssignment(props) {
 
   const classes = useStyles();
@@ -146,7 +149,21 @@ export default function CourseAssignment(props) {
 
   const updateFileLabel = (e) => {
     if (e.target.files.length > 0) {
-      setFileName(e.target.files[0].name)
+      // Check file extension
+      let extension = e.target.files[0].name.split(".")
+      let fileAccepted = false;
+
+      for(let i = 0; i < allowedFileExtensions.length; i++){
+        if(allowedFileExtensions[i] === extension[extension.length - 1].toLowerCase())
+          fileAccepted = true;
+      }
+
+      if(fileAccepted)
+        setFileName(e.target.files[0].name)
+      else{
+        // File is not accepted
+        alert(extension[extension.length - 1].toUpperCase() + " is not a valid file type")
+      }
     }
   }
 
