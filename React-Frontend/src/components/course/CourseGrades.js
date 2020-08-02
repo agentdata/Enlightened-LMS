@@ -20,8 +20,10 @@ const styles = theme => ({
     },
 })
 
-let pointsEarned = 0
-let totalPoints = 0
+let pointsEarned = 0;
+let totalPoints = 0;
+let grade = 100;
+let letterGrade = "A+";
 
 function Row(props) {
     const { assignment } = props;
@@ -58,6 +60,35 @@ function Row(props) {
                 </TableRow>
             </React.Fragment>
     );
+}
+
+function computeLetterGrade(g){
+    if(g >= 97)
+        return "A+"
+    else if(g >= 93)
+        return "A"
+    else if(g >= 90)
+        return "A-"
+    else if(g >= 87)
+        return "B+"
+    else if(g >= 83)
+        return "B"
+    else if(g >= 80)
+        return "B-"
+    else if(g >= 77)
+        return "C+"
+    else if(g >= 73)
+        return "C"
+    else if(g >= 70)
+        return "C-"
+    else if(g >= 67)
+        return "D+"
+    else if(g >= 63)
+        return "D"
+    else if(g >= 60)
+        return "D-"
+    else
+        return "F"
 }
 
 export default function CourseGrades() {
@@ -121,6 +152,8 @@ export default function CourseGrades() {
                     totalPoints = 1
                     pointsEarned = 1
                 }
+                grade = Math.floor((pointsEarned/totalPoints)*10000)/100
+                letterGrade = computeLetterGrade(grade)
                 setGrades(grades)
             }
         })
@@ -154,7 +187,10 @@ export default function CourseGrades() {
                                 Total Grade
                             </TableCell>
                             <TableCell align="right">
-                            {totalPoints !== 0? Math.floor((pointsEarned/totalPoints)*10000)/100 : 100}%
+                                {totalPoints !== 0? grade : 100}%
+                            </TableCell>
+                            <TableCell align="right">
+                                {letterGrade}
                             </TableCell>
                         </TableRow>
                     </TableBody>
