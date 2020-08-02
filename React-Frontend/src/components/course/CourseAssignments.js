@@ -68,8 +68,8 @@ export default function CourseAssignments(props) {
   const isInstructor = sessionStorage.getItem("isInstructor") === "true" ? true : false
   const courseId = sessionStorage.getItem("courseId")
 
-  const [pastAssignments, setPastAssignments] = React.useState([])
-  const [upcomingAssignments, setUpcomingAssignments] = React.useState([])
+  const [pastAssignments, setPastAssignments] = React.useState()
+  const [upcomingAssignments, setUpcomingAssignments] = React.useState()
 
   const classes = useStyles();
   const [assignmentListOpen, setAssignmentListOpen] = React.useState(true);
@@ -84,42 +84,54 @@ export default function CourseAssignments(props) {
       setAssignmentModalOpen(true);
     }
 
-    var fetchedPastAssignments = []
-    var fetchedFutureAssignments = []
-    http.getCourseAssignmentsWithDetails(sessionStorage.getItem("courseId"))
-    .then( async(response) => {
-      var body = await response.json();
-      if(response.status === 200 && body["message"] === "Success"){
-        for (let i in body["assignments"]) {
-          let assignment = {
-            title: body["assignments"][i]["title"],
-            description: body["assignments"][i]["description"],
-            maxPoints: body["assignments"][i]["maxPoints"],
-            dueDate: body["assignments"][i]["dueDate"],
-            assignmentID: body["assignments"][i]["id"],
-            submissionType: body["assignments"][i]["submissionType"],
-            submitted: false,
-          }
-          if(body["assignments"][i]["submissions"] !== null){
-            assignment.submitted = true
-            assignment.graded = body["assignments"][i]["submissions"]["graded"]
-            if(body["assignments"][i]["submissions"]["pointsAwarded"] !== null){
-              assignment.pointsAwarded = body["assignments"][i]["submissions"]["pointsAwarded"]
+    //Check if either assignment array is null then fetch data
+    if(!upcomingAssignments && !pastAssignments){
+      var fetchedPastAssignments = []
+      var fetchedFutureAssignments = []
+      http.getCourseAssignmentsWithDetails(sessionStorage.getItem("courseId"))
+      .then( async(response) => {
+        var body = await response.json();
+        if(response.status === 200 && body["message"] === "Success"){
+          for (let i in body["assignments"]) {
+            let assignment = {
+              title: body["assignments"][i]["title"],
+              description: body["assignments"][i]["description"],
+              maxPoints: body["assignments"][i]["maxPoints"],
+              dueDate: body["assignments"][i]["dueDate"],
+              assignmentID: body["assignments"][i]["id"],
+              submissionType: body["assignments"][i]["submissionType"],
+              submitted: false,
             }
-            assignment.Submission = body["assignments"][i]["submissions"]
+            if(body["assignments"][i]["submissions"] !== null){
+              assignment.submitted = true
+              assignment.graded = body["assignments"][i]["submissions"]["graded"]
+              if(body["assignments"][i]["submissions"]["pointsAwarded"] !== null){
+                assignment.pointsAwarded = body["assignments"][i]["submissions"]["pointsAwarded"]
+              }
+              assignment.Submission = body["assignments"][i]["submissions"]
+            }
             
-          }
-          
-          new Date(Date.parse(assignment["dueDate"])).getTime() < new Date().getTime() ? fetchedPastAssignments.push(assignment) : fetchedFutureAssignments.push(assignment)
-        }  
-        setUpcomingAssignments(fetchedFutureAssignments)
-        setPastAssignments(fetchedPastAssignments)
-      }
-    })
-    .catch((e) => {
-        console.warn("There was an error retrieving instructor courses: ", e);
-    });
- }, [assignmentClicked]);
+            if(new Date(Date.parse(assignment["dueDate"])).getTime() < new Date().getTime()){
+              fetchedPastAssignments.push(assignment)
+              if(body.assignments[i].id === props.match.params.assignmentid){
+                handleAssignmentClick(props.match.params.assignmentid, body.assignments[i])
+              }
+            }else{
+              if(body.assignments[i].id === props.match.params.assignmentid){
+                handlePastAssignmentClick(props.match.params.assignmentid, body.assignments[i])
+              }
+              fetchedFutureAssignments.push(assignment)
+            }
+          }  
+          setUpcomingAssignments(fetchedFutureAssignments)
+          setPastAssignments(fetchedPastAssignments)
+        }
+      })
+      .catch((e) => {
+          console.warn("There was an error retrieving instructor courses: ", e);
+      });
+    } 
+  }, [assignmentClicked])
 
   const handleAssignmentHeadClick = () => {
     setAssignmentListOpen(!assignmentListOpen);
@@ -137,17 +149,28 @@ export default function CourseAssignments(props) {
     setModalOpen(false)
   }
 
-  const handleAssignmentClick = (key) => {
-    setAssignmentClicked(upcomingAssignments.filter(obj => obj.assignmentID === key))
+  const handleAssignmentClick = (key, assignmentFromUrl) => {
+    if(assignmentFromUrl){
+      setAssignmentClicked([assignmentFromUrl])
+    }else{
+      setAssignmentClicked(upcomingAssignments.filter(obj => obj.assignmentID === key))
+    }
   }
 
-  const handlePastAssignmentClick = (key) => {
-    setAssignmentClicked(pastAssignments.filter(obj => obj.assignmentID === key))
+  const handlePastAssignmentClick = (key, assignmentFromUrl) => {
+    if(assignmentFromUrl){
+      setAssignmentClicked([assignmentFromUrl])
+    }else{
+      setAssignmentClicked(pastAssignments.filter(obj => obj.assignmentID === key))
+    }
   }
 
   const handleAssignmentClose = () => {
     setAssignmentModalOpen(false)
     setAssignmentClicked({assignmentID: -1})
+    if(props.match.params.assignmentid){
+      props.history.push(`/course/${sessionStorage.getItem("courseId")}/course-assignments`);
+    }
   }
 
 
@@ -198,7 +221,8 @@ export default function CourseAssignments(props) {
         <Collapse in={assignmentListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
 
-            {upcomingAssignments.map(currentAssignment => (
+            {upcomingAssignments &&
+            upcomingAssignments.map(currentAssignment => (
                 <div key={currentAssignment.assignmentID}>
                   <div className={classes.flexHorizontal}>
                     <ListItem button className={classes.nested} onClick={() => handleAssignmentClick(currentAssignment.assignmentID)}>
@@ -231,7 +255,8 @@ export default function CourseAssignments(props) {
         </ListItem>
         <Collapse in={pastAssignmentListOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            {pastAssignments.map(currentAssignment => (
+            {pastAssignments &&
+            pastAssignments.map(currentAssignment => (
                 <div key={currentAssignment.assignmentID}>
                   <div className={classes.flexHorizontal}>
                     <ListItem button className={classes.nested} onClick={() => handlePastAssignmentClick(currentAssignment.assignmentID)}>

@@ -47,7 +47,8 @@ class CoursePage extends Component {
                         <CourseSidebar match={this.props.match}/>
                         </div>
                         <Switch>
-                            <Route path={`/course/${this.props.match.params.id}/course-assignments`} exact component={CourseAssignments}/>
+                            <Route path={`/course/${this.props.match.params.id}/course-assignments/:assignmentid`} component={CourseAssignments}/>
+                            <Route path={`/course/${this.props.match.params.id}/course-assignments`} component={CourseAssignments}/>
                             {isInstructor ? <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGradesInstructor} /> :
                                 <Route path={`/course/${this.props.match.params.id}/course-grades`} exact component={CourseGrades} /> }
                             <Route path={`/course/${this.props.match.params.id}/course-announcements`} exact component={CourseAnnouncements} />
