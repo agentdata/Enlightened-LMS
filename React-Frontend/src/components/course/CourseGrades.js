@@ -49,37 +49,37 @@ function Row(props) {
                 <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
                         <Collapse in={open} timeout="auto" unmountOnExit>
-                            {!!assignment.graded ? (
-                                <Box style={{display: 'flex', flexFlow: 'column', padding: '10px'}}>
-                                    <div>
-                                        <Typography variant="h5" gutterBottom component="div">
-                                            Grade Analytics
+                        {!!assignment.graded ? (
+                            <Box style={{display: 'flex', flexFlow: 'column', padding: '10px'}}>
+                                <div>
+                                    <Typography variant="h5" gutterBottom component="div">
+                                        Grade Analytics
+                                    </Typography>
+                                    <hr />
+                                </div>
+                                <div style={{display: 'flex'}}>
+                                    <StudentGradesChart assignment={assignment}></StudentGradesChart>
+                                    <div style={{marginTop: '25px'}}>
+                                        <Typography variant="h6" style={{color: "#00F"}}>
+                                            My score: {assignment.pointsAwarded} / {assignment.maxPoints} ({((assignment.pointsAwarded/assignment.maxPoints).toFixed(2))*100}%)
                                         </Typography>
-                                        <hr />
+                                        <Typography variant="h6">
+                                            Low score: {assignment.lowScore} / {assignment.maxPoints} ({((assignment.lowScore/assignment.maxPoints).toFixed(2))*100}%)
+                                        </Typography>
+                                        <Typography variant="h6">
+                                            High score: {assignment.highScore} / {assignment.maxPoints} ({((assignment.highScore/assignment.maxPoints).toFixed(2))*100}%)
+                                        </Typography>
+                                        <Typography variant="h6">
+                                            Class average: {assignment.averageScore} / {assignment.maxPoints} ({((assignment.averageScore/assignment.maxPoints).toFixed(2))*100}%)
+                                        </Typography>
                                     </div>
-                                    <div style={{display: 'flex'}}>
-                                        <StudentGradesChart assignment={assignment}></StudentGradesChart>
-                                        <div style={{marginTop: '25px'}}>
-                                            <Typography variant="h6" style={{color: "#00F"}}>
-                                                My score: {assignment.pointsAwarded} / {assignment.maxPoints} ({((assignment.pointsAwarded/assignment.maxPoints).toFixed(2))*100}%)
-                                            </Typography>
-                                            <Typography variant="h6">
-                                                Low score: {assignment.lowScore} / {assignment.maxPoints} ({((assignment.lowScore/assignment.maxPoints).toFixed(2))*100}%)
-                                            </Typography>
-                                            <Typography variant="h6">
-                                                High score: {assignment.highScore} / {assignment.maxPoints} ({((assignment.highScore/assignment.maxPoints).toFixed(2))*100}%)
-                                            </Typography>
-                                            <Typography variant="h6">
-                                                Class average: {assignment.averageScore} / {assignment.maxPoints} ({((assignment.averageScore/assignment.maxPoints).toFixed(2))*100}%)
-                                            </Typography>
-                                        </div>
-                                    </div>
-                                </Box>
-                            ):
-                                <Typography variant="h5" style={{padding: '10px'}}>
-                                    Not yet submitted/graded!
-                                </Typography>
-                            }
+                                </div>
+                            </Box>
+                        ):
+                            <Typography variant="h5" style={{padding: '10px'}}>
+                                Not yet graded!
+                            </Typography>
+                        }
                         </Collapse>
                     </TableCell>
                 </TableRow>

@@ -45,6 +45,7 @@ function Row(props) {
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
+                    {(!!assignment.gradedCount) ? (
                         <Box style={{display: 'flex', flexFlow: 'column', padding: '10px'}}>
                             <div>
                                 <Typography variant="h5">
@@ -67,6 +68,11 @@ function Row(props) {
                                     </div>
                             </div>
                         </Box>
+                    ) : 
+                        <Typography variant="h5" style={{padding: '10px'}}>
+                            No graded submissions!
+                        </Typography>
+                    }
                     </Collapse>
                 </TableCell>
             </TableRow>
