@@ -38,10 +38,9 @@ function Row(props) {
                 </TableCell>
                 <TableCell align="right">{utilities.formatDateTime(assignment.dueDate)}</TableCell>
                 <TableCell align="right">{assignment.submissions.length === 0? "No submissions": assignment.submissions.length}</TableCell>
-                <TableCell align="right">{assignment.graded === undefined ? 0 : assignment.graded}</TableCell>
+                <TableCell align="right">{assignment.gradedCount === undefined ? 0 : assignment.gradedCount}</TableCell>
                 <TableCell align="right">{assignment.maxPoints}</TableCell>
-                <TableCell align="right">{/*assignment.averageScore*/} avg</TableCell>
-                <TableCell align="right">Stuff</TableCell>
+                <TableCell align="right">{assignment.averageScore}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -74,30 +73,40 @@ export default function CourseGradesInstructor() {
         .then( async(response) => {
             var body = await response.json();
             if(response.status === 200 && body["message"] === "Success"){
-            for (let i in body["assignments"]) {
-                let assignment = {
-                title: body["assignments"][i]["title"],
-                description: body["assignments"][i]["description"],
-                maxPoints: body["assignments"][i]["maxPoints"],
-                dueDate: body["assignments"][i]["dueDate"],
-                assignmentID: body["assignments"][i]["id"],
-                submissionType: body["assignments"][i]["submissionType"],
-                submitted: false,
+                for (let i in body["assignments"]) {
+                    let assignment = {
+                        title: body["assignments"][i]["title"],
+                        description: body["assignments"][i]["description"],
+                        maxPoints: body["assignments"][i]["maxPoints"],
+                        dueDate: body["assignments"][i]["dueDate"],
+                        assignmentID: body["assignments"][i]["id"],
+                        submissionType: body["assignments"][i]["submissionType"],
+                        submitted: false,
+                        highScore: "0",
+                        lowScore: "0",
+                        averageScore: "0",
+                    }
+                    if (body["assignments"][i]["submissions"] !== null) {
+                        assignment.submissions = body["assignments"][i]["submissions"]
+                        assignment.gradedCount = 0
+                        for (let j in assignment.submissions) {
+                            if (assignment.submissions[j]["graded"] === true) {
+                                assignment.gradedCount++;
+                            }
+                        }
+                    }
+                    if (assignment.gradedCount > 0) {
+                        assignment.highScore = body["assignments"][i]["analytics"]["high"]
+                        assignment.lowScore = body["assignments"][i]["analytics"]["low"]
+                        assignment.averageScore = body["assignments"][i]["analytics"]["average"]
+                    }
+
+                    fetchedAssignments.push(assignment)
                 }
-                if(body["assignments"][i]["submissions"] !== null){
-                    assignment.submitted = true
-                    assignment.graded = body["assignments"][i]["submissions"]["graded"]
-                if(body["assignments"][i]["submissions"]["pointsAwarded"] !== null){
-                    assignment.pointsAwarded = body["assignments"][i]["submissions"]["pointsAwarded"]
-                }
-                assignment.submissions = body["assignments"][i]["submissions"]
-                
-                }
-                fetchedAssignments.push(assignment)
             }  
             // set state
             setAssignments(fetchedAssignments)
-            }
+
         })
         .catch((e) => {
             console.warn("There was an error retrieving instructor courses: ", e);
@@ -116,9 +125,8 @@ export default function CourseGradesInstructor() {
                             <TableCell align="right">Due</TableCell>
                             <TableCell align="right">Submissions</TableCell>
                             <TableCell align="right">Graded</TableCell>
-                            <TableCell align="right">Out of</TableCell>
-                            <TableCell align="right">Class average</TableCell>
-                            <TableCell align="right">Graded Submissions</TableCell>
+                            <TableCell align="right">Out Of</TableCell>
+                            <TableCell align="right">Class Average</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
