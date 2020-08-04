@@ -50,7 +50,7 @@ function Row(props) {
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                         <Collapse in={open} timeout="auto" unmountOnExit>
                             <Box style={{height: '550px', width: '600px'}}>
-                                <Typography variant="h6" gutterBottom component="div">
+                                <Typography variant="h5" gutterBottom component="div">
                                     Grade Analytics
                                 </Typography>
                                 <StudentGradesChart assignment={assignment}></StudentGradesChart>
