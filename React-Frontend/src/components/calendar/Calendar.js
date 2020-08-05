@@ -6,6 +6,7 @@ import CourseAssignment from '../course/CourseAssignment';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from 'moment';
 import http from '../../api/http';
+import utilities from "../../actions/utilities";
 
 const localizer = momentLocalizer(moment);
 
@@ -36,7 +37,7 @@ class LMSCalendar extends React.Component {
                                     end: a.dueDate,
                                     title: a.title,
                                     courseId: a.courseId,
-                                    assignmentId: a.assignmentId
+                                    assignmentId: a.id
                                 }]
                         })
                     }
@@ -91,14 +92,14 @@ class LMSCalendar extends React.Component {
     setAssignmentClicked() {
     }
 
-    handleSelectEvent = () => {
-        console.log("stuff")
-        this.setState({
-            selectedAssignment: {
-                title: "Assignment",
-                description: "Desc"
-            }
-        })
+    handleSelectEvent = (assignment) => {
+        //console.log(assignment)
+        this.setState(
+            {
+                selectedAssignment: assignment
+            },
+            utilities.navigateToAssignment(assignment.courseId, assignment.assignmentId)
+        );
     }
 
     render() {
@@ -112,7 +113,7 @@ class LMSCalendar extends React.Component {
                     defaultView="month"
                     events={this.state.events}
                     style={{ height: "90vh" }}
-                    onSelectEvent={this.handleSelectEvent}
+                    onSelectEvent={this.handleSelectEvent.bind(this)}
                     />
                     {/* {this.selectedAssignment && (
                         <Modal

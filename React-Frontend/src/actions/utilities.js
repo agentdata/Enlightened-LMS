@@ -1,5 +1,8 @@
 import http from '../api/http'
 
+export const API_BASE_URL =  'https://cooliocoders.ddns.net'
+// export const API_BASE_URL =  'http://localhost:3000'
+
 export default {
 
     formatDateTime(timestampString){
@@ -39,5 +42,17 @@ export default {
             .catch((e) => {
                 console.warn("There was an error downloading this file: ", e);
             })
-      }
+      },
+
+
+    navigateToAssignment(courseId, assignmentId) {
+        if(courseId !== null && assignmentId !== null) {
+            window.location.href = API_BASE_URL+ `/course/${courseId}/course-assignments/${assignmentId}`
+        }
+        else {
+            console.log("Navigate to assignment page failed")
+            console.log(`CourseId: ${courseId}`)
+            console.log((`AssignmentId: ${assignmentId}`))
+        }
+    }
 }
