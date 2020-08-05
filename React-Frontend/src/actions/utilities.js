@@ -54,5 +54,18 @@ export default {
             console.log(`CourseId: ${courseId}`)
             console.log((`AssignmentId: ${assignmentId}`))
         }
+    },
+
+    generateLinkToAssignment(courseId, assignmentId) {
+        if(courseId !== null && assignmentId !== null) {
+            return API_BASE_URL+ `/course/${courseId}/course-assignments/${assignmentId}`
+        }
+        else {
+            console.log("Navigate to assignment page failed")
+            console.log(`CourseId: ${courseId}`)
+            console.log((`AssignmentId: ${assignmentId}`))
+            return null
+        }
     }
+
 }

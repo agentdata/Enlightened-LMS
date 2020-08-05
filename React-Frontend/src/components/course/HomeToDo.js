@@ -94,7 +94,7 @@ class HomeToDo extends React.Component {
         { this.state.assignments ? ( 
          this.state.assignments.map(currentAssignment => (
             <ListItem alignItems="flex-start" key={ currentAssignment.id }>
-              <Link href={ currentAssignment.link }>
+              <Link href={ utilities.generateLinkToAssignment(currentAssignment.courseId, currentAssignment.id) }>
                 <ListItemText
                   primary={ currentAssignment.title }
                   secondary={
