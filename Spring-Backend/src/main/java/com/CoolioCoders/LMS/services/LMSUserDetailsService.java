@@ -146,7 +146,7 @@ public class LMSUserDetailsService implements UserDetailsService{
         notification.setCourseId(course.getId());
         notification.setCourseName(course.getCourseName());
         notification.setTimestamp(LocalDateTime.now());
-        notification.setLink("Link TBD");
+        notification.setLink("http://cooliocoders.ddns.net/course/" + courseId + "/course-assignments");
         notification.setCleared(false);
 
         List<Notification> notificationList = user.getNotifications();
