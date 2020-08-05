@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom : "0px",
     backgroundColor: theme.palette.background.paper,
   },
+  modal: {
+    overflow: "scroll"
+  },
   nested: {
     paddingLeft: theme.spacing(4),
   },

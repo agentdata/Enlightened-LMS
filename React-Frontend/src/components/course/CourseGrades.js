@@ -47,14 +47,39 @@ function Row(props) {
                     <TableCell align="right">{assignment.averageScore}</TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
                         <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box style={{height: '550px', width: '600px'}}>
-                                <Typography variant="h6" gutterBottom component="div">
-                                    Grade Analytics
-                                </Typography>
-                                <StudentGradesChart assignment={assignment}></StudentGradesChart>
+                        {!!assignment.graded ? (
+                            <Box style={{display: 'flex', flexFlow: 'column', padding: '10px'}}>
+                                <div>
+                                    <Typography variant="h5" gutterBottom component="div">
+                                        Grade Analytics
+                                    </Typography>
+                                    <hr />
+                                </div>
+                                <div style={{display: 'flex'}}>
+                                    <StudentGradesChart assignment={assignment}></StudentGradesChart>
+                                    <div style={{marginTop: '25px'}}>
+                                        <Typography variant="h6" style={{color: "#00F"}}>
+                                            My score: {assignment.pointsAwarded} / {assignment.maxPoints} ({((assignment.pointsAwarded/assignment.maxPoints).toFixed(2))*100}%)
+                                        </Typography>
+                                        <Typography variant="h6">
+                                            Low score: {assignment.lowScore} / {assignment.maxPoints} ({((assignment.lowScore/assignment.maxPoints).toFixed(2))*100}%)
+                                        </Typography>
+                                        <Typography variant="h6">
+                                            High score: {assignment.highScore} / {assignment.maxPoints} ({((assignment.highScore/assignment.maxPoints).toFixed(2))*100}%)
+                                        </Typography>
+                                        <Typography variant="h6">
+                                            Class average: {assignment.averageScore} / {assignment.maxPoints} ({((assignment.averageScore/assignment.maxPoints).toFixed(2))*100}%)
+                                        </Typography>
+                                    </div>
+                                </div>
                             </Box>
+                        ):
+                            <Typography variant="h5" style={{padding: '10px'}}>
+                                Not yet graded!
+                            </Typography>
+                        }
                         </Collapse>
                     </TableCell>
                 </TableRow>
