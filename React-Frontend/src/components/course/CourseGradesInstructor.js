@@ -40,7 +40,7 @@ function Row(props) {
                 <TableCell align="right">{assignment.submissions.length === 0? "No submissions": assignment.submissions.length}</TableCell>
                 <TableCell align="right">{assignment.gradedCount === undefined ? 0 : assignment.gradedCount}</TableCell>
                 <TableCell align="right">{assignment.maxPoints}</TableCell>
-                <TableCell align="right">{assignment.averageScore}</TableCell>
+                <TableCell align="right">{assignment.averageScore.toFixed(2)}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
@@ -57,13 +57,13 @@ function Row(props) {
                                 <TeacherGradesChart assignment={assignment}></TeacherGradesChart>
                                     <div style={{marginTop: '25px'}}>
                                         <Typography variant="h6">
-                                            High score: {assignment.highScore} / {assignment.maxPoints} ({((assignment.highScore/assignment.maxPoints).toFixed(2))*100}%)
+                                            High score: {assignment.highScore.toFixed(2)} / {assignment.maxPoints} ({((assignment.highScore/assignment.maxPoints).toFixed(2))*100}%)
                                         </Typography>
                                         <Typography variant="h6">
-                                            Low score: {assignment.lowScore} / {assignment.maxPoints} ({((assignment.lowScore/assignment.maxPoints).toFixed(2))*100}%)
+                                            Low score: {assignment.lowScore.toFixed(2)} / {assignment.maxPoints} ({((assignment.lowScore/assignment.maxPoints).toFixed(2))*100}%)
                                         </Typography>
                                         <Typography variant="h6">
-                                            Class average: {assignment.averageScore} / {assignment.maxPoints} ({((assignment.averageScore/assignment.maxPoints).toFixed(2))*100}%)
+                                            Class average: {assignment.averageScore.toFixed(2)} / {assignment.maxPoints} ({((assignment.averageScore/assignment.maxPoints).toFixed(2))*100}%)
                                         </Typography>
                                     </div>
                             </div>
@@ -160,36 +160,4 @@ export default function CourseGradesInstructor() {
             </TableContainer>
         </div>
     )
-        // this.state = {
-        //     courseId: sessionStorage.getItem('courseId'),
-        //     assignments: [
-                // {
-                //     title: "Assignment 1",
-                //     assignmentId: 12345,
-                //     dueDate: "1/1/21 11:59pm",
-                //     submissions: 10,
-                //     graded: 3,
-                //     maxPoints: 150,
-                //     average: 130
-                // },
-                // {
-                //     title: "Assignment 2",
-                //     assignmentId: 123456,
-                //     dueDate: "1/9/21 11:59pm",
-                //     submissions: 12,
-                //     graded: 5,
-                //     maxPoints: 120,
-                //     average: 90
-                // },
-                // {
-                //     title: "Assignment 3",
-                //     assignmentId: 1234567,
-                //     dueDate: "1/18/21 11:59pm",
-                //     submissions: 5,
-                //     graded: 0,
-                //     maxPoints: 150,
-                //     average: 130
-                // }
-    //         ]
-    //     }
 }

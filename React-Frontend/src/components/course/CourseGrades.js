@@ -44,7 +44,7 @@ function Row(props) {
                     <TableCell align="right">{assignment.graded === null? "Not Submitted": assignment.graded ? "Graded": "Submitted"}</TableCell>
                     <TableCell align="right">{assignment.graded === null? "-": assignment.graded ? assignment.pointsAwarded : "-" }</TableCell>
                     <TableCell align="right">{assignment.maxPoints}</TableCell>
-                    <TableCell align="right">{assignment.averageScore}</TableCell>
+                    <TableCell align="right">{assignment.averageScore.toFixed(2)}</TableCell>
                 </TableRow>
                 <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
@@ -61,16 +61,16 @@ function Row(props) {
                                     <StudentGradesChart assignment={assignment}></StudentGradesChart>
                                     <div style={{marginTop: '25px'}}>
                                         <Typography variant="h6" style={{color: "#00F"}}>
-                                            My score: {assignment.pointsAwarded} / {assignment.maxPoints} ({((assignment.pointsAwarded/assignment.maxPoints).toFixed(2))*100}%)
+                                            My score: {assignment.pointsAwarded.toFixed(2)} / {assignment.maxPoints} ({((assignment.pointsAwarded/assignment.maxPoints).toFixed(2))*100}%)
                                         </Typography>
                                         <Typography variant="h6">
-                                            Low score: {assignment.lowScore} / {assignment.maxPoints} ({((assignment.lowScore/assignment.maxPoints).toFixed(2))*100}%)
+                                            Low score: {assignment.lowScore.toFixed(2)} / {assignment.maxPoints} ({((assignment.lowScore/assignment.maxPoints).toFixed(2))*100}%)
                                         </Typography>
                                         <Typography variant="h6">
-                                            High score: {assignment.highScore} / {assignment.maxPoints} ({((assignment.highScore/assignment.maxPoints).toFixed(2))*100}%)
+                                            High score: {assignment.highScore.toFixed(2)} / {assignment.maxPoints} ({((assignment.highScore/assignment.maxPoints).toFixed(2))*100}%)
                                         </Typography>
                                         <Typography variant="h6">
-                                            Class average: {assignment.averageScore} / {assignment.maxPoints} ({((assignment.averageScore/assignment.maxPoints).toFixed(2))*100}%)
+                                            Class average: {assignment.averageScore.toFixed(2)} / {assignment.maxPoints} ({((assignment.averageScore/assignment.maxPoints).toFixed(2))*100}%)
                                         </Typography>
                                     </div>
                                 </div>
@@ -121,24 +121,6 @@ export default function CourseGrades() {
     const classes = styles;
     const [grades, setGrades] = React.useState([]);
     const [assignmentClicked, setAssignmentClicked] = React.useState({assignmentId: -1});
-
-    // this.state ={
-    //         grades: [{
-    //             open: false,
-    //             courseId: "",//"courseId",
-    //             description: "",//"description",
-    //             dueDate: "", //"2020-08-15T11:59:00",
-    //             assignmentId: "", //"assignmentId",
-    //             maxPoints: "", //"maxPoints",
-    //             submissionType: "", //"submissionType",
-    //             title: "", //"title",
-    //             graded: null, //"graded",
-    //             pointsAwarded: "", //"pointsAwarded",
-    //             highScore: "", //"highScore",
-    //             lowScore: "", //"lowScore",
-    //             averageScore: "", //"averageScore",
-    //         },]
-    //     }
 
     useEffect(() => {
         http.getStudentGrades(sessionStorage.getItem("courseId"))

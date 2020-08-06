@@ -13,15 +13,15 @@ function TeacherGradesChart(props) {
     const data = [
         {
             "stat": "Low score",
-            "score": lowScore
+            "score": lowScore.toFixed(2)
         },
         {
             "stat": "High score",
-            "score": highScore
+            "score": highScore.toFixed(2)
         },
         {
             "stat": "Class average",
-            "score": averageScore
+            "score": averageScore.toFixed(2)
         }
     ]
     

@@ -14,19 +14,19 @@ function StudentGradesChart(props) {
     const data = [
         {
             "stat": "My score",
-            "score": pointsAwarded
+            "score": pointsAwarded.toFixed(2)
         },
         {
             "stat": "Low score",
-            "score": lowScore
+            "score": lowScore.toFixed(2)
         },
         {
             "stat": "High score",
-            "score": highScore
+            "score": highScore.toFixed(2)
         },
         {
             "stat": "Class average",
-            "score": averageScore
+            "score": averageScore.toFixed(2)
         }
     ]
     
