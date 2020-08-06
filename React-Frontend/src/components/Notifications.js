@@ -37,6 +37,7 @@ export default function AlignItemsList() {
     const classes = useStyles();
 
     const [notifications, setNotifications] = React.useState([]);
+    const [notificationClicked, setNotificationClicked] = React.useState({id: -1});
 
     useEffect(() => {
         var fetchedNotifications = []
@@ -52,7 +53,7 @@ export default function AlignItemsList() {
                 console.warn("There was an error retrieving notifications: ", e);
             })
 
-    });
+    }, [notificationClicked]);
 
     const clearNotification = (currentNotification) => {
         http.clearUserNotification(currentNotification.id)
