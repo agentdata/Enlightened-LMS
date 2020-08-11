@@ -54,14 +54,14 @@ class LMSCalendar extends React.Component {
         this.state = {
             selectedAssignment: null,
             events: [
-                {
-                    start: moment().toDate(),
-                    end: moment()
-                        .toDate(),
-                    title: "Some event title",
-                    courseId: 'Course',
-                    assignmentId: 'Assignment'
-                }
+                // {
+                //     start: moment().toDate(),
+                //     end: moment()
+                //         .toDate(),
+                //     title: "Some event title",
+                //     courseId: 'Course',
+                //     assignmentId: 'Assignment'
+                // }
             ]
         };
 
