@@ -137,15 +137,6 @@ public class CourseService {
         body.put("description", course.getDescription());
         body.put("instructor", userService.userToJSONResponse(course.getInstructor(), false));
 
-        if(includeStudentList) {
-            List<Object> studentList = new ArrayList<>();
-            course.getStudentIds().forEach(
-                    courseId -> {
-                        studentList.add(userService.userToJSONResponse(userService.findById(courseId), false));
-                    });
-            body.put("students", studentList);
-        }
-
         body.put("year", Integer.toString(course.getYear()));
         body.put("block", course.getBlock());
         body.put("startTime", course.getStartTime().toString());
