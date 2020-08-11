@@ -40,7 +40,7 @@ function Row(props) {
                 <TableCell align="right">{assignment.submissions.length === 0? "No submissions": assignment.submissions.length}</TableCell>
                 <TableCell align="right">{assignment.gradedCount === undefined ? 0 : assignment.gradedCount}</TableCell>
                 <TableCell align="right">{assignment.maxPoints}</TableCell>
-                <TableCell align="right">{assignment.averageScore.toFixed(2)}</TableCell>
+                <TableCell align="right">{assignment.averageScore === undefined ? assignment.averageScore.toFixed(2):""}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
