@@ -215,6 +215,9 @@ class CourseList extends Component {
         this.setState({
             modalOpen: false
         })
+        
+        //fetch the courses after closing the modal
+        this.state.isInstructor === "true" ? this.getInstructorCourses() : this.getStudentCourses() 
     }
 
     render() {
