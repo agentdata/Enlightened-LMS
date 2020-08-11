@@ -66,22 +66,6 @@ class GradeAssignments extends Component {
                 onTime: true,
                 isGraded: false,
                 pointsAwarded: 0
-            },
-            {
-                studentId: 123456,
-                studentName: "Kali Winn",
-                submittedTimestamp: "2020-07-15T22:17:41.714+00:00",
-                onTime: true,
-                isGraded: true,
-                pointsAwarded: 145
-            },
-            {
-                studentId: 1234567,
-                studentName: "Zak Jones",
-                submittedTimestamp: "2020-07-15T22:17:41.714+00:00",
-                onTime: false,
-                isGraded: true,
-                pointsAwarded: 130
             }*/],
             currentStudentId: null,
             currentStudentName: null,
@@ -118,7 +102,6 @@ class GradeAssignments extends Component {
         .then( async (response) => {
             const data = await response.json();
             if (response.status === 200 && data["message"] === "success") {
-                console.log(data)
                 for (let submission of data["submissions"]) {
                     this.setState({
                         submissions: this.state.submissions + 1,
@@ -159,8 +142,30 @@ class GradeAssignments extends Component {
         }        
     }
 
-    handleClose = () => {
+    handleClose = (assignmentWasGraded) => {
+
         this.setState({modalOpen: false})
+        //if assignment was successfully graded in modal then refresh view to show change
+        if(assignmentWasGraded === true && assignmentWasGraded !== undefined){
+            this.setState({
+                assignmentName: "Assignment Name",
+                assignmentId: this.props.match.params.assignmentid,
+                submissions: 0,
+                graded: 0,
+                submissionType: "FILEUPLOAD",
+                maxPoints: 150,
+                assignmentSubmissions: [],
+                currentStudentId: null,
+                currentStudentName: null,
+                modalOpen: false,
+    
+                // store text submission here
+                textSubmission: null,
+                submittedFile: null
+            })
+
+            this.getAssignmentSubmissions()
+        }
     }
 
     render() {

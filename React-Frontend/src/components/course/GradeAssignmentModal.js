@@ -76,7 +76,8 @@ class GradeAssignmentModal extends Component {
             submittedFile: this.props.submittedFile,
             pointsAwarded: this.props.pointsAwarded,
             pointsAwardedError: '',
-            confirmDialogOpen: false
+            confirmDialogOpen: false,
+            assignmentGraded: false
         };
     }
     
@@ -111,7 +112,7 @@ class GradeAssignmentModal extends Component {
 
     handleDialogClose = () => {
         this.setState({confirmDialogOpen: false})
-        this.props.closeModal();
+        this.props.closeModal(this.state.assignmentGraded);
     }
 
     // grade submission api call
@@ -130,6 +131,7 @@ class GradeAssignmentModal extends Component {
         .then( async (response) => {
             const data = await response.json()
             if (response.status === 200 && data["message"] === "Assignment graded successfully.") {
+                this.setState({assignmentGraded: true})
                 this.handleDialogOpen();
             }
         })
