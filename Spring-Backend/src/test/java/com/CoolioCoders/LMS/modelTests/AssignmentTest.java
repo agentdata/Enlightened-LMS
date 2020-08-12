@@ -7,6 +7,7 @@ import com.CoolioCoders.LMS.models.Course;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -20,10 +21,12 @@ public class AssignmentTest {
     static AssignmentSubmission submission2;
     static List<AssignmentSubmission> submissions;
     static Course course;
+    static String mockCourseId = "mockCourseId";
 
     @BeforeAll
     static void initialize() {
         course = new Course("iOS development", "3260", "1", 4);
+        course.setId(mockCourseId);
         submissions = new ArrayList<>();
         submission1 = new AssignmentSubmission();
         submission2 = new AssignmentSubmission();
@@ -33,7 +36,7 @@ public class AssignmentTest {
     // course ID for assignment is the same as the retrieved course's ID
     @Test
     public void assignmentAssignedToCourse() {
-        assertTrue(assignment.getCourseId().equals(course.getId()));
+        assertEquals(assignment.getCourseId(), mockCourseId);
     }
 
     // assignment submissions are added to the assignment
