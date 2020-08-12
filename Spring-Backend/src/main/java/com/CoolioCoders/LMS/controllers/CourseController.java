@@ -137,26 +137,27 @@ public class CourseController {
         try {
             MeetingDays days = new MeetingDays();
             days.parseMeetingDays(body.get("days").toString());
-            courseService.saveCourse(
-                    new Course(
-                            body.get("name").toString(),
-                            body.get("number").toString(),
-                            userService.findUserByEmail(principalUser.getName()),
-                            LocalTime.parse( body.get("startTime").toString()), LocalTime.parse( body.get("endTime").toString()),
-                            days,
-                            body.get("building").toString(),
-                            body.get("roomNumber").toString(),
-                            Integer.parseInt(body.get("capacity").toString()),
-                            Integer.parseInt(body.get("credits").toString()),
-                            Integer.parseInt(body.get("year").toString()),
-                            body.get("description").toString(),
-                            body.get("department").toString(),
-                            body.get("semester").toString()
-                    )
-             );
+            Course registeredCourse = courseService.saveCourse(
+                new Course(
+                body.get("name").toString(),
+                body.get("number").toString(),
+                userService.findUserByEmail(principalUser.getName()),
+                LocalTime.parse( body.get("startTime").toString()), LocalTime.parse( body.get("endTime").toString()),
+                days,
+                body.get("building").toString(),
+                body.get("roomNumber").toString(),
+                Integer.parseInt(body.get("capacity").toString()),
+                Integer.parseInt(body.get("credits").toString()),
+                Integer.parseInt(body.get("year").toString()),
+                body.get("description").toString(),
+                body.get("department").toString(),
+                body.get("semester").toString()
+                )
+            );
 
             //if no error then return success message and OK status
             model.put("message", "Successfully added New Course");
+            model.put("courseId", registeredCourse);
             return ok(model);
         } catch (ParseException e) {
             e.printStackTrace();

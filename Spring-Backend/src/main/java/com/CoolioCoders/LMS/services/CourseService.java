@@ -56,7 +56,7 @@ public class CourseService {
         return studentsInCourse;
     }
 
-    public void saveCourse(Course newCourse) {
+    public Course saveCourse(Course newCourse) {
         //save the new course
         Course course = courseRepository.save(newCourse);
 
@@ -66,6 +66,7 @@ public class CourseService {
         courseIds.add(course.getId());
         instructor.setCourseIds(courseIds);
         userRepository.save(instructor);
+        return course;
     }
 
     public void enrollUserInCourse(User student, Course course) throws Exception {
